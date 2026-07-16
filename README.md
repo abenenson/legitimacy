@@ -1,7 +1,7 @@
 # Legitimacy: A Machine-Checked Kernel for the Governance Layer of AI Agents
 
 
-[![CI](https://github.com/abenenson/legitimacy/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/abenenson/legitimacy/actions/workflows/ci.yml)
+[![CI (manual/tag mirror)](https://github.com/abenenson/legitimacy/actions/workflows/ci.yml/badge.svg)](https://github.com/abenenson/legitimacy/actions/workflows/ci.yml)
 
 
 A chatbot can be behaviorally aligned. An agent that allocates tool access,
@@ -275,7 +275,9 @@ turns the first Lean build from hours into minutes.
 `bash scripts/verify.sh` is the canonical fast gate. It checks Rust formatting,
 clippy, tests, Lean build, zero Lean `sorry`/`admit`/first-party `axiom`, fixture
 parity, public documentation, publication polish, and the Lean `lake build`
-gate. Component gates are in [`docs/operational-gates.md`](docs/operational-gates.md).
+gate. GitHub Actions is a manual and tag-time mirror of these repository-local
+checks, not a per-commit gate. Component gates are in
+[`docs/operational-gates.md`](docs/operational-gates.md).
 
 Current Lean gate: `lake build` completes cleanly.
 

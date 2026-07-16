@@ -22,8 +22,8 @@ const EXTRACTION_THEOREM: &str = "extractRustHookCore_decision_equivalent";
 const FAILURE_THEOREM: &str =
     "rust_hook_modeled_program_extractor_failure_reflects_modeled_source_failure";
 
-pub fn build_governance_graph(ast: &RustHookCoreAst) -> GovernanceGraph {
-    build_single_ast_graph(ast).expect("RustHookCore AST should build a governance graph")
+pub fn build_governance_graph(ast: &RustHookCoreAst) -> Result<GovernanceGraph, LegitimacyError> {
+    build_single_ast_graph(ast)
 }
 
 pub(crate) fn extract_rust_hook_core_artifacts(
@@ -338,5 +338,29 @@ fn recognized_node(
             format!("Lean theorem {EXTRACTION_THEOREM}"),
             format!("Lean theorem {FAILURE_THEOREM}"),
         ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::build_governance_graph;
+    use crate::extract::rust_hook_core_parser::RustHookCoreAst;
+
+    #[test]
+    fn public_ast_builder_returns_error_for_empty_ast() {
+        let ast = RustHookCoreAst {
+            hash_algorithm: "rust-hook-core-json-sha256:v1".to_string(),
+            canonical_hash: "empty".to_string(),
+            decision_enums: Vec::new(),
+            hooks: Vec::new(),
+            registrations: Vec::new(),
+        };
+
+        let error = build_governance_graph(&ast).expect_err("empty AST must be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("no RustHookCore formal hook registration")
+        );
     }
 }
