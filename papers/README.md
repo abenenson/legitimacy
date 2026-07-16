@@ -37,6 +37,9 @@ the manuscript.
 - [§4 Semantic Kernel Bridge](03-impossibility-theorem.md#4-semantic-kernel-bridge)
 - [§5 Companion Scaling Consequences (Not Used in the Impossibility Proof)](03-impossibility-theorem.md#5-companion-scaling-consequences-not-used-in-the-impossibility-proof)
 - [§6 Executable Artifact: Extractor Contract and Audit Demonstration](03-impossibility-theorem.md#6-executable-artifact-extractor-contract-and-audit-demonstration)
+- [§7 Design Principles](03-impossibility-theorem.md#7-design-principles)
+- [§8 Conclusion](03-impossibility-theorem.md#8-conclusion)
+- [§9 Code and Data Availability](03-impossibility-theorem.md#9-code-and-data-availability)
 - [Appendix A: Formal-anchor and identifier conventions](03-impossibility-theorem.md#appendix-a-formal-anchor-and-identifier-conventions)
 
 ### 04-spectral-scaling.md

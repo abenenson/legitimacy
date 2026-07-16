@@ -4,9 +4,9 @@
 
 ## 1. Introduction: Positioning the Program
 
-The positioning material has one job: locate the typed governance-graph program without overstating its scope. The prior-art chapter names the voting-theory, social-choice, verification, and alignment lineages. The GS-AI chapter identifies the legitimacy kernel as one static-snapshot verifier-target instance. The verification-trilemma chapter records bounded-domain audit positioning: decision-definedness is the only independently variable clause currently proved, soundness is entailed by decision-definedness, unrestricted generality is definitionally unavailable, and polynomial-time tractability is left as future work. The two-`C*` chapter separates related capacity notions. The three-axis chapter triangulates the reachable scarce peer-relative governance-rule impossibility result, under transparent-prefix and non-denying-suffix scope, against Arrow-style aggregation and Balinski-Young-style allocation.
+The Legitimacy program sits on the formal-methods side of AI safety: it supplies a typed rule-layer audit and theorem surface, not a universal account of alignment verification. Five comparisons locate that contribution. The prior-art chapter names the voting-theory, social-choice, verification, and alignment lineages. The GS-AI chapter identifies the legitimacy kernel as one static-snapshot verifier-target instance. The verification-trilemma chapter records the current bounded-domain result: decision-definedness is the only independently variable clause proved so far, soundness follows from decision-definedness, unrestricted generality is definitionally unavailable, and polynomial-time tractability remains open. The two-`C*` chapter separates related capacity notions. The three-axis chapter places the reachable scarce peer-relative governance-rule impossibility, under transparent-prefix and non-denying-suffix scope, between Arrow-style aggregation and Balinski-Young-style allocation.
 
-Read together, these chapters position the program in the formal-methods side of AI safety: a typed rule-layer audit and theorem surface, not a universal account of all alignment verification.
+Together, these comparisons distinguish the program's theorem object from its nearest neighbors while keeping its scope explicit.
 
 ## 2. Prior Art and Adjacent Programs
 

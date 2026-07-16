@@ -4,17 +4,6 @@
 
 ---
 
-## Citation conventions
-
-Backticked identifiers outside the following exemption categories are expected
-to resolve to a first-party Lean/Rust/test declaration. Fixture field names and
-probe label tokens such as `block_reason`, `hook_registration`,
-`model_not_found`, `skillPrelude`, `bottleneck11_bi`, and `bottleneck13_bi`
-denote literal governance-graph fixture data or probe-bottleneck identifiers,
-not universal claims about upstream source semantics.
-
----
-
 ## The setup
 
 A chatbot can be behaviorally aligned: judged on whether its answers are good.
@@ -205,6 +194,15 @@ adversarial fixtures, and explicit promotion paths from heuristic evidence to
 reviewed and theorem-backed claims.
 
 The constitution needs a compiler. It also needs an evidence label.
+
+## Appendix: Citation conventions
+
+Backticked identifiers outside the following exemption categories are expected
+to resolve to a first-party Lean/Rust/test declaration. Fixture field names and
+probe label tokens such as `block_reason`, `hook_registration`,
+`model_not_found`, `skillPrelude`, `bottleneck11_bi`, and `bottleneck13_bi`
+denote literal governance-graph fixture data or probe-bottleneck identifiers,
+not universal claims about upstream source semantics.
 
 ---
 
