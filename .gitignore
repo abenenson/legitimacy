@@ -1,0 +1,34 @@
+target/
+.beads/
+AGENTS.md
+.legitimacy/ledger.sqlite*
+
+# Lean build artifacts
+.lake/
+lean/.lake/
+
+# OS / editor
+.DS_Store
+*.swp
+*.swo
+
+# Local MCP server wiring
+.mcp.json
+
+# Local-only session and audit-dispatch outputs
+projects/
+
+# Local Claude Code skill scaffolding
+.claude/
+
+# Local self-audit reports (not part of the published artifact)
+/v1-confirm-audit-*.md
+/audits/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/v1-confirm-audit-*.md
+nohup.out
+
+# Local working notes and launch scripts (kept out of the repository)
+.dispatch-*
+
+# Dev-process artifacts (audits, dispatch reports, probes) — internal-only
+internal/
+scripts/maintainer-denylist.sh
