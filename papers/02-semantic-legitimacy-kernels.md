@@ -32,7 +32,7 @@ semantic legitimacy kernel $\to$ declared sacrifices + monitors\\
 \end{tcolorbox}
 ```
 
-> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.0.0` release candidate. Dual license: MIT OR Apache-2.0.
+> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.0.0`. Dual license: MIT OR Apache-2.0.
 
 ## 1. Introduction
 
@@ -220,7 +220,7 @@ The constitution needs a compiler, and the kernel is what it compiles to.
 
 ## References
 
-[LegitimacyCompanions2026] Benenson, A. A Verified Impossibility Theorem for Peer-Relative Governance; Which Governance Structures Survive Unbounded Capability? Capacity and Stability Bounds for AI Governance Graphs. Companion papers in the legitimacy repository, verification code anchor `v1.0.0` release candidate, 2026.
+[LegitimacyCompanions2026] Benenson, A. A Verified Impossibility Theorem for Peer-Relative Governance; Which Governance Structures Survive Unbounded Capability? Capacity and Stability Bounds for AI Governance Graphs. Companion papers in the legitimacy repository, verification code anchor `v1.0.0`, 2026.
 
 [Arrow1951] Arrow, K. J. Social Choice and Individual Values. Yale University Press, 1951.
 

@@ -25,7 +25,7 @@ governance graph G, signal s, tolerance delta\\
 \end{tcolorbox}
 ```
 
-> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.0.0` release candidate. Dual license: MIT OR Apache-2.0.
+> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.0.0`. Dual license: MIT OR Apache-2.0.
 
 > **Capacity converse, informal.** For deterministic protocols embedded in the specified capability-response channel, no zero-error block code can sustain log-rate strictly above one binary decision per channel use. For `δ>0` and `cv(G,s)>0`, at or above the graph's critical threshold, deterministic target-saturating positive-rate `AlignmentProtocol` families with the target-floor obligations have a failed deployment message.
 

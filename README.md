@@ -306,7 +306,7 @@ subject-relative modal box.
 | Where does the claim stop? | [`FRAMEWORK-LIMITS.md`](FRAMEWORK-LIMITS.md), [`docs/boundary.md`](docs/boundary.md), [`docs/extractor-boundary.md`](docs/extractor-boundary.md), and the evidence map in [`docs/claim-ledger.md`](docs/claim-ledger.md). |
 | How do extractor decisions and parity surfaces line up? | [`docs/governance-decision-lattice.md`](docs/governance-decision-lattice.md), [`docs/rust-lean-governance-property-parity.md`](docs/rust-lean-governance-property-parity.md), and [`docs/extractor-ast-theorem-witness.md`](docs/extractor-ast-theorem-witness.md). |
 | What are the current audit-boundary design notes? | [`docs/degenerate-behavior.md`](docs/degenerate-behavior.md), [`docs/production-self-audit-loeb-design.md`](docs/production-self-audit-loeb-design.md), and [`docs/pillar2-governance-audit-capacity-design.md`](docs/pillar2-governance-audit-capacity-design.md). |
-| How do I cite it? | [`papers/CITATION.bib`](papers/CITATION.bib). Rendered PDFs are attached to GitHub releases starting with `v1.0.0`; arXiv links are added at tag time. |
+| How do I cite it? | [`papers/CITATION.bib`](papers/CITATION.bib). Rendered PDFs are attached to GitHub releases starting with `v1.0.0`; arXiv links are added when identifiers are assigned. |
 
 ## Worked extractions: the obstruction on real-agent graphs
 

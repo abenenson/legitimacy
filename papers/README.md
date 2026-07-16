@@ -81,7 +81,5 @@ the public [release](https://github.com/abenenson/legitimacy/releases) for each
 tagged version starting with `v1.0.0`; the canonical sources are the markdown
 files in this directory.
 
-The BibTeX notes intentionally describe the `v1.0.0` release tag as pending.
-At release time, after the annotated `v1.0.0` tag exists, the tag maintainer
-may replace the pending-language note with the final tag wording in the next
-publication-maintenance commit.
+The BibTeX notes reference the final `v1.0.0` release. arXiv identifiers are
+added when assigned.
