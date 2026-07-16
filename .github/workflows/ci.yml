@@ -1,4 +1,4 @@
-name: CI
+name: Verification (manual/tag mirror)
 
 on:
   # Heavy verification is intentionally manual. The publish path runs the same
