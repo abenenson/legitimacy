@@ -1,0 +1,63 @@
+{
+  "nodes": {
+    "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous": {
+      "Binary": {
+        "id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+        "name": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous:446-454",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Approval function that denies potentially dangerous code\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "rm",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "del",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "format",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "delete",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "DROP TABLE",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "f\"Code contains potentially dangerous keyword: \\{keyword\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Code appears safe",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": []
+}

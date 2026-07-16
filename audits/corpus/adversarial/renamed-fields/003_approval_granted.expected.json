@@ -1,0 +1,9 @@
+{
+  "fixture_id": "renamed-fields-003",
+  "family": "renamed-fields",
+  "property": "extractor_recognizes_alias_gate_fields",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "approval_granted should be recognized as an approval evidence alias."
+}
+

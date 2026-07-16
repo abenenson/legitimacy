@@ -1,0 +1,463 @@
+[corpus]
+version = "v1"
+generated_at = "2026-05-04T01:20:00Z"
+extractor_version = "legitimacy 0.1.0 heuristic"
+
+[[harness]]
+id = "aider"
+source_repo = "https://github.com/Aider-AI/aider"
+source_commit = "3ec8ec5a7d695b08a6c24fe6c0c235c8f87df9af"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 100.0
+unsupported_constructs = []
+verdict_summary = "Observed-runtime claim-pack extraction passed over 1 claims; source extraction still skipped because source.lock has no extraction_input."
+
+[[harness]]
+id = "autogen"
+source_repo = "https://github.com/microsoft/autogen"
+source_commit = "027ecf0a379bcc1d09956d46d12d44a3ad9cee14"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "theorem-backed-modeled"
+coverage_pct = 100.0
+unsupported_constructs = ["Unresolved: approvalresponse"]
+verdict_summary = "Synthetic structural probe passed over 1 nodes and 0 edges."
+
+[[harness]]
+id = "claude-agent-sdk-python"
+source_repo = "https://github.com/anthropics/claude-agent-sdk-python"
+source_commit = "0a69e9449b72328742431119132f399e8f30055b"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "theorem-backed-modeled"
+coverage_pct = 100.0
+unsupported_constructs = [
+    "Unresolved: self._send_control_request",
+    "Unresolved: cliconnectionerror",
+    "Unresolved: self._query.set_permission_mode",
+    "Unresolved: mode",
+    "Unresolved: field",
+]
+verdict_summary = "Synthetic structural probe found failures [graph monotonicity] over 15 nodes and 0 edges."
+
+[[harness]]
+id = "cline"
+source_repo = "https://github.com/cline/cline"
+source_commit = "86f463496cc814cf0055dbca4132b7f827425c53"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "codex"
+source_repo = "https://github.com/openai/codex"
+source_commit = "67849d950d843c954102adb0db0e11f993aefdb7"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 100.0
+unsupported_constructs = [
+    "Unresolved: Some",
+    "Unresolved: any",
+    "Unresolved: as_path",
+    "Unresolved: as_slice",
+    "Unresolved: clone",
+    "Unresolved: collect",
+    "Unresolved: display",
+    "Unresolved: execute_handlers",
+    "Unresolved: find_map",
+    "Unresolved: flat_map",
+    "Unresolved: flatten_additional_contexts",
+    "Unresolved: from_path",
+    "Unresolved: hook_completed_for_tool_use",
+    "Unresolved: into_iter",
+    "Unresolved: is_empty",
+    "Unresolved: iter",
+    "Unresolved: join_text_chunks",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: select_handlers",
+    "Unresolved: serialization_failure_hook_events_for_tool_use",
+    "Unresolved: serialization_failure_outcome",
+    "Unresolved: to_string",
+    "Unresolved: handlers",
+    "Unresolved: hook_events",
+    "Unresolved: input_json",
+    "Unresolved: matched",
+    "Unresolved: shell",
+    "Unresolved: and_then",
+    "Unresolved: append_additional_context",
+    "Unresolved: as_deref",
+    "Unresolved: clone",
+    "Unresolved: completed_summary",
+    "Unresolved: is_empty",
+    "Unresolved: is_none",
+    "Unresolved: new",
+    "Unresolved: parse_post_tool_use",
+    "Unresolved: push",
+    "Unresolved: starts_with",
+    "Unresolved: to_string",
+    "Unresolved: trim",
+    "Unresolved: trimmed_non_empty",
+    "Unresolved: unwrap_or",
+    "Unresolved: unwrap_or_else",
+    "Unresolved: additional_context",
+    "Unresolved: entries",
+    "Unresolved: handler",
+    "Unresolved: model_feedback",
+    "Unresolved: reason",
+    "Unresolved: status",
+    "Unresolved: stop_text",
+    "Unresolved: Some",
+    "Unresolved: any",
+    "Unresolved: as_path",
+    "Unresolved: clone",
+    "Unresolved: collect",
+    "Unresolved: display",
+    "Unresolved: execute_handlers",
+    "Unresolved: find_map",
+    "Unresolved: from_path",
+    "Unresolved: hook_completed_for_tool_use",
+    "Unresolved: into_iter",
+    "Unresolved: is_empty",
+    "Unresolved: iter",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: select_handlers",
+    "Unresolved: serialization_failure_hook_events_for_tool_use",
+    "Unresolved: serialization_failure_outcome",
+    "Unresolved: to_string",
+    "Unresolved: handlers",
+    "Unresolved: hook_events",
+    "Unresolved: input_json",
+    "Unresolved: matched",
+    "Unresolved: shell",
+    "Unresolved: Some",
+    "Unresolved: as_deref",
+    "Unresolved: clone",
+    "Unresolved: completed_summary",
+    "Unresolved: is_empty",
+    "Unresolved: new",
+    "Unresolved: parse_pre_tool_use",
+    "Unresolved: push",
+    "Unresolved: starts_with",
+    "Unresolved: to_string",
+    "Unresolved: trim",
+    "Unresolved: trimmed_non_empty",
+    "Unresolved: entries",
+    "Unresolved: handler",
+    "Unresolved: status",
+    "Unresolved: Some",
+    "Unresolved: any",
+    "Unresolved: as_path",
+    "Unresolved: as_slice",
+    "Unresolved: as_str",
+    "Unresolved: clone",
+    "Unresolved: collect",
+    "Unresolved: display",
+    "Unresolved: execute_handlers",
+    "Unresolved: find_map",
+    "Unresolved: flatten_additional_contexts",
+    "Unresolved: into_iter",
+    "Unresolved: is_empty",
+    "Unresolved: iter",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: select_handlers",
+    "Unresolved: serialization_failure_hook_events",
+    "Unresolved: serialization_failure_outcome",
+    "Unresolved: to_string",
+    "Unresolved: handlers",
+    "Unresolved: input_json",
+    "Unresolved: matched",
+    "Unresolved: shell",
+    "Unresolved: turn_id",
+    "Unresolved: append_additional_context",
+    "Unresolved: as_deref",
+    "Unresolved: clone",
+    "Unresolved: completed_summary",
+    "Unresolved: is_empty",
+    "Unresolved: new",
+    "Unresolved: parse_session_start",
+    "Unresolved: push",
+    "Unresolved: starts_with",
+    "Unresolved: to_string",
+    "Unresolved: trim",
+    "Unresolved: additional_context",
+    "Unresolved: entries",
+    "Unresolved: handler",
+    "Unresolved: status",
+    "Unresolved: Some",
+    "Unresolved: aggregate_results",
+    "Unresolved: as_path",
+    "Unresolved: clone",
+    "Unresolved: collect",
+    "Unresolved: display",
+    "Unresolved: execute_handlers",
+    "Unresolved: from_path",
+    "Unresolved: from_string",
+    "Unresolved: into_iter",
+    "Unresolved: is_empty",
+    "Unresolved: iter",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: select_handlers",
+    "Unresolved: serialization_failure_hook_events",
+    "Unresolved: serialization_failure_outcome",
+    "Unresolved: to_string",
+    "Unresolved: handlers",
+    "Unresolved: input_json",
+    "Unresolved: matched",
+    "Unresolved: shell",
+    "Unresolved: Some",
+    "Unresolved: and_then",
+    "Unresolved: as_deref",
+    "Unresolved: clone",
+    "Unresolved: completed_summary",
+    "Unresolved: is_empty",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: parse_stop",
+    "Unresolved: push",
+    "Unresolved: to_string",
+    "Unresolved: trim",
+    "Unresolved: trimmed_non_empty",
+    "Unresolved: unwrap_or_default",
+    "Unresolved: entries",
+    "Unresolved: handler",
+    "Unresolved: status",
+    "Unresolved: Some",
+    "Unresolved: any",
+    "Unresolved: as_path",
+    "Unresolved: as_slice",
+    "Unresolved: clone",
+    "Unresolved: collect",
+    "Unresolved: display",
+    "Unresolved: execute_handlers",
+    "Unresolved: find_map",
+    "Unresolved: flatten_additional_contexts",
+    "Unresolved: from_path",
+    "Unresolved: into_iter",
+    "Unresolved: is_empty",
+    "Unresolved: iter",
+    "Unresolved: map",
+    "Unresolved: new",
+    "Unresolved: select_handlers",
+    "Unresolved: serialization_failure_hook_events",
+    "Unresolved: serialization_failure_outcome",
+    "Unresolved: to_string",
+    "Unresolved: handlers",
+    "Unresolved: input_json",
+    "Unresolved: matched",
+    "Unresolved: shell",
+    "Unresolved: Some",
+    "Unresolved: append_additional_context",
+    "Unresolved: as_deref",
+    "Unresolved: clone",
+    "Unresolved: completed_summary",
+    "Unresolved: is_empty",
+    "Unresolved: is_none",
+    "Unresolved: new",
+    "Unresolved: parse_user_prompt_submit",
+    "Unresolved: push",
+    "Unresolved: starts_with",
+    "Unresolved: to_string",
+    "Unresolved: trim",
+    "Unresolved: trimmed_non_empty",
+    "Unresolved: additional_context",
+    "Unresolved: entries",
+    "Unresolved: handler",
+    "Unresolved: status",
+]
+verdict_summary = "Synthetic structural probe found failures [graph monotonicity, graph nonvacuity] over 10 nodes and 5 edges."
+
+[[harness]]
+id = "continue-dev"
+source_repo = "https://github.com/continuedev/continue"
+source_commit = "cb273098d968906d25ee737b454f0b5f13ea2482"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 100.0
+unsupported_constructs = []
+verdict_summary = "Observed-runtime claim-pack extraction passed over 1 claims; source extraction still skipped because source.lock has no extraction_input."
+
+[[harness]]
+id = "crewai"
+source_repo = "https://github.com/crewAIInc/crewAI"
+source_commit = "c9100cb51d357f6e3ba7d9969a000571f051ca64"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "theorem-backed-modeled"
+coverage_pct = 100.0
+unsupported_constructs = [
+    "Unresolved: get_before_tool_call_hooks",
+    "Unresolved: hook",
+    "Unresolved: register_before_tool_call_hook",
+    "Unresolved: toolcallhookcontext",
+    "Unresolved: context",
+    "Unresolved: hook1",
+    "Unresolved: hook2",
+    "Unresolved: hook3",
+    "Unresolved: get_after_tool_call_hooks",
+    "Unresolved: get_before_tool_call_hooks",
+    "Unresolved: hook",
+    "Unresolved: register_after_tool_call_hook",
+    "Unresolved: register_before_tool_call_hook",
+    "Unresolved: toolcallhookcontext",
+    "Unresolved: blocked_context",
+    "Unresolved: sanitize_context",
+    "Unresolved: sanitize_secrets",
+    "Unresolved: context.tool_input.get",
+    "Unresolved: append",
+    "Unresolved: dict",
+]
+verdict_summary = "Synthetic structural probe found failures [graph monotonicity, graph nonvacuity] over 5 nodes and 1 edges."
+
+[[harness]]
+id = "dspy"
+source_repo = "https://github.com/stanfordnlp/dspy"
+source_commit = "2974a6550a403e9b8c90ca9e34331d67d3102fa6"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "guardrails-ai"
+source_repo = "https://github.com/guardrails-ai/guardrails"
+source_commit = "379ab72ff643d0d9b8dff4f74c956ce29eab341d"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "langchain"
+source_repo = "https://github.com/langchain-ai/langchain"
+source_commit = "1c08d478d98690ac0bc5e6aa80796078e56969de"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "langgraph"
+source_repo = "https://github.com/langchain-ai/langgraph"
+source_commit = "a0c4bdc3cb88e371a0fee00b6479509e9c9a8a72"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "theorem-backed-modeled"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "letta"
+source_repo = "https://github.com/letta-ai/letta"
+source_commit = "bb52a8900a79cf1378e6e9cdecf244b673a13a72"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "litellm"
+source_repo = "https://github.com/BerriAI/litellm"
+source_commit = "c011a7e3ba4218015c808f9891cba9dae48056a1"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 100.0
+unsupported_constructs = []
+verdict_summary = "Observed-runtime claim-pack extraction passed over 1 claims; source extraction still skipped because source.lock has no extraction_input."
+
+[[harness]]
+id = "llamaindex"
+source_repo = "https://github.com/run-llama/llama_index"
+source_commit = "db30f539427e86eb564aa7428bd95e783ffa944a"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "nemo-guardrails"
+source_repo = "https://github.com/NVIDIA/NeMo-Guardrails"
+source_commit = "76d3af8460c2680d3866b8a2dacc9c181428ef0d"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "theorem-backed-modeled"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "openhands"
+source_repo = "https://github.com/All-Hands-AI/OpenHands"
+source_commit = "d3864d9992c4a7503b32e9fbc1fba8c4bf2bdf92"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "qwen-agent"
+source_repo = "https://github.com/QwenLM/Qwen-Agent"
+source_commit = "31a4d36d123688581a9e9744427272b33ce940e0"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "roo-code"
+source_repo = "https://github.com/RooVetGit/Roo-Code"
+source_commit = "ad256349058d3f84fd97517aabce4a119a234bbf"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "semantic-kernel"
+source_repo = "https://github.com/microsoft/semantic-kernel"
+source_commit = "006a5d9a9b3eb4ed41f63beb6341bc44e724d9db"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."
+
+[[harness]]
+id = "swe-agent"
+source_repo = "https://github.com/SWE-agent/SWE-agent"
+source_commit = "0f4f3bba990e01ca8460b9963abdcd89e38042f2"
+license = "MIT"
+extraction_mode = "heuristic"
+evidence_tier = "heuristic"
+coverage_pct = 0.0
+unsupported_constructs = []
+verdict_summary = "Skipped: source.lock has no extraction_input."

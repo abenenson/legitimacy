@@ -1,0 +1,191 @@
+{
+  "nodes": {
+    "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook": {
+      "Binary": {
+        "id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook",
+        "name": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook:158-161",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "dangerous_tool",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook": {
+      "Binary": {
+        "id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+        "name": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook:764-772",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "before",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "tool_name",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "tool_input",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "dangerous_operation",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution": {
+      "Binary": {
+        "id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+        "name": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution:340-376",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Test that first hook returning False blocks execution\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "test_tool",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization": {
+      "Binary": {
+        "id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+        "name": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization:414-466",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "blocked_context",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Test a realistic scenario with validation and sanitization hooks\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "write_file",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "file_path",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": ".env",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "read_file",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "config.txt",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Content: SECRET_KEY=abc123",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path": {
+      "Binary": {
+        "id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+        "name": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path:417-422",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "write_file",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "file_path",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": ".env",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+      "to": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+      "transform": "PassThrough"
+    }
+  ]
+}

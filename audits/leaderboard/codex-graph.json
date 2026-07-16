@@ -1,0 +1,529 @@
+{
+  "nodes": {
+    "post_tool_use.rs::parse_completed": {
+      "Binary": {
+        "id": "post_tool_use.rs::parse_completed",
+        "name": "post_tool_use.rs::parse_completed:155-291",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "PostToolUse hook stopped execution",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid post\\-tool\\-use JSON output",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "PostToolUse hook exited with code 2 but did not write feedback to stderr",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "PostToolUse hook exited with code 2 but did not write feedback to stderr",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "post_tool_use.rs::run": {
+      "Binary": {
+        "id": "post_tool_use.rs::run",
+        "name": "post_tool_use.rs::run:68-153",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_event_name",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permission_mode",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize post tool use hook input: \\{error\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PostToolUse",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Bash",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize post tool use hook input: \\{error\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "pre_tool_use.rs::parse_completed": {
+      "Binary": {
+        "id": "pre_tool_use.rs::parse_completed",
+        "name": "pre_tool_use.rs::parse_completed:132-230",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "block_reason",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid pre\\-tool\\-use JSON output",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "PreToolUse hook exited with code 2 but did not write a blocking reason to stderr",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "pre_tool_use.rs::run": {
+      "Binary": {
+        "id": "pre_tool_use.rs::run",
+        "name": "pre_tool_use.rs::run:61-130",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_event_name",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permission_mode",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize pre tool use hook input: \\{error\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PreToolUse",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Bash",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "session_start.rs::parse_completed": {
+      "Binary": {
+        "id": "session_start.rs::parse_completed",
+        "name": "session_start.rs::parse_completed:141-237",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid session start JSON output",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid session start JSON output",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "session_start.rs::run": {
+      "Binary": {
+        "id": "session_start.rs::run",
+        "name": "session_start.rs::run:75-139",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "permission_mode",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize session start hook input: \\{error\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize session start hook input: \\{error\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "stop.rs::parse_completed": {
+      "Binary": {
+        "id": "stop.rs::parse_completed",
+        "name": "stop.rs::parse_completed:123-262",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Stop hook returned decision:block without a non\\-empty reason",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid stop hook JSON output",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Stop hook exited with code 2 but did not write a continuation prompt to stderr",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "stop.rs::run": {
+      "Binary": {
+        "id": "stop.rs::run",
+        "name": "stop.rs::run:62-121",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_event_name",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permission_mode",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize stop hook input: \\{error\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Stop",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "user_prompt_submit.rs::parse_completed": {
+      "Binary": {
+        "id": "user_prompt_submit.rs::parse_completed",
+        "name": "user_prompt_submit.rs::parse_completed:127-258",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "hook returned invalid user prompt submit JSON output",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "UserPromptSubmit hook exited with code 2 but did not write a blocking reason to stderr",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited with code \\{exit_code\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "hook exited without a status code",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "user_prompt_submit.rs::run": {
+      "Binary": {
+        "id": "user_prompt_submit.rs::run",
+        "name": "user_prompt_submit.rs::run:60-125",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_event_name",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permission_mode",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize user prompt submit hook input: \\{error\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "UserPromptSubmit",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "failed to serialize user prompt submit hook input: \\{error\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "post_tool_use.rs::run",
+      "to": "post_tool_use.rs::parse_completed",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "pre_tool_use.rs::run",
+      "to": "pre_tool_use.rs::parse_completed",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "session_start.rs::run",
+      "to": "session_start.rs::parse_completed",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "stop.rs::run",
+      "to": "stop.rs::parse_completed",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "user_prompt_submit.rs::run",
+      "to": "user_prompt_submit.rs::parse_completed",
+      "transform": "PassThrough"
+    }
+  ]
+}

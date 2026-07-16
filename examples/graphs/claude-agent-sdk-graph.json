@@ -1,0 +1,454 @@
+{
+  "nodes": {
+    "claude_agent_sdk/hooks.py::HookDecision": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::HookDecision",
+        "name": "claude_agent_sdk/hooks.py::HookDecision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::notification_escalation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::notification_escalation",
+        "name": "claude_agent_sdk/hooks.py::notification_escalation",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::permission_request_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::permission_request_review",
+        "name": "claude_agent_sdk/hooks.py::permission_request_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::post_tool_use_failure_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::post_tool_use_failure_review",
+        "name": "claude_agent_sdk/hooks.py::post_tool_use_failure_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::post_tool_use_observation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::post_tool_use_observation",
+        "name": "claude_agent_sdk/hooks.py::post_tool_use_observation",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::pre_tool_use_permission_decision",
+        "name": "claude_agent_sdk/hooks.py::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::Notification::notification_escalation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::Notification::notification_escalation",
+        "name": "claude_agent_sdk/hooks.py::registration::Notification::notification_escalation",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::PermissionRequest::permission_request_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::PermissionRequest::permission_request_review",
+        "name": "claude_agent_sdk/hooks.py::registration::PermissionRequest::permission_request_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::PostToolUse::post_tool_use_observation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::PostToolUse::post_tool_use_observation",
+        "name": "claude_agent_sdk/hooks.py::registration::PostToolUse::post_tool_use_observation",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::PostToolUseFailure::post_tool_use_failure_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::PostToolUseFailure::post_tool_use_failure_review",
+        "name": "claude_agent_sdk/hooks.py::registration::PostToolUseFailure::post_tool_use_failure_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::PreToolUse::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "name": "claude_agent_sdk/hooks.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::Stop::stop_continuation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::Stop::stop_continuation",
+        "name": "claude_agent_sdk/hooks.py::registration::Stop::stop_continuation",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::SubagentStart::subagent_start_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::SubagentStart::subagent_start_review",
+        "name": "claude_agent_sdk/hooks.py::registration::SubagentStart::subagent_start_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::registration::UserPromptSubmit::user_prompt_submit_guard": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+        "name": "claude_agent_sdk/hooks.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::stop_continuation": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::stop_continuation",
+        "name": "claude_agent_sdk/hooks.py::stop_continuation",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::subagent_start_review": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::subagent_start_review",
+        "name": "claude_agent_sdk/hooks.py::subagent_start_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/hooks.py::user_prompt_submit_guard": {
+      "Binary": {
+        "id": "claude_agent_sdk/hooks.py::user_prompt_submit_guard",
+        "name": "claude_agent_sdk/hooks.py::user_prompt_submit_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/types.py::PermissionBehavior": {
+      "Binary": {
+        "id": "claude_agent_sdk/types.py::PermissionBehavior",
+        "name": "claude_agent_sdk/types.py::PermissionBehavior",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/types.py::PermissionResultAllow": {
+      "Binary": {
+        "id": "claude_agent_sdk/types.py::PermissionResultAllow",
+        "name": "claude_agent_sdk/types.py::PermissionResultAllow",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/types.py::PermissionResultDeny": {
+      "Binary": {
+        "id": "claude_agent_sdk/types.py::PermissionResultDeny",
+        "name": "claude_agent_sdk/types.py::PermissionResultDeny",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/types.py::PreToolUseHookSpecificOutput": {
+      "Binary": {
+        "id": "claude_agent_sdk/types.py::PreToolUseHookSpecificOutput",
+        "name": "claude_agent_sdk/types.py::PreToolUseHookSpecificOutput",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "defer",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_agent_sdk/types.py::SyncHookJSONOutput": {
+      "Binary": {
+        "id": "claude_agent_sdk/types.py::SyncHookJSONOutput",
+        "name": "claude_agent_sdk/types.py::SyncHookJSONOutput",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::Notification::notification_escalation",
+      "to": "claude_agent_sdk/hooks.py::notification_escalation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::PermissionRequest::permission_request_review",
+      "to": "claude_agent_sdk/hooks.py::permission_request_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::PostToolUse::post_tool_use_observation",
+      "to": "claude_agent_sdk/hooks.py::post_tool_use_observation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::PostToolUseFailure::post_tool_use_failure_review",
+      "to": "claude_agent_sdk/hooks.py::post_tool_use_failure_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::PreToolUse::pre_tool_use_permission_decision",
+      "to": "claude_agent_sdk/hooks.py::pre_tool_use_permission_decision",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::Stop::stop_continuation",
+      "to": "claude_agent_sdk/hooks.py::stop_continuation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::SubagentStart::subagent_start_review",
+      "to": "claude_agent_sdk/hooks.py::subagent_start_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_agent_sdk/hooks.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+      "to": "claude_agent_sdk/hooks.py::user_prompt_submit_guard",
+      "transform": "PassThrough"
+    }
+  ]
+}

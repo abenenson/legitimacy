@@ -1,0 +1,39 @@
+# Lean modules or module families with no Rust extraction-side counterpart.
+#
+# Format:
+#   <Lean path or trailing-slash prefix> <reason>
+#
+# Per-file registration is required for each Lean-only module. Family-level
+# inheritance is intentionally NOT supported — every new Reflective module must
+# add its own line below with an explicit justification. A future module that
+# makes executable/extractor-adjacent claims must NOT inherit this exemption.
+lean/Legitimacy/Reflective/PolicyAtom.lean Lean-only-by-design: theoretical modal substrate (atom types); no Rust counterpart.
+lean/Legitimacy/Reflective/Encoding.lean Lean-only-by-design: theoretical modal substrate (per-predicate encoders); no Rust counterpart.
+lean/Legitimacy/Reflective/FixedPointSystem.lean Lean-only-by-design: theoretical modal substrate (ReflectiveBoxSubstrate class + core fixed-point program); no Rust counterpart.
+lean/Legitimacy/Reflective/Depth2.lean Lean-only-by-design: theoretical modal substrate (depth-2 worked example); no Rust counterpart.
+lean/Legitimacy/Reflective/CriticalCapabilityComposition.lean Lean-only-by-design: theoretical modal substrate (critical-capability composition); no Rust counterpart.
+lean/Legitimacy/Reflective/Examples.lean Lean-only-by-design: theoretical modal substrate (external consumer worked example); no Rust counterpart.
+lean/Legitimacy/Reflective/BoxedSoundnessRealization.lean Lean-only-by-design: theoretical modal substrate (Kripke countermodel); no Rust counterpart.
+lean/Legitimacy/Reflective/ArithmeticRealizationPrerequisites.lean Lean-only-by-design: theoretical modal substrate (first-order arithmetic shape declaration); no Rust counterpart.
+lean/Legitimacy/Reflective/ArithmeticRealizationObstructions.lean Lean-only-by-design: theoretical modal substrate (three-route obstruction characterization); no Rust counterpart.
+lean/Legitimacy/Reflective/GeneratorBoxConstruction.lean Lean-only-by-design: theoretical modal substrate (generator boxed-atom construction probe); no Rust counterpart.
+lean/Legitimacy/Reflective/ProductionSelfAudit.lean Lean-only-by-design: modal Loeb self-audit over the production audit graph semantics; Rust owns the executable audit pipeline.
+lean/Legitimacy/Reflective/PeerRelativeAuditOrthogonality.lean Lean-only-by-design: proof-only boundary theorem between modal self-audit certificates and peer-relative graph obstructions; no Rust executable counterpart.
+lean/Legitimacy/Extract/AuditClaimQEncoding.lean Lean-only-by-design: proof-only ClaimQ/audit encoding helpers for represented-subject semantic bridges; no Rust executable counterpart.
+lean/Legitimacy/Extract/RepresentableAuditSubject.lean Lean-only-by-design: theorem bridge from constrained first-match audit subjects to all-profile GovernanceGraph semantics; no Rust executable counterpart.
+lean/Legitimacy/Extract/RepresentableAuditSubject/PermitOnly.lean Lean-only-by-design: proof-only permit-only represented-subject floor fixture split from the theorem bridge; no Rust executable counterpart.
+lean/Legitimacy/Extract/RepresentableAuditSubject/Semantics.lean Lean-only-by-design: proof-only all-profile semantic congruence theorems for faithful represented audit subjects; no Rust executable counterpart.
+lean/Legitimacy/Extract/RepresentableAuditSubject/Round2.lean Lean-only-by-design: proof-only representable-subject bridge strengthening for evalNode/repr and showcased harness projection; no Rust executable counterpart.
+lean/Legitimacy/Extract/RepresentableAuditSubject/Round4.lean Lean-only-by-design: proof-only representable-subject corpus-completeness boundary; no Rust executable counterpart.
+lean/Legitimacy/Spectral/Channels/GovernanceAuditCapacity.lean Lean-only-by-design: finite Shannon-capacity proof layer for audit allocation semantics; Rust has no executable audit-prior optimizer.
+lean/Legitimacy/Bridges/AuditSpectralProjection.lean Lean-only-by-design: proof-only audit-graph to spectral-carrier projection and threshold-signal lemmas; Rust emits extracted graph artifacts but does not prove GovGraph obligations.
+lean/Legitimacy/CaseStudies/ClaudeAgentSdkHarness.lean Lean-only-by-design: proof-only derived spectral carrier and threshold facts for the committed Claude Agent SDK audit graph; Rust emits evidence bundle metadata but does not prove GovGraph obligations.
+lean/Legitimacy/CaseStudies/ClaudeCodeHarness.lean Lean-only-by-design: proof-only derived spectral carrier and threshold facts for the committed Claude Code audit graph; Rust emits evidence bundle metadata but does not prove GovGraph obligations.
+lean/Legitimacy/Spectral/ASIBridge/DenialBearing.lean Lean-only-by-design: proof-only ASI bridge carrier/signature theorem and denial-bearing runtime toy; Rust has no executable spectral bridge counterpart.
+lean/Legitimacy/Spectral/ASIBridge/CompleteCarrierSpecialization.lean Lean-only-by-design: proof-only equality bridge from finite complete spectral carriers to the generic ASI complete carrier; Rust has no executable spectral bridge counterpart.
+lean/Legitimacy/SelfModificationLifecycle.lean Lean-only-by-design: pure structural proof of no-silent-degradation across the policy lifecycle (induction over policy transitions); the executable rule-layer reduction is SafetySpecReduction.lean -> src/safety_spec_reduction.rs, not this module.
+lean/Legitimacy/Safety/KernelSafety/StatefulScheduleSafety.lean Lean-only-by-design: universe-polymorphic structural induction over Nat-indexed schedules (no-silent-degradation schedule safety); no executable extractor-adjacent claim, no Rust counterpart.
+lean/Legitimacy/Results/SelfModBoundary.lean Lean-only-by-design: pure induction over abstract action lists (self-modification escape requires an indexed override-removal step); no Rust counterpart.
+lean/Legitimacy/Foundations/SymmetricScarceCoupled.lean Lean-only-by-design: proof-only widened allocator class and strength-blindness lemmas for decision-system obstruction; no Rust executable counterpart.
+lean/Legitimacy/Impossibility/SymmetricScarceCoupledObstruction.lean Lean-only-by-design: proof-only widened impossibility theorem and concrete median witness facts; no Rust executable counterpart.
+lean/Legitimacy/Impossibility/SymmetricScarceCoupledTightness.lean Lean-only-by-design: proof-only tightness countermodels and max-rule separation witness for the widened coupled class; no Rust executable counterpart.

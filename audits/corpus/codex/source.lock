@@ -1,0 +1,9 @@
+[source]
+id = "codex"
+source_repo = "https://github.com/openai/codex"
+source_commit = "67849d950d843c954102adb0db0e11f993aefdb7"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+extraction_input = "audits/fixtures/sources/leaderboard/codex-hooks"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

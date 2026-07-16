@@ -1,0 +1,16 @@
+# Test-Source Fixture Disclosure Registry
+
+# Any extracted-graph fixture whose source-relative path contains `/tests/`
+# must be listed here. `scripts/check-fixture-provenance.sh` fails if such a
+# fixture appears without an entry below. Reviewer-facing disclosure (paper,
+# repository context, theorem-facing Lean module) is enforced editorially, not
+# by this script.
+
+allow: lib/crewai/tests/hooks/test_tool_hooks.py
+reason: CrewAI frozen leaderboard regression row is extracted from the upstream
+reason: hook test suite, not from the production `lib/crewai/src/crewai` surface.
+
+allow: python/packages/autogen-agentchat/tests/test_code_executor_agent.py
+reason: AutoGen frozen leaderboard regression row is extracted from the upstream
+reason: code-executor-agent test suite, not from the production
+reason: `python/packages/autogen-agentchat/src/autogen_agentchat` surface.

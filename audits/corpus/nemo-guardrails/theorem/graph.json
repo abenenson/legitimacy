@@ -1,0 +1,50 @@
+{
+  "nodes": {
+    "python_hook_core_model.py::dialogue_policy_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::dialogue_policy_guard",
+        "name": "python_hook_core_model.py::dialogue_policy_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard",
+        "name": "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration:DialoguePolicy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard",
+      "to": "python_hook_core_model.py::dialogue_policy_guard",
+      "transform": "PassThrough"
+    }
+  ]
+}

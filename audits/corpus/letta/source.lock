@@ -1,0 +1,8 @@
+[source]
+id = "letta"
+source_repo = "https://github.com/letta-ai/letta"
+source_commit = "bb52a8900a79cf1378e6e9cdecf244b673a13a72"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

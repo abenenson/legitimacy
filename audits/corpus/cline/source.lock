@@ -1,0 +1,8 @@
+[source]
+id = "cline"
+source_repo = "https://github.com/cline/cline"
+source_commit = "86f463496cc814cf0055dbca4132b7f827425c53"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

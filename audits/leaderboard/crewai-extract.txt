@@ -1,0 +1,102 @@
+EXTRACTION REPORT
+source: audits/fixtures/sources/leaderboard/crewai
+nodes found: 5
+edges found: 1
+cycles detected: 0
+claim corpus: SyntheticStructuralProbe (22 claims)
+coverage: 1 parsed / 1 discovered (0 skipped, 0 errored)
+resolution issues: 20
+
+RECOGNIZED NODES
+- lib/crewai/tests/hooks/test_tool_hooks.py::block_hook [medium|Automatic] lib/crewai/tests/hooks/test_tool_hooks.py:158-161
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution [medium|Automatic] lib/crewai/tests/hooks/test_tool_hooks.py:340-376
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization [medium|Automatic] lib/crewai/tests/hooks/test_tool_hooks.py:414-466
+- lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path [medium|Automatic] lib/crewai/tests/hooks/test_tool_hooks.py:417-422
+- lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook [medium|Automatic] lib/crewai/tests/hooks/test_tool_hooks.py:764-772
+
+RESOLUTION ISSUES
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> get_before_tool_call_hooks (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> hook (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> register_before_tool_call_hook (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> toolcallhookcontext (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> context (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> hook1 (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> hook2 (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution -> hook3 (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> get_after_tool_call_hooks (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> get_before_tool_call_hooks (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> hook (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> register_after_tool_call_hook (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> register_before_tool_call_hook (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> toolcallhookcontext (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> blocked_context (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> sanitize_context (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization -> sanitize_secrets (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path -> context.tool_input.get (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook -> append (Unresolved)
+- lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook -> dict (Unresolved)
+
+AXIOM STATUS
+- CERTIFIABLE: SUPPORTED (projection verdict passed)
+- GOVERNANCE-OBSERVABLE: SUPPORTED (projection verdict passed)
+- CORRIGIBLE: SUPPORTED (projection verdict passed)
+- COMPOSITIONAL SAFETY: SUPPORTED (projection verdict passed)
+- NON-VACUOUS: REJECTED (4 examined claims remained in Escalate after traversal: lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2, lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9)
+
+DIAGNOSTIC CHECKS
+- graph consistency: passed (22 perturbations)
+- graph solidarity: passed (6 perturbations)
+- graph monotonicity: REJECTED -- Improving 'baseline' on 'hook_registration' by 1.00 worsened 'baseline' from Permit to Escalate
+- graph strategyproofness (derived via solidarity_monotonicity_imply_strategyproof; empirical monitor): passed (110 perturbations)
+- graph certifiability (implements CERTIFIABLE projection): passed (123 perturbations)
+- graph observable determinacy (implements GOVERNANCE-OBSERVABLE projection): passed (60 perturbations)
+- graph corrigibility (implements CORRIGIBLE projection): passed (3 perturbations)
+- graph compositional safety (implements COMPOSITIONAL SAFETY projection): passed (22 perturbations)
+- graph nonvacuity (implements NON-VACUOUS axiom): REJECTED -- 4 examined claims remained in Escalate after traversal: lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2, lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9
+
+PARADOX SUITE
+- compositional Alabama: detected -- Appending peer-review node 'lib-crewai-tests-hooks-test_tool_hooks-py--test_first_blocking_hook_stops_execution-review' after 'lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution' at percentile 0.60 worsened 'lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0' from Escalate to Deny
+- feedback monotonicity: none
+- path dependence: none
+
+SPECTRAL ANALYSIS
+- graph connectivity: DISCONNECTED
+- connected components: 4
+- spectral gap (lambda_2): 0.000
+- max degree: 1
+- signal range: 0.45
+- cv (exact): 5/1
+- C*(δ=0.100): N/A
+- RG trajectory (k=1..3 cv): N/A
+- RG trajectory (k=1..3 C*): N/A
+- spectral well-connected (θ=17/20): no
+- capacity bound: N/A
+- capacity saturated at ε=0.100: N/A
+- cv (Cheeger upper bound): N/A
+- localizability bound: N/A
+- CV x localizability: N/A
+
+GOVERNANCE FACTOR EXPOSURE
+Governance Factor Exposure
+  consistency        0.00  [..........]
+  solidarity         0.00  [..........]
+  monotonicity       1.00  [##########]
+  strategyproofness  0.00  [..........]
+  nonvacuity         1.00  [##########]
+
+PROTOCOL STATE ASSESSMENT
+- current state: UNDECLARED
+- governance-observable: YES (graph extracted for principal inspection)
+- can extract-compile: NO (requires no cycles, at least one passing axiom, and no rejected axioms)
+- can measure: NO (spectral analysis unavailable)
+- supervisory algebra: {pause, deny, sandbox, degrade, rollback, reroute, stop}
+- boundary-relative compositional safety: 4 governance nodes have 20 transitive external dependencies not in the governance graph (causal boundary analysis)
+- blocking for LIVE:
+  - 2 axiom check(s) rejected; sacrifices required before promotion
+  - spectral analysis could not compute algebraic connectivity (disconnected graph or single node)
+  - 4 governance nodes have 20 transitive external dependencies not in the governance graph (causal boundary analysis)
+  - no monitoring infrastructure detected
+
+RECOMMENDED SACRIFICES
+1. monotonicity -- Improving 'baseline' on 'hook_registration' by 1.00 worsened 'baseline' from Permit to Escalate
+2. nonvacuity -- 4 examined claims remained in Escalate after traversal (see diagnostic above)

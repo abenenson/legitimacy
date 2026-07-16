@@ -1,0 +1,382 @@
+{
+  "nodes": {
+    "compact.rs::on_PreCompact": {
+      "Binary": {
+        "id": "compact.rs::on_PreCompact",
+        "name": "compact.rs::on_PreCompact",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "compact.rs::registration::PreCompact::on_PreCompact": {
+      "Binary": {
+        "id": "compact.rs::registration::PreCompact::on_PreCompact",
+        "name": "compact.rs::registration::PreCompact::on_PreCompact",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "permission_request.rs::on_PermissionRequest": {
+      "Binary": {
+        "id": "permission_request.rs::on_PermissionRequest",
+        "name": "permission_request.rs::on_PermissionRequest",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "permission_request.rs::registration::PermissionRequest::on_PermissionRequest": {
+      "Binary": {
+        "id": "permission_request.rs::registration::PermissionRequest::on_PermissionRequest",
+        "name": "permission_request.rs::registration::PermissionRequest::on_PermissionRequest",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "post_tool_use.rs::on_PostToolUse": {
+      "Binary": {
+        "id": "post_tool_use.rs::on_PostToolUse",
+        "name": "post_tool_use.rs::on_PostToolUse",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "post_tool_use.rs::registration::PostToolUse::on_PostToolUse": {
+      "Binary": {
+        "id": "post_tool_use.rs::registration::PostToolUse::on_PostToolUse",
+        "name": "post_tool_use.rs::registration::PostToolUse::on_PostToolUse",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "pre_tool_use.rs::on_PreToolUse": {
+      "Binary": {
+        "id": "pre_tool_use.rs::on_PreToolUse",
+        "name": "pre_tool_use.rs::on_PreToolUse",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "pre_tool_use.rs::registration::PreToolUse::on_PreToolUse": {
+      "Binary": {
+        "id": "pre_tool_use.rs::registration::PreToolUse::on_PreToolUse",
+        "name": "pre_tool_use.rs::registration::PreToolUse::on_PreToolUse",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "registry.rs::on_PostCompact": {
+      "Binary": {
+        "id": "registry.rs::on_PostCompact",
+        "name": "registry.rs::on_PostCompact",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "registry.rs::registration::PostCompact::on_PostCompact": {
+      "Binary": {
+        "id": "registry.rs::registration::PostCompact::on_PostCompact",
+        "name": "registry.rs::registration::PostCompact::on_PostCompact",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "session_start.rs::on_SessionStart": {
+      "Binary": {
+        "id": "session_start.rs::on_SessionStart",
+        "name": "session_start.rs::on_SessionStart",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "session_start.rs::registration::SessionStart::on_SessionStart": {
+      "Binary": {
+        "id": "session_start.rs::registration::SessionStart::on_SessionStart",
+        "name": "session_start.rs::registration::SessionStart::on_SessionStart",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "stop.rs::on_Stop": {
+      "Binary": {
+        "id": "stop.rs::on_Stop",
+        "name": "stop.rs::on_Stop",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "stop.rs::registration::Stop::on_Stop": {
+      "Binary": {
+        "id": "stop.rs::registration::Stop::on_Stop",
+        "name": "stop.rs::registration::Stop::on_Stop",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "user_prompt_submit.rs::on_UserPromptSubmit": {
+      "Binary": {
+        "id": "user_prompt_submit.rs::on_UserPromptSubmit",
+        "name": "user_prompt_submit.rs::on_UserPromptSubmit",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "user_prompt_submit.rs::registration::UserPromptSubmit::on_UserPromptSubmit": {
+      "Binary": {
+        "id": "user_prompt_submit.rs::registration::UserPromptSubmit::on_UserPromptSubmit",
+        "name": "user_prompt_submit.rs::registration::UserPromptSubmit::on_UserPromptSubmit",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "compact.rs::registration::PreCompact::on_PreCompact",
+      "to": "compact.rs::on_PreCompact",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "permission_request.rs::registration::PermissionRequest::on_PermissionRequest",
+      "to": "permission_request.rs::on_PermissionRequest",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "post_tool_use.rs::registration::PostToolUse::on_PostToolUse",
+      "to": "post_tool_use.rs::on_PostToolUse",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "pre_tool_use.rs::registration::PreToolUse::on_PreToolUse",
+      "to": "pre_tool_use.rs::on_PreToolUse",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "registry.rs::registration::PostCompact::on_PostCompact",
+      "to": "registry.rs::on_PostCompact",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "session_start.rs::registration::SessionStart::on_SessionStart",
+      "to": "session_start.rs::on_SessionStart",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "stop.rs::registration::Stop::on_Stop",
+      "to": "stop.rs::on_Stop",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "user_prompt_submit.rs::registration::UserPromptSubmit::on_UserPromptSubmit",
+      "to": "user_prompt_submit.rs::on_UserPromptSubmit",
+      "transform": "PassThrough"
+    }
+  ]
+}

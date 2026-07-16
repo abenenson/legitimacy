@@ -1,0 +1,8 @@
+[source]
+id = "aider"
+source_repo = "https://github.com/Aider-AI/aider"
+source_commit = "3ec8ec5a7d695b08a6c24fe6c0c235c8f87df9af"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

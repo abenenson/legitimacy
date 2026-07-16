@@ -1,0 +1,50 @@
+{
+  "nodes": {
+    "python_hook_core_model.py::approval_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::approval_guard",
+        "name": "python_hook_core_model.py::approval_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "python_hook_core_model.py::registration::CodeExecutorApproval::approval_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::registration::CodeExecutorApproval::approval_guard",
+        "name": "python_hook_core_model.py::registration::CodeExecutorApproval::approval_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration:CodeExecutorApproval",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "python_hook_core_model.py::registration::CodeExecutorApproval::approval_guard",
+      "to": "python_hook_core_model.py::approval_guard",
+      "transform": "PassThrough"
+    }
+  ]
+}

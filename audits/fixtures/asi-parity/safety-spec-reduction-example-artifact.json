@@ -1,0 +1,20 @@
+{
+  "extract": "exampleGovernanceKernelExtractor",
+  "src": {
+    "sourceId": "audits/fixtures/sources/leaderboard/autogen",
+    "byteSize": 23978,
+    "sizeBound": 23978,
+    "coverageComplete": true,
+    "parserErrors": 0
+  },
+  "reachedData": "exampleGovernanceKernelData",
+  "trajectory": "KernelGovernedTrajectory.refl exampleGovernanceKernelData",
+  "compiled": "reductionExampleCompiledGovernance",
+  "report": "reductionExampleRiskReport",
+  "monitoring": "reductionExampleMonitoring",
+  "runtimeKernel": true,
+  "semanticBridge": true,
+  "semanticKernel": true,
+  "reachableStateSafe": true,
+  "forcedSacrificesDeclared": true
+}

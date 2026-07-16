@@ -1,0 +1,50 @@
+{
+  "nodes": {
+    "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard",
+        "name": "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration:BeforeToolCall",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "python_hook_core_model.py::tool_hook_guard": {
+      "Binary": {
+        "id": "python_hook_core_model.py::tool_hook_guard",
+        "name": "python_hook_core_model.py::tool_hook_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard",
+      "to": "python_hook_core_model.py::tool_hook_guard",
+      "transform": "PassThrough"
+    }
+  ]
+}

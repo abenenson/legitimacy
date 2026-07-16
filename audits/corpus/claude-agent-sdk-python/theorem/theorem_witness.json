@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "legitimacy.ast-theorem-witness.v1",
+  "theoremName": "claude_agent_sdk_python_hook_core_graph_equivalent",
+  "sourceDir": "audits/corpus/claude-agent-sdk-python/theorem",
+  "astHashAlgorithm": "tree-sitter-canonical-shape-and-tokens-sha256:v2",
+  "sourceAstHash": "sha256:099b7454f57674597b3921d8d11ee7fc2f1c028b14a7081a50373e19de320c29",
+  "graphHashAlgorithm": "serde-json-pretty-sha256:v1",
+  "governanceGraphHash": "sha256:d5704fc1d6a4a1acf12912408e78886e604e07c42c1be53b401e07f03763718b",
+  "leanBindingType": "Legitimacy.ASTTheoremWitnessBinding",
+  "files": [
+    {
+      "path": "python_hook_core_model.py",
+      "language": "Python",
+      "astHash": "sha256:0de9cef60da7303ec7a6f31496867860c897ac713cc1f00af01d2e9530f128ef"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[source]
+id = "swe-agent"
+source_repo = "https://github.com/SWE-agent/SWE-agent"
+source_commit = "0f4f3bba990e01ca8460b9963abdcd89e38042f2"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

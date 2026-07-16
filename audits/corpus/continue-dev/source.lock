@@ -1,0 +1,8 @@
+[source]
+id = "continue-dev"
+source_repo = "https://github.com/continuedev/continue"
+source_commit = "cb273098d968906d25ee737b454f0b5f13ea2482"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

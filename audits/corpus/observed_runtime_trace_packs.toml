@@ -1,0 +1,85 @@
+[observed_runtime]
+schema_version = 1
+format = "observed_runtime_claims.jsonl"
+redaction_method = "sha256-truncate-12-or-stable-fixture-id"
+
+[[trace_pack]]
+harness_id = "autogen"
+source_descriptor = "AutoGen code-executor approval multi-claim runtime trace"
+claims_path = "autogen/observed_runtime_claims.jsonl"
+claim_count = 4
+heuristic_extractor_verdict = "Synthetic structural probe passed over 1 nodes and 0 edges."
+extractor_report = "autogen/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "codex"
+source_descriptor = "codex-rs tui oss-story fixture"
+source_pack = "../observed-runtime/codex-oss-story-pack"
+claims_path = "codex/observed_runtime_claims.jsonl"
+claim_count = 9
+heuristic_extractor_verdict = "Synthetic structural probe found failures [graph monotonicity, graph nonvacuity] over 10 nodes and 5 edges."
+extractor_report = "codex/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "crewai"
+source_descriptor = "CrewAI before/after-tool hook multi-claim runtime trace"
+claims_path = "crewai/observed_runtime_claims.jsonl"
+claim_count = 4
+heuristic_extractor_verdict = "Synthetic structural probe found failures [graph monotonicity, graph nonvacuity] over 5 nodes and 1 edges."
+extractor_report = "crewai/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "langgraph"
+source_descriptor = "LangGraph interrupt/checkpoint representative trace"
+claims_path = "langgraph/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "langgraph/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "openhands"
+source_descriptor = "OpenHands tool-execution representative trace"
+claims_path = "openhands/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "openhands/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "swe-agent"
+source_descriptor = "SWE-agent patch/test representative trace"
+claims_path = "swe-agent/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "swe-agent/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "aider"
+source_descriptor = "Aider file-edit approval representative trace"
+claims_path = "aider/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "aider/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "continue-dev"
+source_descriptor = "Continue.dev tool-call approval representative trace"
+claims_path = "continue-dev/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "continue-dev/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "litellm"
+source_descriptor = "LiteLLM routing/fallback representative trace"
+claims_path = "litellm/observed_runtime_claims.jsonl"
+claim_count = 1
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "litellm/extractor_report.json"
+
+[[trace_pack]]
+harness_id = "nemo-guardrails"
+source_descriptor = "NeMo Guardrails dialogue-policy multi-claim runtime trace"
+claims_path = "nemo-guardrails/observed_runtime_claims.jsonl"
+claim_count = 4
+heuristic_extractor_verdict = "Skipped: source.lock has no extraction_input."
+extractor_report = "nemo-guardrails/extractor_report.json"

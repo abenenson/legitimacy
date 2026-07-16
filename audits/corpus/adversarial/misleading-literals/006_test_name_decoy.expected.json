@@ -1,0 +1,9 @@
+{
+  "fixture_id": "misleading-literals-006",
+  "family": "misleading-literals",
+  "property": "extractor_ignores_comment_and_string_decoys",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "The function name contains deny_all but the executable branch does not."
+}
+

@@ -1,0 +1,34 @@
+{
+  "decisions": {
+    "agreements": 7,
+    "disagreements": 0,
+    "expected_agreement": 1.0,
+    "items": 7,
+    "kappa": 1.0,
+    "left_only": [],
+    "observed_agreement": 1.0,
+    "right_only": []
+  },
+  "edges": {
+    "agreements": 1,
+    "disagreements": 0,
+    "expected_agreement": 1.0,
+    "items": 1,
+    "kappa": 1.0,
+    "left_only": [],
+    "observed_agreement": 1.0,
+    "right_only": []
+  },
+  "nodes": {
+    "agreements": 3,
+    "disagreements": 0,
+    "expected_agreement": 1.0,
+    "items": 3,
+    "kappa": 1.0,
+    "left_only": [],
+    "observed_agreement": 1.0,
+    "right_only": []
+  },
+  "reviewer_a": "audits/corpus/claude-agent-sdk-python/ground_truth/reviewer_a.graph.toml",
+  "reviewer_b": "audits/corpus/claude-agent-sdk-python/ground_truth/reviewer_b.graph.toml"
+}

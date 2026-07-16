@@ -1,0 +1,8 @@
+[source]
+id = "langgraph"
+source_repo = "https://github.com/langchain-ai/langgraph"
+source_commit = "a0c4bdc3cb88e371a0fee00b6479509e9c9a8a72"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

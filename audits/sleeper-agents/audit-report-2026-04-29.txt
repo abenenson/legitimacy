@@ -1,0 +1,38 @@
+EXTRACTION REPORT
+source: audits/sleeper-agents/sleeper-agent-graph.json
+nodes found: 3
+edges found: 1
+cycles detected: 0
+claim corpus: SyntheticStructuralProbe (4 claims)
+coverage: 0 parsed / 0 discovered (0 skipped, 0 errored)
+resolution issues: 0
+
+AXIOM STATUS
+- CERTIFIABLE: SUPPORTED (projection verdict passed)
+- GOVERNANCE-OBSERVABLE: SUPPORTED (projection verdict passed)
+- CORRIGIBLE: SUPPORTED (projection verdict passed)
+- COMPOSITIONAL SAFETY: SUPPORTED (projection verdict passed)
+- NON-VACUOUS: SUPPORTED (projection verdict passed)
+
+DIAGNOSTIC CHECKS (Young 1994)
+- graph consistency: passed
+- graph solidarity: passed
+- graph monotonicity: REJECTED -- Strengthening 'baseline' on 'deployment_context' by 1.00 worsened 'baseline' from Permit to Deny
+- graph strategyproofness: passed
+- graph certifiability: passed
+- graph observable determinacy: passed
+- graph corrigibility: passed
+- graph compositional safety: passed
+- graph nonvacuity: passed
+
+PARADOX SUITE
+- compositional Alabama: none
+- feedback monotonicity: none
+- path dependence: none
+
+GOVERNANCE FACTOR EXPOSURE
+- consistency: 0.00
+- solidarity: 0.00
+- monotonicity: 1.00
+- strategyproofness: 0.00
+- nonvacuity: 0.00

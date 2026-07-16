@@ -1,0 +1,95 @@
+{
+  "source": {
+    "paper": "Greenblatt et al., AI Control: Improving Safety Despite Intentional Subversion, arXiv:2312.06942",
+    "source_refs": [
+      "main.tex:L446-L453",
+      "main.tex:L455-L469",
+      "main.tex:L472-L472",
+      "Figure 2",
+      "Table 3"
+    ]
+  },
+  "nodes": {
+    "untrusted_policy": {
+      "Binary": {
+        "id": "untrusted_policy",
+        "name": "U writes candidate code",
+        "gates": [],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "trusted_monitor_audit_router": {
+      "Binary": {
+        "id": "trusted_monitor_audit_router",
+        "name": "T routes top suspicion scores to H audit",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "trusted_suspicion_top2",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "trusted_monitor_defer_router": {
+      "Binary": {
+        "id": "trusted_monitor_defer_router",
+        "name": "T routes intermediate suspicion scores to a T-written solution",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "trusted_suspicion_defer_band",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "human_audit": {
+      "Binary": {
+        "id": "human_audit",
+        "name": "H audits top suspicious U code and shuts down on confirmed backdoor",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "trusted_suspicion_top2",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "trusted_solution": {
+      "Binary": {
+        "id": "trusted_solution",
+        "name": "T writes substitute solution for deferred cases",
+        "gates": [],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "trusted_monitor_audit_router",
+      "to": "human_audit",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "trusted_monitor_defer_router",
+      "to": "trusted_solution",
+      "transform": "PassThrough"
+    }
+  ]
+}

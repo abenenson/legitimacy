@@ -1,0 +1,9 @@
+[source]
+id = "claude-agent-sdk-python"
+source_repo = "https://github.com/anthropics/claude-agent-sdk-python"
+source_commit = "0a69e9449b72328742431119132f399e8f30055b"
+license = "MIT"
+extraction_mode = "heuristic"
+extraction_input = "audits/fixtures/sources/leaderboard/claude-agent-sdk-hooks"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

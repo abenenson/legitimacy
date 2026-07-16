@@ -1,0 +1,2152 @@
+{
+  "harness_id": "crewai",
+  "source_repo": "https://github.com/crewAIInc/crewAI",
+  "source_commit": "c9100cb51d357f6e3ba7d9969a000571f051ca64",
+  "extraction_mode": "heuristic",
+  "evidence_tier": "theorem-backed-modeled",
+  "coverage_pct": 100.0,
+  "unsupported_constructs": [
+    "Unresolved: get_before_tool_call_hooks",
+    "Unresolved: hook",
+    "Unresolved: register_before_tool_call_hook",
+    "Unresolved: toolcallhookcontext",
+    "Unresolved: context",
+    "Unresolved: hook1",
+    "Unresolved: hook2",
+    "Unresolved: hook3",
+    "Unresolved: get_after_tool_call_hooks",
+    "Unresolved: get_before_tool_call_hooks",
+    "Unresolved: hook",
+    "Unresolved: register_after_tool_call_hook",
+    "Unresolved: register_before_tool_call_hook",
+    "Unresolved: toolcallhookcontext",
+    "Unresolved: blocked_context",
+    "Unresolved: sanitize_context",
+    "Unresolved: sanitize_secrets",
+    "Unresolved: context.tool_input.get",
+    "Unresolved: append",
+    "Unresolved: dict"
+  ],
+  "verdict_summary": "Synthetic structural probe found failures [graph monotonicity, graph nonvacuity] over 5 nodes and 1 edges.",
+  "report": {
+    "artifacts": {
+      "source_dir": "audits/fixtures/sources/leaderboard/crewai",
+      "graph": {
+        "nodes": {
+          "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook": {
+            "Binary": {
+              "id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook",
+              "name": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook:158-161",
+              "gates": [
+                {
+                  "ExactMatch": {
+                    "value": "dangerous_tool",
+                    "decision": "Deny"
+                  }
+                }
+              ],
+              "default": "Permit",
+              "combination": "FirstMatch"
+            }
+          },
+          "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook": {
+            "Binary": {
+              "id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+              "name": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook:764-772",
+              "gates": [
+                {
+                  "ExactMatch": {
+                    "value": "before",
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "tool_name",
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "tool_input",
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "dangerous_operation",
+                    "decision": "Deny"
+                  }
+                }
+              ],
+              "default": "Permit",
+              "combination": "FirstMatch"
+            }
+          },
+          "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution": {
+            "Binary": {
+              "id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "name": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution:340-376",
+              "gates": [
+                {
+                  "ContentMatch": {
+                    "regex": "Test that first hook returning False blocks execution\\.",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "test_tool",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ThresholdGate": {
+                    "field": "hook_registration",
+                    "min": 1.0,
+                    "decision": "Escalate"
+                  }
+                }
+              ],
+              "default": "Permit",
+              "combination": "FirstMatch"
+            }
+          },
+          "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization": {
+            "Binary": {
+              "id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "name": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization:414-466",
+              "gates": [
+                {
+                  "ThresholdGate": {
+                    "field": "blocked_context",
+                    "min": 1.0,
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ThresholdGate": {
+                    "field": "hook",
+                    "min": 1.0,
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ContentMatch": {
+                    "regex": "Test a realistic scenario with validation and sanitization hooks\\.",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "write_file",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "file_path",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": ".env",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "read_file",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "config.txt",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ContentMatch": {
+                    "regex": "Content: SECRET_KEY=abc123",
+                    "decision": "Escalate"
+                  }
+                },
+                {
+                  "ThresholdGate": {
+                    "field": "hook_registration",
+                    "min": 1.0,
+                    "decision": "Escalate"
+                  }
+                }
+              ],
+              "default": "Permit",
+              "combination": "FirstMatch"
+            }
+          },
+          "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path": {
+            "Binary": {
+              "id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+              "name": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path:417-422",
+              "gates": [
+                {
+                  "ExactMatch": {
+                    "value": "write_file",
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "file_path",
+                    "decision": "Deny"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": ".env",
+                    "decision": "Deny"
+                  }
+                }
+              ],
+              "default": "Permit",
+              "combination": "FirstMatch"
+            }
+          }
+        },
+        "edges": [
+          {
+            "from": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "to": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+            "transform": "PassThrough"
+          }
+        ]
+      },
+      "coverage": {
+        "files_discovered": 1,
+        "files_parsed": 1,
+        "files_skipped": 0,
+        "files_errored": 0,
+        "complete": true,
+        "files": [
+          {
+            "path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+            "language": "Python",
+            "status": "Parsed"
+          }
+        ]
+      },
+      "recognized_nodes": [
+        {
+          "node_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook",
+          "function_name": "block_hook",
+          "relative_path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+          "language": "Python",
+          "line_start": 158,
+          "line_end": 161,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 2 decision branches",
+            "explicit outputs positive=0 negative=1",
+            "permission/policy context signal"
+          ]
+        },
+        {
+          "node_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "function_name": "test_first_blocking_hook_stops_execution",
+          "relative_path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+          "language": "Python",
+          "line_start": 340,
+          "line_end": 376,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 2 decision branches",
+            "explicit outputs positive=1 negative=3",
+            "permission/policy context signal"
+          ]
+        },
+        {
+          "node_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "function_name": "test_hooks_with_validation_and_sanitization",
+          "relative_path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+          "language": "Python",
+          "line_start": 414,
+          "line_end": 466,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 4 decision branches",
+            "explicit outputs positive=1 negative=4",
+            "permission/policy context signal"
+          ]
+        },
+        {
+          "node_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+          "function_name": "validate_file_path",
+          "relative_path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+          "language": "Python",
+          "line_start": 417,
+          "line_end": 422,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 4 decision branches",
+            "explicit outputs positive=0 negative=1",
+            "permission/policy context signal"
+          ]
+        },
+        {
+          "node_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+          "function_name": "blocking_before_hook",
+          "relative_path": "lib/crewai/tests/hooks/test_tool_hooks.py",
+          "language": "Python",
+          "line_start": 764,
+          "line_end": 772,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 2 decision branches",
+            "explicit outputs positive=0 negative=1",
+            "permission/policy context signal"
+          ]
+        }
+      ],
+      "recognized_edges": [
+        {
+          "from": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "to": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+          "target_symbol": "validate_file_path",
+          "resolution": "SameFile",
+          "tier": "automatic",
+          "review_note": null
+        }
+      ],
+      "resolution_issues": [
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "get_before_tool_call_hooks",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "hook",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "register_before_tool_call_hook",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "toolcallhookcontext",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "context",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "hook1",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "hook2",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+          "target_symbol": "hook3",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "get_after_tool_call_hooks",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "get_before_tool_call_hooks",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "hook",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "register_after_tool_call_hook",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "register_before_tool_call_hook",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "toolcallhookcontext",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "blocked_context",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "sanitize_context",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+          "target_symbol": "sanitize_secrets",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+          "target_symbol": "context.tool_input.get",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+          "target_symbol": "append",
+          "kind": "Unresolved",
+          "candidates": []
+        },
+        {
+          "caller": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+          "target_symbol": "dict",
+          "kind": "Unresolved",
+          "candidates": []
+        }
+      ],
+      "boundary_causal_safety": {
+        "summary": "4 governance nodes have 20 transitive external dependencies not in the governance graph (causal boundary analysis)",
+        "affected_governance_nodes": 4,
+        "external_dependency_count": 20,
+        "ungoverned_dependencies": [
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+            "dependency": "append"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+            "dependency": "dict"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "execution_order.append"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "get_before_tool_call_hooks"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "hook"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "hook1"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "hook2"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "hook3"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "register_before_tool_call_hook"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+            "dependency": "toolcallhookcontext"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "context.tool_input.get"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "context.tool_result.replace"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "get_after_tool_call_hooks"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "get_before_tool_call_hooks"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "hook"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "register_after_tool_call_hook"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "register_before_tool_call_hook"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "sanitize_secrets"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+            "dependency": "toolcallhookcontext"
+          },
+          {
+            "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+            "dependency": "context.tool_input.get"
+          }
+        ]
+      }
+    },
+    "audit": {
+      "corpus_provenance": "SyntheticStructuralProbe",
+      "claims": [
+        {
+          "claimant_id": "baseline",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "dangerous_tool",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "before",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1",
+          "strength": 1.05,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "tool_name",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2",
+          "strength": 1.1,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "tool_input",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3",
+          "strength": 1.15,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "dangerous_operation",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "Test that first hook returning False blocks execution.",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1",
+          "strength": 1.05,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "test_tool",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2",
+          "strength": 1.1,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 1.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 1.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1",
+          "strength": 1.05,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 1.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2",
+          "strength": 1.1,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "Test a realistic scenario with validation and sanitization hooks.",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3",
+          "strength": 1.15,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "write_file",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4",
+          "strength": 1.2,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "file_path",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5",
+          "strength": 1.25,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": ".env",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6",
+          "strength": 1.3,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "read_file",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7",
+          "strength": 1.35,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "config.txt",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8",
+          "strength": 1.4,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "Content: SECRET_KEY=abc123",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+          "strength": 1.45,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "escalate_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 1.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "write_file",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1",
+          "strength": 1.05,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "file_path",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        },
+        {
+          "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2",
+          "strength": 1.1,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": ".env",
+          "content": "safe content",
+          "metrics": {
+            "blocked_context": 0.0,
+            "deny_signal": 1.0,
+            "hook": 0.0,
+            "hook_registration": 0.0
+          }
+        }
+      ],
+      "cycles": [],
+      "axiom_results": [
+        {
+          "axiom": "graph consistency",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph consistency",
+              "perturbations_tested": 22
+            }
+          }
+        },
+        {
+          "axiom": "graph solidarity",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph solidarity",
+              "perturbations_tested": 6
+            }
+          }
+        },
+        {
+          "axiom": "graph monotonicity",
+          "verdict": {
+            "Rejected": {
+              "axiom": "graph monotonicity",
+              "counterexample": {
+                "description": "Improving 'baseline' on 'hook_registration' by 1.00 worsened 'baseline' from Permit to Escalate",
+                "original_claims": [
+                  {
+                    "claimant_id": "baseline",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 1.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 1.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4",
+                    "strength": 1.2,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5",
+                    "strength": 1.25,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6",
+                    "strength": 1.3,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7",
+                    "strength": 1.35,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8",
+                    "strength": 1.4,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+                    "strength": 1.45,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  }
+                ],
+                "original_estate": {
+                  "total": 2.0,
+                  "unit": "binary-decision-rank"
+                },
+                "original_allocation": {
+                  "baseline": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": 0.0
+                },
+                "perturbed_claims": [
+                  {
+                    "claimant_id": "baseline",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 1.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 1.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4",
+                    "strength": 1.2,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5",
+                    "strength": 1.25,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6",
+                    "strength": 1.3,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7",
+                    "strength": 1.35,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8",
+                    "strength": 1.4,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+                    "strength": 1.45,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  }
+                ],
+                "perturbed_estate": {
+                  "total": 2.0,
+                  "unit": "binary-decision-rank"
+                },
+                "perturbed_allocation": {
+                  "baseline": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": 2.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": 1.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": 0.0
+                },
+                "violation": "Schema-aware improvement of 'baseline' changed the composed graph so that 'baseline' became strictly worse at the exit node."
+              }
+            }
+          }
+        },
+        {
+          "axiom": "graph strategyproofness",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph strategyproofness",
+              "perturbations_tested": 110
+            }
+          }
+        },
+        {
+          "axiom": "graph certifiability",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph certifiability",
+              "perturbations_tested": 123
+            }
+          }
+        },
+        {
+          "axiom": "graph observable determinacy",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph observable determinacy",
+              "perturbations_tested": 60
+            }
+          }
+        },
+        {
+          "axiom": "graph corrigibility",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph corrigibility",
+              "perturbations_tested": 3
+            }
+          }
+        },
+        {
+          "axiom": "graph compositional safety",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph compositional safety",
+              "perturbations_tested": 22
+            }
+          }
+        },
+        {
+          "axiom": "graph nonvacuity",
+          "verdict": {
+            "Rejected": {
+              "axiom": "graph nonvacuity",
+              "counterexample": {
+                "description": "4 examined claims remained in Escalate after traversal: lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2, lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+                "original_claims": [
+                  {
+                    "claimant_id": "baseline",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 1.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 1.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4",
+                    "strength": 1.2,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5",
+                    "strength": 1.25,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6",
+                    "strength": 1.3,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7",
+                    "strength": 1.35,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8",
+                    "strength": 1.4,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+                    "strength": 1.45,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  }
+                ],
+                "original_estate": {
+                  "total": 1.0,
+                  "unit": "decision"
+                },
+                "original_allocation": {
+                  "baseline": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": 0.0
+                },
+                "perturbed_claims": [
+                  {
+                    "claimant_id": "baseline",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 1.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 1.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3",
+                    "strength": 1.15,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4",
+                    "strength": 1.2,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5",
+                    "strength": 1.25,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6",
+                    "strength": 1.3,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7",
+                    "strength": 1.35,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8",
+                    "strength": 1.4,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+                    "strength": 1.45,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "escalate_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 1.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0",
+                    "strength": 1.0,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1",
+                    "strength": 1.05,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  },
+                  {
+                    "claimant_id": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2",
+                    "strength": 1.1,
+                    "metrics": {
+                      "blocked_context": 0.0,
+                      "deny_signal": 1.0,
+                      "hook": 0.0,
+                      "hook_registration": 0.0
+                    }
+                  }
+                ],
+                "perturbed_estate": {
+                  "total": 1.0,
+                  "unit": "decision"
+                },
+                "perturbed_allocation": {
+                  "baseline": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": 0.18181818181818182,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": 0.18181818181818182,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": 0.18181818181818182,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": 0.18181818181818182,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": 0.0,
+                  "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": 0.0
+                },
+                "violation": "NON-VACUOUS requires every governed claim to reach a terminal Permit or Deny disposition"
+              }
+            }
+          }
+        }
+      ],
+      "paradox_results": [
+        {
+          "paradox": "compositional Alabama",
+          "violation": {
+            "paradox_type": "CompositionalAlabama",
+            "description": "Appending peer-review node 'lib-crewai-tests-hooks-test_tool_hooks-py--test_first_blocking_hook_stops_execution-review' after 'lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution' at percentile 0.60 worsened 'lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0' from Escalate to Deny",
+            "original_decisions": {
+              "baseline": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": "Escalate",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": "Escalate",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": "Escalate",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": "Escalate",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": "Deny"
+            },
+            "perturbed_decisions": {
+              "baseline": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::block_hook-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-1": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-2": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook-gate-3": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-1": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-2": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-3": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-4": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-5": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-6": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-7": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-8": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9": "Permit",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-0": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-1": "Deny",
+              "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path-gate-2": "Deny"
+            }
+          }
+        },
+        {
+          "paradox": "feedback monotonicity"
+        },
+        {
+          "paradox": "path dependence"
+        }
+      ],
+      "spectral": {
+        "node_count": 5,
+        "edge_count": 1,
+        "is_connected": true,
+        "spectral_gap": 2.0,
+        "max_degree": 1,
+        "min_removed_deg": 0,
+        "signal_range": 0.44999999999999996,
+        "cv_exact": "5/1",
+        "cv_bound": 0.22499999999999998,
+        "capacity": null,
+        "capacity_saturated": null,
+        "c_star": "1/50",
+        "c_star_delta": 0.1,
+        "swc": true,
+        "rg_trajectory": [
+          [
+            "0/1",
+            "0/1"
+          ],
+          [
+            "0/1",
+            "0/1"
+          ],
+          [
+            "0/1",
+            "0/1"
+          ]
+        ],
+        "localizability_bound": 2.2222222222222223,
+        "cv_times_localizability": 0.5
+      },
+      "factor_exposure": {
+        "consistency": 0.0,
+        "solidarity": 0.0,
+        "monotonicity": 1.0,
+        "strategyproofness": 0.0,
+        "nonvacuity": 1.0
+      },
+      "protocol_assessment": {
+        "current_state": "UNDECLARED",
+        "can_declare": true,
+        "can_extract_compile": false,
+        "can_measure": true,
+        "boundary_causal_safety": {
+          "summary": "4 governance nodes have 20 transitive external dependencies not in the governance graph (causal boundary analysis)",
+          "affected_governance_nodes": 4,
+          "external_dependency_count": 20,
+          "ungoverned_dependencies": [
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+              "dependency": "append"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::blocking_before_hook",
+              "dependency": "dict"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "execution_order.append"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "get_before_tool_call_hooks"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "hook"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "hook1"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "hook2"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "hook3"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "register_before_tool_call_hook"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution",
+              "dependency": "toolcallhookcontext"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "context.tool_input.get"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "context.tool_result.replace"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "get_after_tool_call_hooks"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "get_before_tool_call_hooks"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "hook"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "register_after_tool_call_hook"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "register_before_tool_call_hook"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "sanitize_secrets"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization",
+              "dependency": "toolcallhookcontext"
+            },
+            {
+              "governance_node": "lib/crewai/tests/hooks/test_tool_hooks.py::validate_file_path",
+              "dependency": "context.tool_input.get"
+            }
+          ]
+        },
+        "blocking_issues": [
+          "2 axiom check(s) rejected; sacrifices required before promotion",
+          "4 governance nodes have 20 transitive external dependencies not in the governance graph (causal boundary analysis)",
+          "no monitoring infrastructure detected"
+        ],
+        "recommended_sacrifices": [
+          {
+            "property": "graph monotonicity",
+            "reason": "Improving 'baseline' on 'hook_registration' by 1.00 worsened 'baseline' from Permit to Escalate",
+            "impact_bound": null
+          },
+          {
+            "property": "graph nonvacuity",
+            "reason": "4 examined claims remained in Escalate after traversal: lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-0, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-1, lib/crewai/tests/hooks/test_tool_hooks.py::test_first_blocking_hook_stops_execution-gate-2, lib/crewai/tests/hooks/test_tool_hooks.py::test_hooks_with_validation_and_sanitization-gate-9",
+            "impact_bound": null
+          }
+        ]
+      }
+    }
+  }
+}

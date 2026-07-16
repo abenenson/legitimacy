@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "legitimacy.ast-theorem-witness.v1",
+  "theoremName": "crewai_python_hook_core_graph_equivalent",
+  "sourceDir": "audits/corpus/crewai/theorem",
+  "astHashAlgorithm": "tree-sitter-canonical-shape-and-tokens-sha256:v2",
+  "sourceAstHash": "sha256:b7e0f5f94cd5e676b0e829919dcfcbf427f236fcc2dc2f782ee3e5c7b45a80c2",
+  "graphHashAlgorithm": "serde-json-pretty-sha256:v1",
+  "governanceGraphHash": "sha256:61b68e49447c67455e78daff42bc55a07c6f5a2d7aaddee72da3add3d84ee1c8",
+  "leanBindingType": "Legitimacy.ASTTheoremWitnessBinding",
+  "files": [
+    {
+      "path": "python_hook_core_model.py",
+      "language": "Python",
+      "astHash": "sha256:ff6f06dc225335149c0392520fc56ae08753bcb2c4b1afd6b948daf60169cda5"
+    }
+  ]
+}

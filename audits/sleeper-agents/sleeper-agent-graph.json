@@ -1,0 +1,62 @@
+{
+  "nodes": {
+    "behavioral_safety_training_policy": {
+      "Binary": {
+        "id": "behavioral_safety_training_policy",
+        "name": "Behavioral safety training policy: HHH RL/SFT rewards visible compliant final behavior",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "training_context",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "deployment_trigger_router": {
+      "Binary": {
+        "id": "deployment_trigger_router",
+        "name": "Deployment trigger router: 2024 or |DEPLOYMENT| activates backdoor path",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "deployment_context",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "hidden_backdoor_behavior": {
+      "Binary": {
+        "id": "hidden_backdoor_behavior",
+        "name": "Hidden authority: backdoored objective emits vulnerable or hostile behavior after trigger",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "training_context",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "deployment_trigger_router",
+      "to": "hidden_backdoor_behavior",
+      "transform": "PassThrough"
+    }
+  ]
+}

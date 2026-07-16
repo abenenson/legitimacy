@@ -1,0 +1,567 @@
+{
+  "nodes": {
+    "app.rs::handle_event": {
+      "Binary": {
+        "id": "app.rs::handle_event",
+        "name": "app.rs::handle_event:4164-5659",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "permissions",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "policy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "policy_cwd",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "policy_for_chat",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandbox_setup_is_complete",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Failed to start TUI session picker: \\{err\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "No saved chat found matching '\\{id_or_name\\}'\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "codex.thread.fork",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "source",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "slash_command",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "/fork",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "forking the thread",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "To continue this session, run",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "bottom_pane/approval_overlay.rs::build_options": {
+      "Binary": {
+        "id": "bottom_pane/approval_overlay.rs::build_options",
+        "name": "bottom_pane/approval_overlay.rs::build_options:142-209",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Would you like to run the following command\\?",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Do you want to approve network access to \"\\{\\}\"\\?",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Would you like to grant these permissions\\?",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Would you like to make the following edits\\?",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\{server_name\\} needs your approval\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Would you like to grant these permissions\\?",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "bottom_pane/approval_overlay.rs::exec_options": {
+      "Binary": {
+        "id": "bottom_pane/approval_overlay.rs::exec_options",
+        "name": "bottom_pane/approval_overlay.rs::exec_options:645-734",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Yes, just this once",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, proceed",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, and don't ask again for commands that start with `\\{rendered_prefix\\}`",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, and allow this host for this conversation",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, and allow these permissions for this session",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, and don't ask again for this command in this session",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Yes, and allow this host in the future",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "No, and block this host in the future",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "bottom_pane/approval_overlay.rs::handle_permissions_decision": {
+      "Binary": {
+        "id": "bottom_pane/approval_overlay.rs::handle_permissions_decision",
+        "name": "bottom_pane/approval_overlay.rs::handle_permissions_decision:269-312",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approvedforsession",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permissiongrantscope",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "reviewdecision",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "You did not grant additional permissions",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "You granted additional permissions for this session",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "You granted additional permissions",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "chatwidget.rs::open_world_writable_warning_confirmation@8696": {
+      "Binary": {
+        "id": "chatwidget.rs::open_world_writable_warning_confirmation@8696",
+        "name": "chatwidget.rs::open_world_writable_warning_confirmation@8696:8696-8804",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approval",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "policy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandbox",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Agent mode",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Read\\-Only mode",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Agent mode",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Read\\-Only mode",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "We couldn't complete the world\\-writable scan, so protections cannot be verified\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "The Windows sandbox cannot guarantee protection in \\{mode_label\\}\\.",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "chatwidget.rs::preset_matches_current": {
+      "Binary": {
+        "id": "chatwidget.rs::preset_matches_current",
+        "name": "chatwidget.rs::preset_matches_current:8547-8580",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approval",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandbox",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "history_cell/hook_cell.rs::complete_run": {
+      "Binary": {
+        "id": "history_cell/hook_cell.rs::complete_run",
+        "name": "history_cell/hook_cell.rs::complete_run:212-237",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_run_is_quiet_success",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "lib.rs::run_main": {
+      "Binary": {
+        "id": "lib.rs::run_main",
+        "name": "lib.rs::run_main:655-1002",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "permissions",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandbox_policy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Error parsing \\-c overrides: \\{e\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Error finding codex home: \\{err\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "Error loading config.toml:\\n{}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "Error loading config.toml: {err}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Error loading rules:\\\\n\\{\\}",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "OSS provider unexpectedly not set when oss flag is used",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "OSS provider not set but oss flag was used",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Could not create otel exporter: \\{e\\}",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "status/card.rs::new": {
+      "Binary": {
+        "id": "status/card.rs::new",
+        "name": "status/card.rs::new:230-358",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approval_policy",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "permissions",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandbox_policy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "sandboxpolicy",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "danger-full-access",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "read-only",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "workspace\\-write with network access",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "workspace-write",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "external\\-sandbox \\(network access enabled\\)",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "external-sandbox",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "workdir",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "model",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "app.rs::handle_event",
+      "to": "status/card.rs::new",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "app.rs::handle_event",
+      "to": "chatwidget.rs::open_world_writable_warning_confirmation@8696",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "bottom_pane/approval_overlay.rs::build_options",
+      "to": "bottom_pane/approval_overlay.rs::exec_options",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "bottom_pane/approval_overlay.rs::build_options",
+      "to": "status/card.rs::new",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "bottom_pane/approval_overlay.rs::handle_permissions_decision",
+      "to": "status/card.rs::new",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "chatwidget.rs::open_world_writable_warning_confirmation@8696",
+      "to": "status/card.rs::new",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "lib.rs::run_main",
+      "to": "status/card.rs::new",
+      "transform": "PassThrough"
+    }
+  ]
+}

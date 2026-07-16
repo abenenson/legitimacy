@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "legitimacy.ast-theorem-witness.v1",
+  "theoremName": "nemo_guardrails_python_hook_core_graph_equivalent",
+  "sourceDir": "audits/corpus/nemo-guardrails/theorem",
+  "astHashAlgorithm": "tree-sitter-canonical-shape-and-tokens-sha256:v2",
+  "sourceAstHash": "sha256:a4ec7e8cdc695d98eb4575a4689d2f77b9e5b1ffa57bbca70d9809c78498c5f3",
+  "graphHashAlgorithm": "serde-json-pretty-sha256:v1",
+  "governanceGraphHash": "sha256:5e83789a0fd8fef2473abaf7fea01843e1b8bc6bf8c38aa11b475982c4e6dcd4",
+  "leanBindingType": "Legitimacy.ASTTheoremWitnessBinding",
+  "files": [
+    {
+      "path": "python_hook_core_model.py",
+      "language": "Python",
+      "astHash": "sha256:c60599fbf4872493fdefc5c6f58b2029cc31d12c762fc7dae68ff07b93e963cd"
+    }
+  ]
+}

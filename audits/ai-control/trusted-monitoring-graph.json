@@ -1,0 +1,65 @@
+{
+  "source": {
+    "paper": "Greenblatt et al., AI Control: Improving Safety Despite Intentional Subversion, arXiv:2312.06942",
+    "source_refs": [
+      "main.tex:L132-L139",
+      "main.tex:L377-L385",
+      "main.tex:L425-L432",
+      "Figure 1",
+      "Figure 3",
+      "Table 2"
+    ]
+  },
+  "nodes": {
+    "untrusted_policy": {
+      "Binary": {
+        "id": "untrusted_policy",
+        "name": "U writes candidate code",
+        "gates": [],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "trusted_monitor": {
+      "Binary": {
+        "id": "trusted_monitor",
+        "name": "T rates U code suspicious; top scores are audited by H",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "trusted_suspicion",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "human_audit": {
+      "Binary": {
+        "id": "human_audit",
+        "name": "H audits suspicious code and shuts down on confirmed backdoor",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "trusted_suspicion",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "trusted_monitor",
+      "to": "human_audit",
+      "transform": "PassThrough"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+[source]
+id = "crewai"
+source_repo = "https://github.com/crewAIInc/crewAI"
+source_commit = "c9100cb51d357f6e3ba7d9969a000571f051ca64"
+license = "MIT"
+extraction_mode = "heuristic"
+extraction_input = "audits/fixtures/sources/leaderboard/crewai"
+allow_partial = true
+notes = ["Created by legitimacy corpus add."]

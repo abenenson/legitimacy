@@ -1,0 +1,12 @@
+[adjudication]
+harness_id = "autogen"
+status = "resolved"
+adjudicator_id = "adjudicator_1"
+resolved_at = "2026-05-04T00:00:00Z"
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+cohen_kappa_decisions = 1.0
+node_count = 2
+edge_count = 1
+disagreement_count = 0
+rationale = "The curated answer key matches the theorem-generated PythonHookCore graph."

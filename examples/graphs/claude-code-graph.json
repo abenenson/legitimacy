@@ -1,0 +1,622 @@
+{
+  "nodes": {
+    "claude_code/public_governance_surface.py::HookDecision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::HookDecision",
+        "name": "claude_code/public_governance_surface.py::HookDecision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::PermissionDecision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::PermissionDecision",
+        "name": "claude_code/public_governance_surface.py::PermissionDecision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "defer",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::StopHookSpecificOutput": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::StopHookSpecificOutput",
+        "name": "claude_code/public_governance_surface.py::StopHookSpecificOutput",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::config_change_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::config_change_review",
+        "name": "claude_code/public_governance_surface.py::config_change_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::instructions_loaded_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::instructions_loaded_review",
+        "name": "claude_code/public_governance_surface.py::instructions_loaded_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::notification_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::notification_review",
+        "name": "claude_code/public_governance_surface.py::notification_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::permission_request_decision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::permission_request_decision",
+        "name": "claude_code/public_governance_surface.py::permission_request_decision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::post_tool_use_observation": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::post_tool_use_observation",
+        "name": "claude_code/public_governance_surface.py::post_tool_use_observation",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::pre_compact_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::pre_compact_review",
+        "name": "claude_code/public_governance_surface.py::pre_compact_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::pre_tool_use_permission_decision",
+        "name": "claude_code/public_governance_surface.py::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::ConfigChange::config_change_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::ConfigChange::config_change_review",
+        "name": "claude_code/public_governance_surface.py::registration::ConfigChange::config_change_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::InstructionsLoaded::instructions_loaded_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::InstructionsLoaded::instructions_loaded_review",
+        "name": "claude_code/public_governance_surface.py::registration::InstructionsLoaded::instructions_loaded_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::Notification::notification_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::Notification::notification_review",
+        "name": "claude_code/public_governance_surface.py::registration::Notification::notification_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::PermissionRequest::permission_request_decision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::PermissionRequest::permission_request_decision",
+        "name": "claude_code/public_governance_surface.py::registration::PermissionRequest::permission_request_decision",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::PostToolUse::post_tool_use_observation": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::PostToolUse::post_tool_use_observation",
+        "name": "claude_code/public_governance_surface.py::registration::PostToolUse::post_tool_use_observation",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::PreCompact::pre_compact_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::PreCompact::pre_compact_review",
+        "name": "claude_code/public_governance_surface.py::registration::PreCompact::pre_compact_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::PreToolUse::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "name": "claude_code/public_governance_surface.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::SessionStart::session_start_policy": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::SessionStart::session_start_policy",
+        "name": "claude_code/public_governance_surface.py::registration::SessionStart::session_start_policy",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::Setup::setup_policy": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::Setup::setup_policy",
+        "name": "claude_code/public_governance_surface.py::registration::Setup::setup_policy",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::Stop::stop_continuation": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::Stop::stop_continuation",
+        "name": "claude_code/public_governance_surface.py::registration::Stop::stop_continuation",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::SubagentStart::subagent_start_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::SubagentStart::subagent_start_review",
+        "name": "claude_code/public_governance_surface.py::registration::SubagentStart::subagent_start_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::SubagentStop::subagent_stop_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::SubagentStop::subagent_stop_review",
+        "name": "claude_code/public_governance_surface.py::registration::SubagentStop::subagent_stop_review",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::UserPromptExpansion::user_prompt_expansion_guard": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::UserPromptExpansion::user_prompt_expansion_guard",
+        "name": "claude_code/public_governance_surface.py::registration::UserPromptExpansion::user_prompt_expansion_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::registration::UserPromptSubmit::user_prompt_submit_guard": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+        "name": "claude_code/public_governance_surface.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::session_start_policy": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::session_start_policy",
+        "name": "claude_code/public_governance_surface.py::session_start_policy",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::setup_policy": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::setup_policy",
+        "name": "claude_code/public_governance_surface.py::setup_policy",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::stop_continuation": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::stop_continuation",
+        "name": "claude_code/public_governance_surface.py::stop_continuation",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::subagent_start_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::subagent_start_review",
+        "name": "claude_code/public_governance_surface.py::subagent_start_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::subagent_stop_review": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::subagent_stop_review",
+        "name": "claude_code/public_governance_surface.py::subagent_stop_review",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::user_prompt_expansion_guard": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::user_prompt_expansion_guard",
+        "name": "claude_code/public_governance_surface.py::user_prompt_expansion_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "block",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude_code/public_governance_surface.py::user_prompt_submit_guard": {
+      "Binary": {
+        "id": "claude_code/public_governance_surface.py::user_prompt_submit_guard",
+        "name": "claude_code/public_governance_surface.py::user_prompt_submit_guard",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "claude_code/public_governance_surface.py::registration::ConfigChange::config_change_review",
+      "to": "claude_code/public_governance_surface.py::config_change_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::InstructionsLoaded::instructions_loaded_review",
+      "to": "claude_code/public_governance_surface.py::instructions_loaded_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::Notification::notification_review",
+      "to": "claude_code/public_governance_surface.py::notification_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::PermissionRequest::permission_request_decision",
+      "to": "claude_code/public_governance_surface.py::permission_request_decision",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::PostToolUse::post_tool_use_observation",
+      "to": "claude_code/public_governance_surface.py::post_tool_use_observation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::PreCompact::pre_compact_review",
+      "to": "claude_code/public_governance_surface.py::pre_compact_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::PreToolUse::pre_tool_use_permission_decision",
+      "to": "claude_code/public_governance_surface.py::pre_tool_use_permission_decision",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::SessionStart::session_start_policy",
+      "to": "claude_code/public_governance_surface.py::session_start_policy",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::Setup::setup_policy",
+      "to": "claude_code/public_governance_surface.py::setup_policy",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::Stop::stop_continuation",
+      "to": "claude_code/public_governance_surface.py::stop_continuation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::SubagentStart::subagent_start_review",
+      "to": "claude_code/public_governance_surface.py::subagent_start_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::SubagentStop::subagent_stop_review",
+      "to": "claude_code/public_governance_surface.py::subagent_stop_review",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::UserPromptExpansion::user_prompt_expansion_guard",
+      "to": "claude_code/public_governance_surface.py::user_prompt_expansion_guard",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "claude_code/public_governance_surface.py::registration::UserPromptSubmit::user_prompt_submit_guard",
+      "to": "claude_code/public_governance_surface.py::user_prompt_submit_guard",
+      "transform": "PassThrough"
+    }
+  ]
+}

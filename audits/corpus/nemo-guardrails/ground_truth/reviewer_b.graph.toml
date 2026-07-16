@@ -1,0 +1,45 @@
+[ground_truth]
+status = "reviewed"
+harness_id = "nemo-guardrails"
+reviewer_id = "reviewer_b"
+reviewed_at = "2026-05-04T00:00:00Z"
+scope = "corpus theorem PythonHookCore model"
+
+[[node]]
+id = "python_hook_core_model.py::dialogue_policy_guard"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed source-modeled governance node python_hook_core_model.py::dialogue_policy_guard"
+
+[[node]]
+id = "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed source-modeled governance node python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard"
+
+[[edge]]
+from = "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard"
+to = "python_hook_core_model.py::dialogue_policy_guard"
+kind = "dispatch"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed explicit hook registration dispatch."
+
+[[decision]]
+node = "python_hook_core_model.py::dialogue_policy_guard"
+predicate = "value == allow"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::dialogue_policy_guard"
+predicate = "value == deny"
+decision = "deny"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::registration::DialoguePolicy::dialogue_policy_guard"
+predicate = "hook_registration:DialoguePolicy >= 1.0"
+decision = "escalate"
+source_span = "theorem/python_hook_core_model.py"

@@ -1,0 +1,9 @@
+{
+  "fixture_id": "renamed-fields-001",
+  "family": "renamed-fields",
+  "property": "extractor_recognizes_alias_gate_fields",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "allow_clean is a permit alias and should be treated as a positive gate field."
+}
+

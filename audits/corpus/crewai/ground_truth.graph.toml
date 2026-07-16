@@ -1,0 +1,46 @@
+[ground_truth]
+status = "reviewed"
+harness_id = "crewai"
+reviewer_id = "consensus"
+source_commit = "c9100cb51d357f6e3ba7d9969a000571f051ca64"
+reviewed_at = "2026-05-04T00:00:00Z"
+scope = "corpus theorem PythonHookCore model for the pinned CrewAI before-tool hook surface"
+
+[[node]]
+id = "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Consensus labels the modeled CrewAI before-tool hook registration as the dispatch node for the theorem-backed source slice."
+
+[[node]]
+id = "python_hook_core_model.py::tool_hook_guard"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Consensus labels the modeled CrewAI before-tool guard as the binary governance decision node for the theorem-backed source slice."
+
+[[edge]]
+from = "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard"
+to = "python_hook_core_model.py::tool_hook_guard"
+kind = "dispatch"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed explicit hook registration dispatch."
+
+[[decision]]
+node = "python_hook_core_model.py::registration::BeforeToolCall::tool_hook_guard"
+predicate = "hook_registration:BeforeToolCall >= 1.0"
+decision = "escalate"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::tool_hook_guard"
+predicate = "value == allow"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::tool_hook_guard"
+predicate = "value == deny"
+decision = "deny"
+source_span = "theorem/python_hook_core_model.py"

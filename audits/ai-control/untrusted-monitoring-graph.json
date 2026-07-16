@@ -1,0 +1,84 @@
+{
+  "source": {
+    "paper": "Greenblatt et al., AI Control: Improving Safety Despite Intentional Subversion, arXiv:2312.06942",
+    "source_refs": [
+      "main.tex:L478-L500",
+      "main.tex:L506-L513",
+      "main.tex:L549-L580",
+      "main.tex:L605-L609",
+      "main.tex:L618-L633",
+      "Figure 2",
+      "Table 2",
+      "Table 5"
+    ]
+  },
+  "nodes": {
+    "monitor_validation": {
+      "Binary": {
+        "id": "monitor_validation",
+        "name": "H-built synthetic backdoors validate the untrusted monitor before deployment",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "monitor_validation_failure",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "untrusted_policy": {
+      "Binary": {
+        "id": "untrusted_policy",
+        "name": "U writes candidate code",
+        "gates": [],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "redacted_untrusted_monitor": {
+      "Binary": {
+        "id": "redacted_untrusted_monitor",
+        "name": "Redacted U monitor plus T ensemble routes top scores to H audit",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "combined_untrusted_suspicion",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "human_audit": {
+      "Binary": {
+        "id": "human_audit",
+        "name": "H audits monitor-flagged code and shuts down on confirmed backdoor",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "combined_untrusted_suspicion",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "redacted_untrusted_monitor",
+      "to": "human_audit",
+      "transform": "PassThrough"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+[source]
+id = "autogen"
+source_repo = "https://github.com/microsoft/autogen"
+source_commit = "027ecf0a379bcc1d09956d46d12d44a3ad9cee14"
+license = "MIT"
+extraction_mode = "heuristic"
+extraction_input = "audits/fixtures/sources/leaderboard/autogen"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

@@ -1,0 +1,1649 @@
+{
+  "nodes": {
+    "approval-errors.ts::isapprovalnotfounderror": {
+      "Binary": {
+        "id": "approval-errors.ts::isapprovalnotfounderror",
+        "name": "approval-errors.ts::isapprovalnotfounderror:18-31",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approval_not_found",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-gateway-resolver.ts::resolveapprovalovergateway": {
+      "Binary": {
+        "id": "approval-gateway-resolver.ts::resolveapprovalovergateway",
+        "name": "approval-gateway-resolver.ts::resolveapprovalovergateway:16-79",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowpluginfallback",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "approvalid",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Approval \\(\\$\\{params\\.senderId\\?\\.trim\\(\\) \\|\\| \"unknown\"\\}\\)",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "unknown",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "plugin:",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "plugin.approval.resolve",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "exec.approval.resolve",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap": {
+      "Binary": {
+        "id": "approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap",
+        "name": "approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap:19-167",
+        "gates": [
+          {
+            "PrefixMatch": {
+              "pattern": "${params.plugin.id}/approval-bootstrap",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-handler-bootstrap.ts::starthandlerforcontext": {
+      "Binary": {
+        "id": "approval-handler-bootstrap.ts::starthandlerforcontext",
+        "name": "approval-handler-bootstrap.ts::starthandlerforcontext:56-91",
+        "gates": [
+          {
+            "PrefixMatch": {
+              "pattern": "${params.plugin.id}/native-approvals",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\$\\{channelLabel\\} Native Approvals \\(\\$\\{params\\.accountId\\}\\)",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability": {
+      "Binary": {
+        "id": "approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability",
+        "name": "approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability:468-716",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan": {
+      "Binary": {
+        "id": "approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan",
+        "name": "approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan:42-131",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "origin",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "both",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "approver-dm",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "preferred",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice": {
+      "Binary": {
+        "id": "approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice",
+        "name": "approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice:240-274",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "send",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "approval\\-route\\-notice:\\$\\{approvalId\\}",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-route-coordinator.ts::observerequest": {
+      "Binary": {
+        "id": "approval-native-route-coordinator.ts::observerequest",
+        "name": "approval-native-route-coordinator.ts::observerequest:318-333",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approvalkind",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-route-coordinator.ts::report": {
+      "Binary": {
+        "id": "approval-native-route-coordinator.ts::report",
+        "name": "approval-native-route-coordinator.ts::report:286-315",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approvalkind",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext": {
+      "Binary": {
+        "id": "approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext",
+        "name": "approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext:26-38",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Approval required\\. I sent the approval request to \\$\\{formatHumanList\\(\n    uniqueDestinations\\.toSorted\\(\\(a, b\\) => a\\.localeCompare\\(b\\)\\),\n  \\)\\}, not this chat\\.",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan": {
+      "Binary": {
+        "id": "approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan",
+        "name": "approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan:35-135",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-turn-source.ts::hasapprovalturnsourceroute": {
+      "Binary": {
+        "id": "approval-turn-source.ts::hasapprovalturnsourceroute",
+        "name": "approval-turn-source.ts::hasapprovalturnsourceroute:4-18",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "enabled",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-view-model.ts::buildexecmetadata": {
+      "Binary": {
+        "id": "approval-view-model.ts::buildexecmetadata",
+        "name": "approval-view-model.ts::buildexecmetadata:21-36",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "Agent",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "CWD",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Host",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Env Overrides",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-view-model.ts::buildpendingapprovalview": {
+      "Binary": {
+        "id": "approval-view-model.ts::buildpendingapprovalview",
+        "name": "approval-view-model.ts::buildpendingapprovalview:99-120",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "plugin:",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "pending",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "approval-view-model.ts::buildpluginmetadata": {
+      "Binary": {
+        "id": "approval-view-model.ts::buildpluginmetadata",
+        "name": "approval-view-model.ts::buildpluginmetadata:38-55",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "warning",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Severity",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "critical",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Critical",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "info",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Info",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Warning",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Tool",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "channel-approval-auth.ts::resolveapprovalcommandauthorization": {
+      "Binary": {
+        "id": "channel-approval-auth.ts::resolveapprovalcommandauthorization",
+        "name": "channel-approval-auth.ts::resolveapprovalcommandauthorization:12-50",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "approve",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "disabled",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-channel-runtime.ts::anonymous_callback_226": {
+      "Binary": {
+        "id": "exec-approval-channel-runtime.ts::anonymous_callback_226",
+        "name": "exec-approval-channel-runtime.ts::anonymous_callback_226:226-300",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "disabled",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-channel-runtime.ts::handleexpired": {
+      "Binary": {
+        "id": "exec-approval-channel-runtime.ts::handleexpired",
+        "name": "exec-approval-channel-runtime.ts::handleexpired:95-105",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "expired \\$\\{approvalId\\}",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-channel-runtime.ts::handlerequested": {
+      "Binary": {
+        "id": "exec-approval-channel-runtime.ts::handlerequested",
+        "name": "exec-approval-channel-runtime.ts::handlerequested:107-168",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "ignored duplicate request \\$\\{request\\.id\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "received request \\$\\{request\\.id\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "resolved \\$\\{entry\\.pendingResolution\\.id\\} with \\$\\{entry\\.pendingResolution\\.decision\\}",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-forwarder.ts::buildrequestmessage": {
+      "Binary": {
+        "id": "exec-approval-forwarder.ts::buildrequestmessage",
+        "name": "exec-approval-forwarder.ts::buildrequestmessage:224-272",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "alloweddecisions",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\|",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "🔒 Exec approval required",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "ID: \\$\\{request\\.id\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Command: \\$\\{command\\.text\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Command:",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "CWD: \\$\\{request\\.request\\.cwd\\}",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Node: \\$\\{request\\.request\\.nodeId\\}",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-reply.ts::buildexecapprovalactiondescriptors": {
+      "Binary": {
+        "id": "exec-approval-reply.ts::buildexecapprovalactiondescriptors",
+        "name": "exec-approval-reply.ts::buildexecapprovalactiondescriptors:119-164",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "alloweddecisions",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "approvalcommandid",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-once",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Allow Once",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "success",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-always",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Allow Always",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-reply.ts::buildexecapprovalpendingreplypayload": {
+      "Binary": {
+        "id": "exec-approval-reply.ts::buildexecapprovalpendingreplypayload",
+        "name": "exec-approval-reply.ts::buildexecapprovalpendingreplypayload:298-364",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "alloweddecisions",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Approval required\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Run:",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "txt",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Pending command:",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "sh",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Other options:",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-always",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-reply.ts::getexecapprovalreplymetadata": {
+      "Binary": {
+        "id": "exec-approval-reply.ts::getexecapprovalreplymetadata",
+        "name": "exec-approval-reply.ts::getexecapprovalreplymetadata:262-296",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "approvalid",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "approvalslug",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "object",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "plugin",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "exec",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-reply.ts::parseexecapprovalcommandtext": {
+      "Binary": {
+        "id": "exec-approval-reply.ts::parseexecapprovalcommandtext",
+        "name": "exec-approval-reply.ts::parseexecapprovalcommandtext:213-229",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "always",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-always",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate": {
+      "Binary": {
+        "id": "exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate",
+        "name": "exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate:40-73",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "tui",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "enabled",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "approve",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "exec",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "unsupported",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approval-surface.ts::supportsnativeexecapprovalclient": {
+      "Binary": {
+        "id": "exec-approval-surface.ts::supportsnativeexecapprovalclient",
+        "name": "exec-approval-surface.ts::supportsnativeexecapprovalclient:75-81",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "tui",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::evaluateshellallowlist": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::evaluateshellallowlist",
+        "name": "exec-approvals-allowlist.ts::evaluateshellallowlist:1079-1221",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowlistsatisfied",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "allowskillpreludeatindex",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\&\\&",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain",
+        "name": "exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain:544-579",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allowlist",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation",
+        "name": "exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation:858-871",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "\\[\\^\\\\S\\\\r\\\\n\\]\\+",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\(\\?:\\\\\\$\\(\\?:0\\|\\\\\\{0\\\\\\}\\)\\|\"\\\\\\$\\(\\?:0\\|\\\\\\{0\\\\\\}\\)\"\\)",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\(\\?:\\\\\\$\\(\\?:\\[@\\*\\]\\|\\[1\\-9\\]\\|\\\\\\{\\[@\\*1\\-9\\]\\\\\\}\\)\\|\"\\\\\\$\\(\\?:\\[@\\*\\]\\|\\[1\\-9\\]\\|\\\\\\{\\[@\\*1\\-9\\]\\\\\\}\\)\"\\)",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\^\\(\\?:exec\\$\\{shellWhitespace\\}\\(\\?:\\-\\-\\$\\{shellWhitespace\\}\\)\\?\\)\\?\\$\\{positionalZero\\}\\(\\?:\\$\\{shellWhitespace\\}\\$\\{positionalArg\\}\\)\\*\\$",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "u",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::isskillautoallowedsegment": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::isskillautoallowedsegment",
+        "name": "exec-approvals-allowlist.ts::isskillautoallowedsegment:193-216",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowskills",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::isskillmarkdownpreludepath": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::isskillmarkdownpreludepath",
+        "name": "exec-approvals-allowlist.ts::isskillmarkdownpreludepath:226-246",
+        "gates": [
+          {
+            "PrefixMatch": {
+              "pattern": "/",
+              "decision": "Deny"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "/skill.md",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "skills",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::isskillpreludemarkersegment": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::isskillpreludemarkersegment",
+        "name": "exec-approvals-allowlist.ts::isskillpreludemarkersegment:288-298",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "printf",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\\\\\\\n\\-\\-\\-CMD\\-\\-\\-\\\\\\\\n",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\\\n\\-\\-\\-CMD\\-\\-\\-\\\\n",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::isskillpreludereadsegment": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::isskillpreludereadsegment",
+        "name": "exec-approvals-allowlist.ts::isskillpreludereadsegment:271-286",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "cat",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::resolvesegmentsatisfaction": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::resolvesegmentsatisfaction",
+        "name": "exec-approvals-allowlist.ts::resolvesegmentsatisfaction:493-521",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allowlist",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "safeBins",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "skills",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath",
+        "name": "exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath:812-856",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "ash",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "bash",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "dash",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "fish",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ksh",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "sh",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "zsh",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-allowlist.ts::segments.every_handler_callback_596": {
+      "Binary": {
+        "id": "exec-approvals-allowlist.ts::segments.every_handler_callback_596",
+        "name": "exec-approvals-allowlist.ts::segments.every_handler_callback_596:596-633",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "policyblocked",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-analysis.ts::splitcommandchainwithoperators": {
+      "Binary": {
+        "id": "exec-approvals-analysis.ts::splitcommandchainwithoperators",
+        "name": "exec-approvals-analysis.ts::splitcommandchainwithoperators:617-726",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "\\\\\\\\",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\"",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\&",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\&\\&",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals-analysis.ts::splitshellpipeline": {
+      "Binary": {
+        "id": "exec-approvals-analysis.ts::splitshellpipeline",
+        "name": "exec-approvals-analysis.ts::splitshellpipeline:81-354",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\\\n",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\\\r",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "command substitution in unquoted heredoc",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "\\\\\\\\",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::coerceallowlistentries": {
+      "Binary": {
+        "id": "exec-approvals.ts::coerceallowlistentries",
+        "name": "exec-approvals.ts::coerceallowlistentries:283-310",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowlist",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "object",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::ensureallowlistids": {
+      "Binary": {
+        "id": "exec-approvals.ts::ensureallowlistids",
+        "name": "exec-approvals.ts::ensureallowlistids:312-327",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowlist",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::requiresexecapproval": {
+      "Binary": {
+        "id": "exec-approvals.ts::requiresexecapproval",
+        "name": "exec-approvals.ts::requiresexecapproval:772-790",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "always",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "on-miss",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allowlist",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::resolveexecapprovalalloweddecisions": {
+      "Binary": {
+        "id": "exec-approvals.ts::resolveexecapprovalalloweddecisions",
+        "name": "exec-approvals.ts::resolveexecapprovalalloweddecisions:1017-1025",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "always",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-once",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::stripallowlistcommandtext": {
+      "Binary": {
+        "id": "exec-approvals.ts::stripallowlistcommandtext",
+        "name": "exec-approvals.ts::stripallowlistcommandtext:329-345",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowlist",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-approvals.ts::writeexecapprovalsraw": {
+      "Binary": {
+        "id": "exec-approvals.ts::writeexecapprovalsraw",
+        "name": "exec-approvals.ts::writeexecapprovalsraw:487-506",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "\\.exec\\-approvals\\.\\$\\{process\\.pid\\}\\.\\$\\{crypto\\.randomUUID\\(\\)\\}\\.tmp",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "wx",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-safe-bin-policy-validator.ts::ispathliketoken": {
+      "Binary": {
+        "id": "exec-safe-bin-policy-validator.ts::ispathliketoken",
+        "name": "exec-safe-bin-policy-validator.ts::ispathliketoken:9-24",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "-",
+              "decision": "Deny"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "./",
+              "decision": "Deny"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "../",
+              "decision": "Deny"
+            }
+          },
+          {
+            "PrefixMatch": {
+              "pattern": "/",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "exec-safe-bin-policy-validator.ts::issafeliteraltoken": {
+      "Binary": {
+        "id": "exec-safe-bin-policy-validator.ts::issafeliteraltoken",
+        "name": "exec-safe-bin-policy-validator.ts::issafeliteraltoken:34-39",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "-",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "net/fetch-guard.ts::fetchwithssrfguard": {
+      "Binary": {
+        "id": "net/fetch-guard.ts::fetchwithssrfguard",
+        "name": "net/fetch-guard.ts::fetchwithssrfguard:282-450",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "fetch is not available",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "number",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "string",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Invalid URL: must be http or https",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "http:",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "https:",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "explicit-proxy",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "net/fetch-guard.ts::rewriteredirectinitforcrossorigin": {
+      "Binary": {
+        "id": "net/fetch-guard.ts::rewriteredirectinitforcrossorigin",
+        "name": "net/fetch-guard.ts::rewriteredirectinitforcrossorigin:259-278",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowunsafereplay",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "GET",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "HEAD",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "outbound/outbound-policy.ts::enforcecrosscontextpolicy": {
+      "Binary": {
+        "id": "outbound/outbound-policy.ts::enforcecrosscontextpolicy",
+        "name": "outbound/outbound-policy.ts::enforcecrosscontextpolicy:91-141",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowacrossproviders",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "allowcrosscontextsend",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "allowwithinprovider",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Cross\\-context messaging denied: action=\\$\\{params\\.action\\} target provider \"\\$\\{params\\.channel\\}\" while bound to \"\\$\\{currentProvider\\}\"\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Cross\\-context messaging denied: action=\\$\\{params\\.action\\} target=\"\\$\\{target\\}\" while bound to \"\\$\\{currentTarget\\}\" \\(channel=\\$\\{params\\.channel\\}\\)\\.",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "path-alias-guards.ts::assertnopathaliasescape": {
+      "Binary": {
+        "id": "path-alias-guards.ts::assertnopathaliasescape",
+        "name": "path-alias-guards.ts::assertnopathaliasescape:12-34",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "allowfinalsymlink",
+              "min": 1.0,
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "symlink",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "plugin-approvals.ts::approvaldecisionlabel": {
+      "Binary": {
+        "id": "plugin-approvals.ts::approvaldecisionlabel",
+        "name": "plugin-approvals.ts::approvaldecisionlabel:38-46",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow-once",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "allowed once",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow-always",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "allowed always",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "denied",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "runtime-guard.ts::runtimesatisfies": {
+      "Binary": {
+        "id": "runtime-guard.ts::runtimesatisfies",
+        "name": "runtime-guard.ts::runtimesatisfies:65-71",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "node",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "system-run-approval-binding.ts::matchsystemrunapprovalenvhash": {
+      "Binary": {
+        "id": "system-run-approval-binding.ts::matchsystemrunapprovalenvhash",
+        "name": "system-run-approval-binding.ts::matchsystemrunapprovalenvhash:160-199",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "APPROVAL_ENV_BINDING_MISSING",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "approval id missing env binding for requested env overrides",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "APPROVAL_ENV_MISMATCH",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "approval id env binding mismatch",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "approval-gateway-resolver.ts::resolveapprovalovergateway",
+      "to": "approval-errors.ts::isapprovalnotfounderror",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap",
+      "to": "approval-handler-bootstrap.ts::starthandlerforcontext",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-handler-bootstrap.ts::starthandlerforcontext",
+      "to": "approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-native-route-coordinator.ts::report",
+      "to": "approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan",
+      "to": "approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-turn-source.ts::hasapprovalturnsourceroute",
+      "to": "exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "approval-view-model.ts::buildpendingapprovalview",
+      "to": "exec-approval-reply.ts::buildexecapprovalactiondescriptors",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approval-channel-runtime.ts::anonymous_callback_226",
+      "to": "exec-approval-channel-runtime.ts::handlerequested",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approval-reply.ts::buildexecapprovalpendingreplypayload",
+      "to": "exec-approval-reply.ts::buildexecapprovalactiondescriptors",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approvals-allowlist.ts::isskillpreludereadsegment",
+      "to": "exec-approvals-allowlist.ts::isskillmarkdownpreludepath",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approvals-allowlist.ts::resolvesegmentsatisfaction",
+      "to": "exec-approvals-allowlist.ts::isskillautoallowedsegment",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approvals-allowlist.ts::segments.every_handler_callback_596",
+      "to": "exec-approvals-allowlist.ts::resolvesegmentsatisfaction",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath",
+      "to": "exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-approvals-allowlist.ts::evaluateshellallowlist",
+      "to": "exec-approvals-analysis.ts::splitcommandchainwithoperators",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "exec-safe-bin-policy-validator.ts::issafeliteraltoken",
+      "to": "exec-safe-bin-policy-validator.ts::ispathliketoken",
+      "transform": "PassThrough"
+    },
+    {
+      "from": "net/fetch-guard.ts::fetchwithssrfguard",
+      "to": "net/fetch-guard.ts::rewriteredirectinitforcrossorigin",
+      "transform": "PassThrough"
+    }
+  ]
+}

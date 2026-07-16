@@ -1,0 +1,9 @@
+{
+  "fixture_id": "renamed-fields-002",
+  "family": "renamed-fields",
+  "property": "extractor_recognizes_alias_gate_fields",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "blocked_reason is a block_reason alias and should be treated as a negative gate field."
+}
+

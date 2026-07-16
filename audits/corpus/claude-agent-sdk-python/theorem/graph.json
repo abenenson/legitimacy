@@ -1,0 +1,84 @@
+{
+  "nodes": {
+    "python_hook_core_model.py::PreToolUseHookSpecificOutput": {
+      "Binary": {
+        "id": "python_hook_core_model.py::PreToolUseHookSpecificOutput",
+        "name": "python_hook_core_model.py::PreToolUseHookSpecificOutput",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Escalate",
+        "combination": "FirstMatch"
+      }
+    },
+    "python_hook_core_model.py::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "python_hook_core_model.py::pre_tool_use_permission_decision",
+        "name": "python_hook_core_model.py::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision": {
+      "Binary": {
+        "id": "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "name": "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "hook_registration:PreToolUse",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision",
+      "to": "python_hook_core_model.py::pre_tool_use_permission_decision",
+      "transform": "PassThrough"
+    }
+  ]
+}

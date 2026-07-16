@@ -1,0 +1,9 @@
+{
+  "fixture_id": "dead-code-004",
+  "family": "dead-code",
+  "property": "extractor_excludes_unreachable_hook_branches",
+  "should_hold": false,
+  "evidence_tier": "heuristic",
+  "notes": "Static extraction cannot prove the exception path unreachable without semantic exception analysis."
+}
+

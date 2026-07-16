@@ -1,0 +1,64 @@
+{
+  "source": {
+    "paper": "Greenblatt et al., AI Control: Improving Safety Despite Intentional Subversion, arXiv:2312.06942",
+    "source_refs": [
+      "main.tex:L348-L354",
+      "main.tex:L356-L365",
+      "main.tex:L220-L228",
+      "Figure 1",
+      "Table 1"
+    ]
+  },
+  "nodes": {
+    "untrusted_policy": {
+      "Binary": {
+        "id": "untrusted_policy",
+        "name": "U writes candidate code; early submissions are audited until H budget is spent",
+        "gates": [],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "upfront_audit_router": {
+      "Binary": {
+        "id": "upfront_audit_router",
+        "name": "Audit every code submission while the upfront H audit window remains open",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "upfront_audit_window",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "human_audit": {
+      "Binary": {
+        "id": "human_audit",
+        "name": "H detects audited backdoors and shuts down the untrusted model",
+        "gates": [
+          {
+            "ThresholdGate": {
+              "field": "upfront_audit_window",
+              "min": 1.0,
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "upfront_audit_router",
+      "to": "human_audit",
+      "transform": "PassThrough"
+    }
+  ]
+}

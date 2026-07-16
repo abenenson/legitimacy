@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source_descriptor": "codex-rs tui oss-story fixture",
+  "source_sha256": "815e563dc36b0b90982d381338443dfc7efb05ba14b28c3df5bd4a9875d56c8b",
+  "capture_timestamp": "2025-08-10T03:48:49.927Z",
+  "redaction": {
+    "redacted_fields": [
+      "source_event_id",
+      "claim.claimant_id",
+      "claim.content"
+    ],
+    "method": "sha256-truncate-12"
+  },
+  "claim_count": 9
+}

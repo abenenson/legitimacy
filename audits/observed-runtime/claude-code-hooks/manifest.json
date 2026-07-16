@@ -1,0 +1,69 @@
+{
+  "schema_version": "observed-runtime-metadata-v1",
+  "system": "Claude Code hooks",
+  "source_repository": "https://github.com/anthropics/claude-code",
+  "source_commit": "c128568da0ecb75a5f17bbded2d558da5152ba8e",
+  "redistribution": "metadata-only; proprietary source is not redistributed",
+  "files": [
+    {
+      "path": "plugins/security-guidance/hooks/security_reminder_hook.py",
+      "url": "https://github.com/anthropics/claude-code/blob/c128568da0ecb75a5f17bbded2d558da5152ba8e/plugins/security-guidance/hooks/security_reminder_hook.py",
+      "sha256": "a86fcbcf727d4b32d780c36697b595ae850d48e0ebd18d0d3784cad98fb0f64f",
+      "line_count": 280,
+      "line_ranges": [
+        {
+          "lines": "31-129",
+          "fact": "9 security-pattern records"
+        },
+        {
+          "lines": "187-200",
+          "fact": "command/content pattern scan"
+        },
+        {
+          "lines": "202-215",
+          "fact": "tool input extraction"
+        },
+        {
+          "lines": "218-276",
+          "fact": "hook entrypoint"
+        }
+      ],
+      "tools": ["Bash", "Edit", "Write", "MultiEdit"],
+      "exit_semantics": {
+        "0": "allow",
+        "2": "block with guidance"
+      }
+    },
+    {
+      "path": "examples/hooks/bash_command_validator_example.py",
+      "url": "https://github.com/anthropics/claude-code/blob/c128568da0ecb75a5f17bbded2d558da5152ba8e/examples/hooks/bash_command_validator_example.py",
+      "sha256": "0d7a9468405bb614ebddfb56037217cd9282a8045ea87a42cf6ff4099a61820d",
+      "line_count": 83,
+      "line_ranges": [
+        {
+          "lines": "14-24",
+          "fact": "PreToolUse Bash hook configuration"
+        },
+        {
+          "lines": "36-45",
+          "fact": "validation regexes"
+        },
+        {
+          "lines": "48-53",
+          "fact": "command validator"
+        },
+        {
+          "lines": "57-80",
+          "fact": "hook entrypoint"
+        }
+      ],
+      "tools": ["Bash"],
+      "exit_semantics": {
+        "0": "clean/non-Bash/empty input",
+        "1": "invalid JSON",
+        "2": "block invalid Bash command"
+      }
+    }
+  ],
+  "verdict_scope": "structurally documented; runtime verdict requires Anthropic-side audit collaboration or a redistributable source/trace corpus"
+}

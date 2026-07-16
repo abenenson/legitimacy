@@ -1,0 +1,9 @@
+{
+  "fixture_id": "misleading-literals-003",
+  "family": "misleading-literals",
+  "property": "extractor_ignores_comment_and_string_decoys",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "The log string resembles a policy field but is not control flow."
+}
+

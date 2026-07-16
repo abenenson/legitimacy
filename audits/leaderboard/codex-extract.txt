@@ -1,0 +1,298 @@
+EXTRACTION REPORT
+source: audits/fixtures/sources/leaderboard/codex-hooks
+nodes found: 10
+edges found: 5
+cycles detected: 0
+claim corpus: SyntheticStructuralProbe (64 claims)
+coverage: 7 parsed / 7 discovered (0 skipped, 0 errored)
+resolution issues: 211
+
+RECOGNIZED NODES
+- post_tool_use.rs::run [medium|Automatic] post_tool_use.rs:68-153
+- post_tool_use.rs::parse_completed [medium|Automatic] post_tool_use.rs:155-291
+- pre_tool_use.rs::run [high|Automatic] pre_tool_use.rs:61-130
+- pre_tool_use.rs::parse_completed [medium|Automatic] pre_tool_use.rs:132-230
+- session_start.rs::run [medium|Automatic] session_start.rs:75-139
+- session_start.rs::parse_completed [medium|Automatic] session_start.rs:141-237
+- stop.rs::run [high|Automatic] stop.rs:62-121
+- stop.rs::parse_completed [medium|Automatic] stop.rs:123-262
+- user_prompt_submit.rs::run [medium|Automatic] user_prompt_submit.rs:60-125
+- user_prompt_submit.rs::parse_completed [medium|Automatic] user_prompt_submit.rs:127-258
+
+RESOLUTION ISSUES
+- post_tool_use.rs::run -> Some (Unresolved)
+- post_tool_use.rs::run -> any (Unresolved)
+- post_tool_use.rs::run -> as_path (Unresolved)
+- post_tool_use.rs::run -> as_slice (Unresolved)
+- post_tool_use.rs::run -> clone (Unresolved)
+- post_tool_use.rs::run -> collect (Unresolved)
+- post_tool_use.rs::run -> display (Unresolved)
+- post_tool_use.rs::run -> execute_handlers (Unresolved)
+- post_tool_use.rs::run -> find_map (Unresolved)
+- post_tool_use.rs::run -> flat_map (Unresolved)
+- post_tool_use.rs::run -> flatten_additional_contexts (Unresolved)
+- post_tool_use.rs::run -> from_path (Unresolved)
+- post_tool_use.rs::run -> hook_completed_for_tool_use (Unresolved)
+- post_tool_use.rs::run -> into_iter (Unresolved)
+- post_tool_use.rs::run -> is_empty (Unresolved)
+- post_tool_use.rs::run -> iter (Unresolved)
+- post_tool_use.rs::run -> join_text_chunks (Unresolved)
+- post_tool_use.rs::run -> map (Unresolved)
+- post_tool_use.rs::run -> new (Unresolved)
+- post_tool_use.rs::run -> select_handlers (Unresolved)
+- post_tool_use.rs::run -> serialization_failure_hook_events_for_tool_use (Unresolved)
+- post_tool_use.rs::run -> serialization_failure_outcome (Unresolved)
+- post_tool_use.rs::run -> to_string (Unresolved)
+- post_tool_use.rs::run -> handlers (Unresolved)
+- post_tool_use.rs::run -> hook_events (Unresolved)
+- post_tool_use.rs::run -> input_json (Unresolved)
+- post_tool_use.rs::run -> matched (Unresolved)
+- post_tool_use.rs::run -> shell (Unresolved)
+- post_tool_use.rs::parse_completed -> and_then (Unresolved)
+- post_tool_use.rs::parse_completed -> append_additional_context (Unresolved)
+- post_tool_use.rs::parse_completed -> as_deref (Unresolved)
+- post_tool_use.rs::parse_completed -> clone (Unresolved)
+- post_tool_use.rs::parse_completed -> completed_summary (Unresolved)
+- post_tool_use.rs::parse_completed -> is_empty (Unresolved)
+- post_tool_use.rs::parse_completed -> is_none (Unresolved)
+- post_tool_use.rs::parse_completed -> new (Unresolved)
+- post_tool_use.rs::parse_completed -> parse_post_tool_use (Unresolved)
+- post_tool_use.rs::parse_completed -> push (Unresolved)
+- post_tool_use.rs::parse_completed -> starts_with (Unresolved)
+- post_tool_use.rs::parse_completed -> to_string (Unresolved)
+- post_tool_use.rs::parse_completed -> trim (Unresolved)
+- post_tool_use.rs::parse_completed -> trimmed_non_empty (Unresolved)
+- post_tool_use.rs::parse_completed -> unwrap_or (Unresolved)
+- post_tool_use.rs::parse_completed -> unwrap_or_else (Unresolved)
+- post_tool_use.rs::parse_completed -> additional_context (Unresolved)
+- post_tool_use.rs::parse_completed -> entries (Unresolved)
+- post_tool_use.rs::parse_completed -> handler (Unresolved)
+- post_tool_use.rs::parse_completed -> model_feedback (Unresolved)
+- post_tool_use.rs::parse_completed -> reason (Unresolved)
+- post_tool_use.rs::parse_completed -> status (Unresolved)
+- post_tool_use.rs::parse_completed -> stop_text (Unresolved)
+- pre_tool_use.rs::run -> Some (Unresolved)
+- pre_tool_use.rs::run -> any (Unresolved)
+- pre_tool_use.rs::run -> as_path (Unresolved)
+- pre_tool_use.rs::run -> clone (Unresolved)
+- pre_tool_use.rs::run -> collect (Unresolved)
+- pre_tool_use.rs::run -> display (Unresolved)
+- pre_tool_use.rs::run -> execute_handlers (Unresolved)
+- pre_tool_use.rs::run -> find_map (Unresolved)
+- pre_tool_use.rs::run -> from_path (Unresolved)
+- pre_tool_use.rs::run -> hook_completed_for_tool_use (Unresolved)
+- pre_tool_use.rs::run -> into_iter (Unresolved)
+- pre_tool_use.rs::run -> is_empty (Unresolved)
+- pre_tool_use.rs::run -> iter (Unresolved)
+- pre_tool_use.rs::run -> map (Unresolved)
+- pre_tool_use.rs::run -> new (Unresolved)
+- pre_tool_use.rs::run -> select_handlers (Unresolved)
+- pre_tool_use.rs::run -> serialization_failure_hook_events_for_tool_use (Unresolved)
+- pre_tool_use.rs::run -> serialization_failure_outcome (Unresolved)
+- pre_tool_use.rs::run -> to_string (Unresolved)
+- pre_tool_use.rs::run -> handlers (Unresolved)
+- pre_tool_use.rs::run -> hook_events (Unresolved)
+- pre_tool_use.rs::run -> input_json (Unresolved)
+- pre_tool_use.rs::run -> matched (Unresolved)
+- pre_tool_use.rs::run -> shell (Unresolved)
+- pre_tool_use.rs::parse_completed -> Some (Unresolved)
+- pre_tool_use.rs::parse_completed -> as_deref (Unresolved)
+- pre_tool_use.rs::parse_completed -> clone (Unresolved)
+- pre_tool_use.rs::parse_completed -> completed_summary (Unresolved)
+- pre_tool_use.rs::parse_completed -> is_empty (Unresolved)
+- pre_tool_use.rs::parse_completed -> new (Unresolved)
+- pre_tool_use.rs::parse_completed -> parse_pre_tool_use (Unresolved)
+- pre_tool_use.rs::parse_completed -> push (Unresolved)
+- pre_tool_use.rs::parse_completed -> starts_with (Unresolved)
+- pre_tool_use.rs::parse_completed -> to_string (Unresolved)
+- pre_tool_use.rs::parse_completed -> trim (Unresolved)
+- pre_tool_use.rs::parse_completed -> trimmed_non_empty (Unresolved)
+- pre_tool_use.rs::parse_completed -> entries (Unresolved)
+- pre_tool_use.rs::parse_completed -> handler (Unresolved)
+- pre_tool_use.rs::parse_completed -> status (Unresolved)
+- session_start.rs::run -> Some (Unresolved)
+- session_start.rs::run -> any (Unresolved)
+- session_start.rs::run -> as_path (Unresolved)
+- session_start.rs::run -> as_slice (Unresolved)
+- session_start.rs::run -> as_str (Unresolved)
+- session_start.rs::run -> clone (Unresolved)
+- session_start.rs::run -> collect (Unresolved)
+- session_start.rs::run -> display (Unresolved)
+- session_start.rs::run -> execute_handlers (Unresolved)
+- session_start.rs::run -> find_map (Unresolved)
+- session_start.rs::run -> flatten_additional_contexts (Unresolved)
+- session_start.rs::run -> into_iter (Unresolved)
+- session_start.rs::run -> is_empty (Unresolved)
+- session_start.rs::run -> iter (Unresolved)
+- session_start.rs::run -> map (Unresolved)
+- session_start.rs::run -> new (Unresolved)
+- session_start.rs::run -> select_handlers (Unresolved)
+- session_start.rs::run -> serialization_failure_hook_events (Unresolved)
+- session_start.rs::run -> serialization_failure_outcome (Unresolved)
+- session_start.rs::run -> to_string (Unresolved)
+- session_start.rs::run -> handlers (Unresolved)
+- session_start.rs::run -> input_json (Unresolved)
+- session_start.rs::run -> matched (Unresolved)
+- session_start.rs::run -> shell (Unresolved)
+- session_start.rs::run -> turn_id (Unresolved)
+- session_start.rs::parse_completed -> append_additional_context (Unresolved)
+- session_start.rs::parse_completed -> as_deref (Unresolved)
+- session_start.rs::parse_completed -> clone (Unresolved)
+- session_start.rs::parse_completed -> completed_summary (Unresolved)
+- session_start.rs::parse_completed -> is_empty (Unresolved)
+- session_start.rs::parse_completed -> new (Unresolved)
+- session_start.rs::parse_completed -> parse_session_start (Unresolved)
+- session_start.rs::parse_completed -> push (Unresolved)
+- session_start.rs::parse_completed -> starts_with (Unresolved)
+- session_start.rs::parse_completed -> to_string (Unresolved)
+- session_start.rs::parse_completed -> trim (Unresolved)
+- session_start.rs::parse_completed -> additional_context (Unresolved)
+- session_start.rs::parse_completed -> entries (Unresolved)
+- session_start.rs::parse_completed -> handler (Unresolved)
+- session_start.rs::parse_completed -> status (Unresolved)
+- stop.rs::run -> Some (Unresolved)
+- stop.rs::run -> aggregate_results (Unresolved)
+- stop.rs::run -> as_path (Unresolved)
+- stop.rs::run -> clone (Unresolved)
+- stop.rs::run -> collect (Unresolved)
+- stop.rs::run -> display (Unresolved)
+- stop.rs::run -> execute_handlers (Unresolved)
+- stop.rs::run -> from_path (Unresolved)
+- stop.rs::run -> from_string (Unresolved)
+- stop.rs::run -> into_iter (Unresolved)
+- stop.rs::run -> is_empty (Unresolved)
+- stop.rs::run -> iter (Unresolved)
+- stop.rs::run -> map (Unresolved)
+- stop.rs::run -> new (Unresolved)
+- stop.rs::run -> select_handlers (Unresolved)
+- stop.rs::run -> serialization_failure_hook_events (Unresolved)
+- stop.rs::run -> serialization_failure_outcome (Unresolved)
+- stop.rs::run -> to_string (Unresolved)
+- stop.rs::run -> handlers (Unresolved)
+- stop.rs::run -> input_json (Unresolved)
+- stop.rs::run -> matched (Unresolved)
+- stop.rs::run -> shell (Unresolved)
+- stop.rs::parse_completed -> Some (Unresolved)
+- stop.rs::parse_completed -> and_then (Unresolved)
+- stop.rs::parse_completed -> as_deref (Unresolved)
+- stop.rs::parse_completed -> clone (Unresolved)
+- stop.rs::parse_completed -> completed_summary (Unresolved)
+- stop.rs::parse_completed -> is_empty (Unresolved)
+- stop.rs::parse_completed -> map (Unresolved)
+- stop.rs::parse_completed -> new (Unresolved)
+- stop.rs::parse_completed -> parse_stop (Unresolved)
+- stop.rs::parse_completed -> push (Unresolved)
+- stop.rs::parse_completed -> to_string (Unresolved)
+- stop.rs::parse_completed -> trim (Unresolved)
+- stop.rs::parse_completed -> trimmed_non_empty (Unresolved)
+- stop.rs::parse_completed -> unwrap_or_default (Unresolved)
+- stop.rs::parse_completed -> entries (Unresolved)
+- stop.rs::parse_completed -> handler (Unresolved)
+- stop.rs::parse_completed -> status (Unresolved)
+- user_prompt_submit.rs::run -> Some (Unresolved)
+- user_prompt_submit.rs::run -> any (Unresolved)
+- user_prompt_submit.rs::run -> as_path (Unresolved)
+- user_prompt_submit.rs::run -> as_slice (Unresolved)
+- user_prompt_submit.rs::run -> clone (Unresolved)
+- user_prompt_submit.rs::run -> collect (Unresolved)
+- user_prompt_submit.rs::run -> display (Unresolved)
+- user_prompt_submit.rs::run -> execute_handlers (Unresolved)
+- user_prompt_submit.rs::run -> find_map (Unresolved)
+- user_prompt_submit.rs::run -> flatten_additional_contexts (Unresolved)
+- user_prompt_submit.rs::run -> from_path (Unresolved)
+- user_prompt_submit.rs::run -> into_iter (Unresolved)
+- user_prompt_submit.rs::run -> is_empty (Unresolved)
+- user_prompt_submit.rs::run -> iter (Unresolved)
+- user_prompt_submit.rs::run -> map (Unresolved)
+- user_prompt_submit.rs::run -> new (Unresolved)
+- user_prompt_submit.rs::run -> select_handlers (Unresolved)
+- user_prompt_submit.rs::run -> serialization_failure_hook_events (Unresolved)
+- user_prompt_submit.rs::run -> serialization_failure_outcome (Unresolved)
+- user_prompt_submit.rs::run -> to_string (Unresolved)
+- user_prompt_submit.rs::run -> handlers (Unresolved)
+- user_prompt_submit.rs::run -> input_json (Unresolved)
+- user_prompt_submit.rs::run -> matched (Unresolved)
+- user_prompt_submit.rs::run -> shell (Unresolved)
+- user_prompt_submit.rs::parse_completed -> Some (Unresolved)
+- user_prompt_submit.rs::parse_completed -> append_additional_context (Unresolved)
+- user_prompt_submit.rs::parse_completed -> as_deref (Unresolved)
+- user_prompt_submit.rs::parse_completed -> clone (Unresolved)
+- user_prompt_submit.rs::parse_completed -> completed_summary (Unresolved)
+- user_prompt_submit.rs::parse_completed -> is_empty (Unresolved)
+- user_prompt_submit.rs::parse_completed -> is_none (Unresolved)
+- user_prompt_submit.rs::parse_completed -> new (Unresolved)
+- user_prompt_submit.rs::parse_completed -> parse_user_prompt_submit (Unresolved)
+- user_prompt_submit.rs::parse_completed -> push (Unresolved)
+- user_prompt_submit.rs::parse_completed -> starts_with (Unresolved)
+- user_prompt_submit.rs::parse_completed -> to_string (Unresolved)
+- user_prompt_submit.rs::parse_completed -> trim (Unresolved)
+- user_prompt_submit.rs::parse_completed -> trimmed_non_empty (Unresolved)
+- user_prompt_submit.rs::parse_completed -> additional_context (Unresolved)
+- user_prompt_submit.rs::parse_completed -> entries (Unresolved)
+- user_prompt_submit.rs::parse_completed -> handler (Unresolved)
+- user_prompt_submit.rs::parse_completed -> status (Unresolved)
+
+AXIOM STATUS
+- CERTIFIABLE: SUPPORTED (projection verdict passed)
+- GOVERNANCE-OBSERVABLE: SKIPPED (graph has more than 100000 legal topological orders)
+- CORRIGIBLE: SUPPORTED (projection verdict passed)
+- COMPOSITIONAL SAFETY: SUPPORTED (projection verdict passed)
+- NON-VACUOUS: REJECTED (10 examined claims remained in Escalate after traversal: post_tool_use.rs::parse_completed-gate-6, post_tool_use.rs::run-gate-6, pre_tool_use.rs::parse_completed-gate-7, pre_tool_use.rs::run-gate-5, session_start.rs::parse_completed-gate-6, session_start.rs::run-gate-3, stop.rs::parse_completed-gate-5, stop.rs::run-gate-4, user_prompt_submit.rs::parse_completed-gate-6, user_prompt_submit.rs::run-gate-5)
+
+DIAGNOSTIC CHECKS
+- graph consistency: passed (64 perturbations)
+- graph solidarity: passed (8 perturbations)
+- graph monotonicity: REJECTED -- Improving 'post_tool_use.rs::parse_completed-gate-0' on 'hook_event_name' by 1.00 worsened 'post_tool_use.rs::parse_completed-gate-0' from Permit to Deny
+- graph strategyproofness (derived via solidarity_monotonicity_imply_strategyproof; empirical monitor): passed (320 perturbations)
+- graph certifiability (implements CERTIFIABLE projection): passed (487 perturbations)
+- graph observable determinacy (implements GOVERNANCE-OBSERVABLE projection): skipped (graph has more than 100000 legal topological orders)
+- graph corrigibility (implements CORRIGIBLE projection): passed (3 perturbations)
+- graph compositional safety (implements COMPOSITIONAL SAFETY projection): passed (64 perturbations)
+- graph nonvacuity (implements NON-VACUOUS axiom): REJECTED -- 10 examined claims remained in Escalate after traversal: post_tool_use.rs::parse_completed-gate-6, post_tool_use.rs::run-gate-6, pre_tool_use.rs::parse_completed-gate-7, pre_tool_use.rs::run-gate-5, session_start.rs::parse_completed-gate-6, session_start.rs::run-gate-3, stop.rs::parse_completed-gate-5, stop.rs::run-gate-4, user_prompt_submit.rs::parse_completed-gate-6, user_prompt_submit.rs::run-gate-5
+
+PARADOX SUITE
+- compositional Alabama: detected -- Appending peer-review node 'post_tool_use-rs--parse_completed-review' after 'post_tool_use.rs::parse_completed' at percentile 0.60 worsened 'pre_tool_use.rs::run-gate-5' from Escalate to Deny
+- feedback monotonicity: none
+- path dependence: none
+
+SPECTRAL ANALYSIS
+- graph connectivity: DISCONNECTED
+- connected components: 5
+- spectral gap (lambda_2): 0.000
+- max degree: 1
+- signal range: 0.35
+- cv (exact): 10/1
+- C*(δ=0.100): N/A
+- RG trajectory (k=1..3 cv): N/A
+- RG trajectory (k=1..3 C*): N/A
+- spectral well-connected (θ=17/20): no
+- capacity bound: N/A
+- capacity saturated at ε=0.100: N/A
+- cv (Cheeger upper bound): N/A
+- localizability bound: N/A
+- CV x localizability: N/A
+
+GOVERNANCE FACTOR EXPOSURE
+Governance Factor Exposure
+  consistency        0.00  [..........]
+  solidarity         0.00  [..........]
+  monotonicity       1.00  [##########]
+  strategyproofness  0.00  [..........]
+  nonvacuity         1.00  [##########]
+
+PROTOCOL STATE ASSESSMENT
+- current state: UNDECLARED
+- governance-observable: YES (graph extracted for principal inspection)
+- can extract-compile: NO (requires no cycles, at least one passing axiom, and no rejected axioms)
+- can measure: NO (spectral analysis unavailable)
+- supervisory algebra: {pause, deny, sandbox, degrade, rollback, reroute, stop}
+- boundary-relative compositional safety: 10 governance nodes have 202 transitive external dependencies not in the governance graph (causal boundary analysis)
+- blocking for LIVE:
+  - 2 axiom check(s) rejected; sacrifices required before promotion
+  - spectral analysis could not compute algebraic connectivity (disconnected graph or single node)
+  - 10 governance nodes have 202 transitive external dependencies not in the governance graph (causal boundary analysis)
+  - no monitoring infrastructure detected
+
+RECOMMENDED SACRIFICES
+1. monotonicity -- Improving 'post_tool_use.rs (see diagnostic above)
+2. nonvacuity -- 10 examined claims remained in Escalate after traversal (see diagnostic above)

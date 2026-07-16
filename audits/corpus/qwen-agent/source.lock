@@ -1,0 +1,8 @@
+[source]
+id = "qwen-agent"
+source_repo = "https://github.com/QwenLM/Qwen-Agent"
+source_commit = "31a4d36d123688581a9e9744427272b33ce940e0"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

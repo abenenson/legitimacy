@@ -1,0 +1,378 @@
+{
+  "harness_id": "autogen",
+  "source_repo": "https://github.com/microsoft/autogen",
+  "source_commit": "027ecf0a379bcc1d09956d46d12d44a3ad9cee14",
+  "extraction_mode": "heuristic",
+  "evidence_tier": "theorem-backed-modeled",
+  "coverage_pct": 100.0,
+  "unsupported_constructs": [
+    "Unresolved: approvalresponse"
+  ],
+  "verdict_summary": "Synthetic structural probe passed over 1 nodes and 0 edges.",
+  "report": {
+    "artifacts": {
+      "source_dir": "audits/fixtures/sources/leaderboard/autogen",
+      "graph": {
+        "nodes": {
+          "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous": {
+            "Binary": {
+              "id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+              "name": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous:446-454",
+              "gates": [
+                {
+                  "ContentMatch": {
+                    "regex": "Approval function that denies potentially dangerous code\\.",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "rm",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "del",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "format",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ExactMatch": {
+                    "value": "delete",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ContentMatch": {
+                    "regex": "DROP TABLE",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ContentMatch": {
+                    "regex": "f\"Code contains potentially dangerous keyword: \\{keyword\\}",
+                    "decision": "Permit"
+                  }
+                },
+                {
+                  "ContentMatch": {
+                    "regex": "Code appears safe",
+                    "decision": "Permit"
+                  }
+                }
+              ],
+              "default": "Deny",
+              "combination": "FirstMatch"
+            }
+          }
+        },
+        "edges": []
+      },
+      "coverage": {
+        "files_discovered": 1,
+        "files_parsed": 1,
+        "files_skipped": 0,
+        "files_errored": 0,
+        "complete": true,
+        "files": [
+          {
+            "path": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py",
+            "language": "Python",
+            "status": "Parsed"
+          }
+        ]
+      },
+      "recognized_nodes": [
+        {
+          "node_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+          "function_name": "approval_function_deny_dangerous",
+          "relative_path": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py",
+          "language": "Python",
+          "line_start": 446,
+          "line_end": 454,
+          "confidence": "Medium",
+          "tier": "automatic",
+          "rationale": [
+            "governance naming/path/body signal",
+            "branch structure with 2 decision branches",
+            "explicit outputs positive=2 negative=0",
+            "permission/policy context signal"
+          ]
+        }
+      ],
+      "recognized_edges": [],
+      "resolution_issues": [
+        {
+          "caller": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+          "target_symbol": "approvalresponse",
+          "kind": "Unresolved",
+          "candidates": []
+        }
+      ],
+      "boundary_causal_safety": {
+        "summary": "1 governance nodes have 1 transitive external dependencies not in the governance graph (causal boundary analysis)",
+        "affected_governance_nodes": 1,
+        "external_dependency_count": 1,
+        "ungoverned_dependencies": [
+          {
+            "governance_node": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+            "dependency": "approvalresponse"
+          }
+        ]
+      }
+    },
+    "audit": {
+      "corpus_provenance": "SyntheticStructuralProbe",
+      "claims": [
+        {
+          "claimant_id": "baseline",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "safe content",
+          "metrics": {}
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-0",
+          "strength": 1.0,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "Approval function that denies potentially dangerous code.",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-1",
+          "strength": 1.05,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "rm",
+          "content": "safe content",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-2",
+          "strength": 1.1,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "del",
+          "content": "safe content",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-3",
+          "strength": 1.15,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "format",
+          "content": "safe content",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-4",
+          "strength": 1.2,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "delete",
+          "content": "safe content",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-5",
+          "strength": 1.25,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "DROP TABLE",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-6",
+          "strength": 1.3,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "f\"Code contains potentially dangerous keyword: {keyword}",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        },
+        {
+          "claimant_id": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous-gate-7",
+          "strength": 1.35,
+          "priority_class": "extracted",
+          "path": "/workspace/safe.rs",
+          "action": "safe_action",
+          "content": "Code appears safe",
+          "metrics": {
+            "permit_signal": 1.0
+          }
+        }
+      ],
+      "cycles": [],
+      "axiom_results": [
+        {
+          "axiom": "graph consistency",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph consistency",
+              "perturbations_tested": 9
+            }
+          }
+        },
+        {
+          "axiom": "graph solidarity",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph solidarity",
+              "perturbations_tested": 2
+            }
+          }
+        },
+        {
+          "axiom": "graph monotonicity",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph monotonicity",
+              "perturbations_tested": 18
+            }
+          }
+        },
+        {
+          "axiom": "graph strategyproofness",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph strategyproofness",
+              "perturbations_tested": 45
+            }
+          }
+        },
+        {
+          "axiom": "graph certifiability",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph certifiability",
+              "perturbations_tested": 18
+            }
+          }
+        },
+        {
+          "axiom": "graph observable determinacy",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph observable determinacy",
+              "perturbations_tested": 1
+            }
+          }
+        },
+        {
+          "axiom": "graph corrigibility",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph corrigibility",
+              "perturbations_tested": 3
+            }
+          }
+        },
+        {
+          "axiom": "graph compositional safety",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph compositional safety",
+              "perturbations_tested": 9
+            }
+          }
+        },
+        {
+          "axiom": "graph nonvacuity",
+          "verdict": {
+            "Admissible": {
+              "axiom": "graph nonvacuity",
+              "perturbations_tested": 9
+            }
+          }
+        }
+      ],
+      "paradox_results": [
+        {
+          "paradox": "compositional Alabama"
+        },
+        {
+          "paradox": "feedback monotonicity"
+        },
+        {
+          "paradox": "path dependence"
+        }
+      ],
+      "spectral": {
+        "node_count": 1,
+        "edge_count": 0,
+        "is_connected": true,
+        "spectral_gap": null,
+        "max_degree": 0,
+        "min_removed_deg": 0,
+        "signal_range": 0.3500000000000001,
+        "cv_exact": null,
+        "cv_bound": null,
+        "capacity": null,
+        "capacity_saturated": null,
+        "c_star": null,
+        "c_star_delta": 0.1,
+        "swc": null,
+        "rg_trajectory": null,
+        "localizability_bound": null,
+        "cv_times_localizability": null
+      },
+      "factor_exposure": {
+        "consistency": 0.0,
+        "solidarity": 0.0,
+        "monotonicity": 0.0,
+        "strategyproofness": 0.0,
+        "nonvacuity": 0.0
+      },
+      "protocol_assessment": {
+        "current_state": "UNDECLARED",
+        "can_declare": true,
+        "can_extract_compile": true,
+        "can_measure": false,
+        "boundary_causal_safety": {
+          "summary": "1 governance nodes have 1 transitive external dependencies not in the governance graph (causal boundary analysis)",
+          "affected_governance_nodes": 1,
+          "external_dependency_count": 1,
+          "ungoverned_dependencies": [
+            {
+              "governance_node": "python/packages/autogen-agentchat/tests/test_code_executor_agent.py::approval_function_deny_dangerous",
+              "dependency": "approvalresponse"
+            }
+          ]
+        },
+        "blocking_issues": [
+          "spectral analysis could not compute algebraic connectivity (disconnected graph or single node)",
+          "1 governance nodes have 1 transitive external dependencies not in the governance graph (causal boundary analysis)",
+          "no monitoring infrastructure detected"
+        ],
+        "recommended_sacrifices": []
+      }
+    }
+  }
+}

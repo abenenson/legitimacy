@@ -1,0 +1,8 @@
+[source]
+id = "openhands"
+source_repo = "https://github.com/All-Hands-AI/OpenHands"
+source_commit = "d3864d9992c4a7503b32e9fbc1fba8c4bf2bdf92"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

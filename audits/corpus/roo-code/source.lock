@@ -1,0 +1,8 @@
+[source]
+id = "roo-code"
+source_repo = "https://github.com/RooVetGit/Roo-Code"
+source_commit = "ad256349058d3f84fd97517aabce4a119a234bbf"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

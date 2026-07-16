@@ -1,0 +1,13 @@
+[adjudication]
+harness_id = "crewai"
+status = "resolved"
+adjudicator_id = "adjudicator_1"
+source_commit = "c9100cb51d357f6e3ba7d9969a000571f051ca64"
+resolved_at = "2026-05-04T00:00:00Z"
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+cohen_kappa_decisions = 1.0
+node_count = 2
+edge_count = 1
+disagreement_count = 0
+rationale = "The curated answer key matches the theorem-generated PythonHookCore graph for the modeled CrewAI before-tool hook source slice. This adjudicates the modeled source slice; it is not a byte-level completeness proof for every file in the pinned upstream CrewAI revision."

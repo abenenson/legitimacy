@@ -1,0 +1,9 @@
+{
+  "fixture_id": "renamed-fields-007",
+  "family": "renamed-fields",
+  "property": "extractor_recognizes_alias_gate_fields",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "forbid_dirty is a negative dirty-worktree gate alias."
+}
+

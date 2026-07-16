@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "legitimacy.ast-theorem-witness.v1",
+  "theoremName": "autogen_python_hook_core_graph_equivalent",
+  "sourceDir": "audits/corpus/autogen/theorem",
+  "astHashAlgorithm": "tree-sitter-canonical-shape-and-tokens-sha256:v2",
+  "sourceAstHash": "sha256:988fa3a296e6f6e622de4db91f31e12e378a6de8d8e8634e84d62512e060e61a",
+  "graphHashAlgorithm": "serde-json-pretty-sha256:v1",
+  "governanceGraphHash": "sha256:e33e0afd5b13b65c72d8b627d919ef28e6ec204f73d7efbc1b84ac14c7ffeb2d",
+  "leanBindingType": "Legitimacy.ASTTheoremWitnessBinding",
+  "files": [
+    {
+      "path": "python_hook_core_model.py",
+      "language": "Python",
+      "astHash": "sha256:656ff884478e955ed0c0910bded0b54fdb09a0c7c4f122dcb745cc5bd0c66cc6"
+    }
+  ]
+}

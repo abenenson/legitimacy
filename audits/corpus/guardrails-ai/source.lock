@@ -1,0 +1,8 @@
+[source]
+id = "guardrails-ai"
+source_repo = "https://github.com/guardrails-ai/guardrails"
+source_commit = "379ab72ff643d0d9b8dff4f74c956ce29eab341d"
+license = "Apache-2.0"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

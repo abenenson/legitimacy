@@ -1,0 +1,541 @@
+# ASI concept-stack Rust/Lean parity manifest.
+#
+# Each entry maps one top-level Lean concept declaration to the Rust file and
+# identifier that witnesses its executable counterpart.
+
+[[concept]]
+lean = "RuleLayerKernelArtifact"
+lean_path = "lean/Legitimacy/SafetySpecReduction.lean"
+rust_path = "src/safety_spec_reduction.rs"
+rust_identifier = "RuleLayerKernelArtifact"
+
+[[concept]]
+lean = "RuleLayerKernelAuditObligations"
+lean_path = "lean/Legitimacy/SafetySpecReduction.lean"
+rust_path = "src/safety_spec_reduction.rs"
+rust_identifier = "RuleLayerKernelAuditObligations"
+
+[[concept]]
+lean = "KernelAuditConjunction"
+lean_path = "lean/Legitimacy/SafetySpecReduction.lean"
+rust_path = "src/safety_spec_reduction.rs"
+rust_identifier = "KernelAuditConjunction"
+
+[[concept]]
+lean = "noSilentRuleLayerDegradation"
+lean_path = "lean/Legitimacy/SafetySpecReduction.lean"
+rust_path = "src/safety_spec_reduction.rs"
+rust_identifier = "no_silent_rule_layer_degradation"
+
+[[concept]]
+lean = "safety_spec_reduces_to_kernel_audit"
+lean_path = "lean/Legitimacy/SafetySpecReduction.lean"
+rust_path = "src/safety_spec_reduction.rs"
+rust_identifier = "safety_spec_reduces_to_kernel_audit"
+
+[[concept]]
+lean = "AuthorityNodeId"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "AuthorityNodeId"
+
+[[concept]]
+lean = "AuthorityEdge"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "AuthorityEdge"
+
+[[concept]]
+lean = "AuthorityGraph"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "AuthorityGraph"
+
+[[concept]]
+lean = "HasAuthorityEdge"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "has_edge"
+
+[[concept]]
+lean = "HasAuthorityOverride"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "has_override"
+
+[[concept]]
+lean = "AuthorityEdgeDifference"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "authority_edge_difference"
+
+[[concept]]
+lean = "AuthorityOverrideDifference"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "authority_override_difference"
+
+[[concept]]
+lean = "pathAuthorityEdges"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "path_authority_edges"
+
+[[concept]]
+lean = "AuthorityPathPermitted"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "authority_path_permitted"
+
+[[concept]]
+lean = "routeTarget?"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "route_target"
+
+[[concept]]
+lean = "routeDirectEdge?"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "route_direct_edge"
+
+[[concept]]
+lean = "IsEdgePermittedRoute"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "is_edge_permitted_route"
+
+[[concept]]
+lean = "IsEdgePermittedBypass"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "is_edge_permitted_bypass"
+
+[[concept]]
+lean = "routeSublists"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "route_sublists"
+
+[[concept]]
+lean = "ProperRouteSublist"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "proper_route_sublist"
+
+[[concept]]
+lean = "AuthorityExtensionallyEquivalent"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "authority_extensionally_equivalent"
+
+[[concept]]
+lean = "SourceDerivesEdge"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "source_derives_edge"
+
+[[concept]]
+lean = "SourceEdgeDerivation"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "SourceEdgeDerivation"
+
+[[concept]]
+lean = "SourceEvidenceDerivable"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "source_evidence_derivable"
+
+[[concept]]
+lean = "SemanticFailureLocus"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "SemanticFailureLocus"
+
+[[concept]]
+lean = "GovernanceKernelizationObservation"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "GovernanceKernelizationObservation"
+
+[[concept]]
+lean = "SourceEvidenceComplete"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "source_evidence_complete"
+
+[[concept]]
+lean = "KernelizationClean"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "kernelization_clean"
+
+[[concept]]
+lean = "UnmodeledEdgeWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "UnmodeledEdgeWitness"
+
+[[concept]]
+lean = "BypassPathWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "BypassPathWitness"
+
+[[concept]]
+lean = "HiddenOverrideWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "HiddenOverrideWitness"
+
+[[concept]]
+lean = "SourceEvidenceGapWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "SourceEvidenceGapWitness"
+
+[[concept]]
+lean = "SemanticBridgeFailureWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "SemanticBridgeFailureWitness"
+
+[[concept]]
+lean = "SemanticFailureLocusFails"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "semantic_failure_locus_fails"
+
+[[concept]]
+lean = "SemanticFailureLocusPrecedes"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "semantic_failure_locus_minimal"
+
+[[concept]]
+lean = "SemanticFailureLocusMinimal"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "semantic_failure_locus_minimal"
+
+[[concept]]
+lean = "HiddenAuthorityCertificate"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "HiddenAuthorityCertificate"
+
+[[concept]]
+lean = "BypassPathMinimal"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "bypass_path_minimal"
+
+[[concept]]
+lean = "HiddenOverrideDominatesPair"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "hidden_override_dominates_pair"
+
+[[concept]]
+lean = "MinimalHiddenAuthority"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "minimal_hidden_authority"
+
+[[concept]]
+lean = "KernelizationHonesty"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "kernelization_honesty"
+
+[[concept]]
+lean = "kernelization_honesty"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "kernelization_honesty"
+
+[[concept]]
+lean = "KernelizationCleanWitness"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "KernelizationCleanWitness"
+
+[[concept]]
+lean = "KernelizationExtractorContract"
+lean_path = "lean/Legitimacy/Kernelization/Core.lean"
+rust_path = "src/extract/kernelization.rs"
+rust_identifier = "KernelizationExtractorContract"
+
+[[concept]]
+lean = "CapacityKernel"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "CapacityKernel"
+
+[[concept]]
+lean = "WellConditionedForCapacity"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "WellConditionedForCapacity"
+
+[[concept]]
+lean = "PreservedDiagnostic"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "PreservedDiagnostic"
+
+[[concept]]
+lean = "PositiveProcedureCertificate"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "PositiveProcedureCertificate"
+# Rust lower-scale certificate fields are intentionally named
+# sampled_lower_scales_* because the executable mirror probes a finite sample.
+
+[[concept]]
+lean = "governance_certificate"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "governance_certificate"
+
+[[concept]]
+lean = "governance_certificate_constructible"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "governance_certificate_constructible"
+
+[[concept]]
+lean = "GraphDiagnosticCarrier"
+lean_path = "lean/Legitimacy/Spectral/Certificates/PositiveProcedureCertificate.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "GraphDiagnosticCarrier"
+
+[[concept]]
+lean = "positiveProcedure_graphDiagnostic_classification"
+lean_path = "lean/Legitimacy/Results/PositiveProcedure.lean"
+rust_path = "src/spectral/positive_procedure.rs"
+rust_identifier = "kind_consistency_to_graph_consistency"
+
+[[concept]]
+lean = "ConcreteBSCNoisyCStarCalibration"
+lean_path = "lean/Legitimacy/Spectral/Channels/NoisyThresholdClosedForm.lean"
+rust_path = "src/spectral/noisy_threshold_closed_form.rs"
+rust_identifier = "ConcreteBSCNoisyCStarCalibration"
+
+[[concept]]
+lean = "channelCapacity_asNoisyThresholdChannel_eq_log_two_sub_binEntropy"
+lean_path = "lean/Legitimacy/Spectral/Channels/NoisyThresholdClosedForm.lean"
+rust_path = "src/spectral/noisy_threshold_closed_form.rs"
+rust_identifier = "bsc_channel_capacity"
+
+[[concept]]
+lean = "channelCapacity_asNoisyThresholdChannel_bits"
+lean_path = "lean/Legitimacy/Spectral/Channels/NoisyThresholdClosedForm.lean"
+rust_path = "src/spectral/noisy_threshold_closed_form.rs"
+rust_identifier = "bsc_channel_capacity_bits"
+
+[[concept]]
+lean = "concreteHalfBSCNoisyCStarCalibration"
+lean_path = "lean/Legitimacy/Spectral/Channels/NoisyThresholdClosedForm.lean"
+rust_path = "src/spectral/noisy_threshold_closed_form.rs"
+rust_identifier = "concrete_half_bsc_noisy_c_star_calibration"
+
+[[concept]]
+lean = "twoStateCountingKernel"
+lean_path = "lean/Legitimacy/Spectral/ASIEmbedding/MeasureTheoretic.lean"
+rust_path = "src/spectral/measure_theoretic.rs"
+rust_identifier = "TwoStateCountingKernel"
+
+[[concept]]
+lean = "operatorSpectralGap"
+lean_path = "lean/Legitimacy/Spectral/ASIEmbedding/MeasureTheoretic.lean"
+rust_path = "src/spectral/measure_theoretic.rs"
+rust_identifier = "operator_spectral_gap"
+
+[[concept]]
+lean = "twoStateCountingKernel_operatorSpectralGap_eq"
+lean_path = "lean/Legitimacy/Spectral/ASIEmbedding/MeasureTheoretic.lean"
+rust_path = "src/spectral/measure_theoretic.rs"
+rust_identifier = "two_state_counting_kernel_operator_spectral_gap_eq"
+
+[[concept]]
+lean = "ConstitutionalAIDecision"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAIDecision"
+
+[[concept]]
+lean = "ConstitutionalAIClaimClass"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAIClaimClass"
+
+[[concept]]
+lean = "ConstitutionalAIBehavioralLineage"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAIBehavioralLineage"
+
+[[concept]]
+lean = "ConstitutionalAICapacityLineage"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAICapacityLineage"
+
+[[concept]]
+lean = "profile_sensitive_policy_label"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "profile_sensitive_policy_label"
+
+[[concept]]
+lean = "cai_harm_categorical_policy_denies"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "cai_harm_categorical_policy_denies"
+
+[[concept]]
+lean = "cai_capabilityBoundary_benign_response_matches_C_star"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "cai_capability_boundary_benign_response_matches_c_star"
+
+[[concept]]
+lean = "BenignBoundaryPolicyMatches"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "benign_boundary_policy_matches"
+
+[[concept]]
+lean = "constantDenyPolicy"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAILineage.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "constant_deny_policy"
+
+[[concept]]
+lean = "ConstitutionalAISubstrateFailureMode"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIVerdict.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAISubstrateFailureMode"
+
+[[concept]]
+lean = "ConstitutionalAISubstrateVerdict"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIVerdict.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAISubstrateVerdict"
+
+[[concept]]
+lean = "substrateVerdictForPolicy"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIVerdict.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "substrate_verdict_for_policy"
+
+[[concept]]
+lean = "substrateVerdict"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIVerdict.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "substrate_verdict"
+
+[[concept]]
+lean = "ConstitutionalAIPositiveProcedureCarrier"
+lean_path = "lean/Legitimacy/Spectral/Certificates/ConstitutionalAIPositiveProcedure.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "ConstitutionalAIPositiveProcedureCarrier"
+
+[[concept]]
+lean = "constitutionalAIWitnessLineage5"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIWitnesses.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "constitutional_ai_witness_lineage5"
+
+[[concept]]
+lean = "constitutionalAICapacityWitnessLineage"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIWitnesses.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "constitutional_ai_capacity_witness_lineage"
+
+[[concept]]
+lean = "constitutionalAIWitnessPositiveProcedureCertificate5_boundary"
+lean_path = "lean/Legitimacy/Behavioral/ConstitutionalAIWitnesses.lean"
+rust_path = "src/behavioral/constitutional_ai_lineage.rs"
+rust_identifier = "constitutional_ai_witness_positive_procedure_certificate5_boundary"
+
+[[concept]]
+lean = "binaryDecisionEquivBool"
+lean_path = "lean/Legitimacy/Spectral/Channels/BinaryDecisionHelpers.lean"
+rust_path = "src/spectral/binary_decision_helpers.rs"
+rust_identifier = "binary_decision_equiv_bool"
+
+[[concept]]
+lean = "sum_binaryDecision"
+lean_path = "lean/Legitimacy/Spectral/Channels/BinaryDecisionHelpers.lean"
+rust_path = "src/spectral/binary_decision_helpers.rs"
+rust_identifier = "sum_binary_decision"
+
+[[concept]]
+lean = "binaryDecision_entropy_le_log_two"
+lean_path = "lean/Legitimacy/Spectral/Channels/BinaryDecisionHelpers.lean"
+rust_path = "src/spectral/binary_decision_helpers.rs"
+rust_identifier = "binary_decision_entropy_le_log_two"
+
+# Kernel-axiom parity wrappers. This family closes the 2026-04-29
+# compositional-safety seed class at the manifest layer: every graph-side kernel
+# wrapper must name its Lean verdict wrapper and Rust executable check.
+
+[[concept]]
+lean = "rustCheckGraphCompositionalSafety"
+lean_path = "lean/Legitimacy/Extract/CompositionalSafetyParity.lean"
+rust_path = "src/axioms/kernel/compositional.rs"
+rust_identifier = "check_graph_compositional_safety"
+
+[[concept]]
+lean = "rustCheckGraphCorrigibility"
+lean_path = "lean/Legitimacy/Extract/CorrigibilityParity.lean"
+rust_path = "src/axioms/kernel/corrigible.rs"
+rust_identifier = "check_graph_corrigibility"
+
+[[concept]]
+lean = "rustCheckGraphCertifiability"
+lean_path = "lean/Legitimacy/Extract/CertifiabilityParity.lean"
+rust_path = "src/axioms/kernel/certifiable.rs"
+rust_identifier = "check_graph_certifiability"
+
+[[concept]]
+lean = "rustCheckObservableDeterminacy"
+lean_path = "lean/Legitimacy/Extract/ObservableDeterminacyParity.lean"
+rust_path = "src/axioms/kernel/observable.rs"
+rust_identifier = "check_graph_observable_determinacy"
+
+[[concept]]
+lean = "rustCheckGraphNonVacuity"
+lean_path = "lean/Legitimacy/Extract/NonVacuityParity.lean"
+rust_path = "src/axioms/kernel/nonvacuity.rs"
+rust_identifier = "check_graph_nonvacuity"
+
+# Graph-diagnostic parity wrappers. These pin the extraction-audit diagnostic
+# verdict surface to the Lean finite perturbation cores.
+
+[[concept]]
+lean = "rustCheckGraphConsistency"
+lean_path = "lean/Legitimacy/Extract/DiagnosticParity.lean"
+rust_path = "src/axioms/diagnostics/graph/consistency.rs"
+rust_identifier = "check_graph_consistency"
+
+[[concept]]
+lean = "rustCheckGraphSolidarity"
+lean_path = "lean/Legitimacy/Extract/DiagnosticParity.lean"
+rust_path = "src/axioms/diagnostics/graph/solidarity.rs"
+rust_identifier = "check_graph_solidarity"
+
+[[concept]]
+lean = "rustCheckGraphMonotonicity"
+lean_path = "lean/Legitimacy/Extract/DiagnosticParity.lean"
+rust_path = "src/axioms/diagnostics/graph/monotonicity.rs"
+rust_identifier = "check_graph_monotonicity"
+
+[[concept]]
+lean = "rustCheckGraphStrategyproofness"
+lean_path = "lean/Legitimacy/Extract/DiagnosticParity.lean"
+rust_path = "src/axioms/diagnostics/graph/strategyproofness.rs"
+rust_identifier = "check_graph_strategyproofness"

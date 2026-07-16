@@ -1,0 +1,47 @@
+{
+  "harness_id": "continue-dev",
+  "source_repo": "https://github.com/continuedev/continue",
+  "source_commit": "cb273098d968906d25ee737b454f0b5f13ea2482",
+  "extraction_mode": "heuristic-observed-runtime",
+  "evidence_tier": "heuristic",
+  "coverage_pct": 100.0,
+  "unsupported_constructs": [],
+  "verdict_summary": "Observed-runtime claim-pack extraction passed over 1 claims; source extraction still skipped because source.lock has no extraction_input.",
+  "report": {
+    "artifacts": {
+      "claim_pack": "audits/corpus/continue-dev/observed_runtime_claims.jsonl",
+      "source_extraction": "skipped: source.lock has no extraction_input",
+      "graph": {
+        "nodes": 1,
+        "edges": 0,
+        "connected": "single node",
+        "lambda2": null
+      }
+    },
+    "audit": {
+      "corpus_provenance": "ObservedRuntime",
+      "claims": [
+        "continue_tool_call_approval_001"
+      ],
+      "diagnostics": {
+        "consistency": "ok",
+        "solidarity": "ok",
+        "monotonicity": "ok",
+        "strategyproofness": "ok",
+        "certifiability": "ok",
+        "observable_determinacy": "ok",
+        "corrigibility": "ok",
+        "compositional_safety": "ok",
+        "nonvacuity": "ok",
+        "paradoxes": []
+      },
+      "factor_exposure": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  }
+}

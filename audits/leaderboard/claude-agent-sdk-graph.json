@@ -1,0 +1,459 @@
+{
+  "nodes": {
+    "claude-agent-sdk-python/src/claude_agent_sdk/_internal/query.py::set_permission_mode": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/_internal/query.py::set_permission_mode",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/_internal/query.py::set_permission_mode:686-693",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Change permission mode\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "subtype",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "set_permission_mode",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "mode",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/client.py::set_permission_mode": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/client.py::set_permission_mode",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/client.py::set_permission_mode:318-343",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Change permission mode during conversation \\(only works with streaming mode\\)\\.\n\n        Args:\n            mode: The permission mode to set\\. Valid options:\n                \\- 'default': CLI prompts for dangerous tools\n                \\- 'acceptEdits': Auto\\-accept file edits\n                \\- 'plan': Plan\\-only mode \\(no tool execution\\)\n                \\- 'bypassPermissions': Allow all tools \\(use with caution\\)\n                \\- 'dontAsk': Deny anything not pre\\-approved by allow rules\n                \\- 'auto': A model classifier approves or denies each tool call\n\n        Example:\n            ```python\n            async with ClaudeSDKClient\\(\\) as client:\n                \\# Start with default permissions\n                await client\\.query\\(\"Help me analyze this codebase\"\\)\n\n                \\# Review mode done, switch to auto\\-accept edits\n                await client\\.set_permission_mode\\('acceptEdits'\\)\n                await client\\.query\\(\"Now implement the fix we discussed\"\\)\n            ```",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Not connected\\. Call connect\\(\\) first\\.",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::BaseHookInput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::BaseHookInput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::BaseHookInput:231-237",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Base hook input fields present across many hook events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::ClaudeAgentOptions": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::ClaudeAgentOptions",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::ClaudeAgentOptions:1452-1769",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Query options for Claude SDK\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Specify the base set of available built\\-in tools\\.\n\n    \\- ``list\\[str\\]`` — Specific tool names \\(e\\.g\\. ``\\[\"Bash\", \"Read\", \"Edit\"\\]``\\)\\.\n    \\- ``\\[\\]`` \\(empty list\\) — Disable all built\\-in tools\\.\n    \\- ``\\{\"type\": \"preset\", \"preset\": \"claude_code\"\\}`` — Use all default Claude Code tools\\.\n\n    To restrict which tools the model may call without being prompted, use\n    ``allowed_tools`` instead\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Tool names that are auto\\-allowed without prompting for permission\\.\n\n    These tools execute automatically without asking the user for approval\\.\n    To restrict which tools are available at all, use ``tools``\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "System prompt configuration\\.\n\n    \\- ``str`` — Use a custom system prompt\\.\n    \\- ``\\{\"type\": \"preset\", \"preset\": \"claude_code\"\\}`` — Use Claude Code's default\n      system prompt\\.\n    \\- ``\\{\"type\": \"preset\", \"preset\": \"claude_code\", \"append\": \"\\.\\.\\.\"\\}`` — Default\n      prompt with appended instructions\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "MCP \\(Model Context Protocol\\) server configurations\\.\n\n    Keys are server names, values are server configurations\\. May also be a path\n    to an MCP config JSON file\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Permission mode for the session\\.\n\n    \\- ``\"default\"`` — Standard permission behavior; prompts for dangerous operations\\.\n    \\- ``\"acceptEdits\"`` — Auto\\-accept file edit operations\\.\n    \\- ``\"bypassPermissions\"`` — Bypass all permission checks\\.\n    \\- ``\"plan\"`` — Planning mode, no execution of tools\\.\n    \\- ``\"dontAsk\"`` — Don't prompt for permissions; deny if not pre\\-approved\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Continue the most recent conversation in the current directory instead of\n    starting a new one\\. Mutually exclusive with ``resume``\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ContentMatch": {
+              "regex": "Session ID to resume\\. Loads the conversation history from the specified session\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::NotificationHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::NotificationHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::NotificationHookSpecificOutput:408-412",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for Notification events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "Notification",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionRequestHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionRequestHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionRequestHookSpecificOutput:422-426",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for PermissionRequest events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PermissionRequest",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultAllow": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultAllow",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultAllow:191-196",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Allow permission result\\.",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          }
+        ],
+        "default": "Deny",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultDeny": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultDeny",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PermissionResultDeny:200-205",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Deny permission result\\.",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseFailureHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseFailureHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseFailureHookSpecificOutput:387-391",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for PostToolUseFailure events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PostToolUseFailure",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PostToolUseHookSpecificOutput:379-384",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for PostToolUse events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PostToolUse",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PreToolUseHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PreToolUseHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::PreToolUseHookSpecificOutput:369-376",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for PreToolUse events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "PreToolUse",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "allow",
+              "decision": "Permit"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "deny",
+              "decision": "Deny"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "ask",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SDKControlSetPermissionModeRequest": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SDKControlSetPermissionModeRequest",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SDKControlSetPermissionModeRequest:1794-1796",
+        "gates": [
+          {
+            "ExactMatch": {
+              "value": "set_permission_mode",
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SessionStartHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SessionStartHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SessionStartHookSpecificOutput:401-405",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for SessionStart events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "SessionStart",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SubagentStartHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SubagentStartHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::SubagentStartHookSpecificOutput:415-419",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for SubagentStart events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "SubagentStart",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    },
+    "claude-agent-sdk-python/src/claude_agent_sdk/types.py::UserPromptSubmitHookSpecificOutput": {
+      "Binary": {
+        "id": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::UserPromptSubmitHookSpecificOutput",
+        "name": "claude-agent-sdk-python/src/claude_agent_sdk/types.py::UserPromptSubmitHookSpecificOutput:394-398",
+        "gates": [
+          {
+            "ContentMatch": {
+              "regex": "Hook\\-specific output for UserPromptSubmit events\\.",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ExactMatch": {
+              "value": "UserPromptSubmit",
+              "decision": "Escalate"
+            }
+          },
+          {
+            "ThresholdGate": {
+              "field": "hook_registration",
+              "min": 1.0,
+              "decision": "Escalate"
+            }
+          }
+        ],
+        "default": "Permit",
+        "combination": "FirstMatch"
+      }
+    }
+  },
+  "edges": []
+}

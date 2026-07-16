@@ -1,0 +1,12 @@
+# Info-architecture watch notes.
+#
+# The active spectral folder threshold is enforced by
+# scripts/canonical-info-architecture.sh. Spectral is currently below its
+# threshold, so the next growth pass should subcluster positive/noisy/ASI
+# embedding/operator material instead of increasing the root folder threshold.
+
+[spectral_root_watch]
+current_file_count = 34
+threshold = 36
+next_growth_action = "subcluster"
+families = ["PositiveProcedure", "Noisy", "ASIEmbedding", "Operator"]

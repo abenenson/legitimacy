@@ -1,0 +1,9 @@
+{
+  "fixture_id": "misleading-literals-005",
+  "family": "misleading-literals",
+  "property": "extractor_ignores_comment_and_string_decoys",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "Error text is assigned but never returned as a governance verdict."
+}
+

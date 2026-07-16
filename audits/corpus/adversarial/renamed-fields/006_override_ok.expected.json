@@ -1,0 +1,9 @@
+{
+  "fixture_id": "renamed-fields-006",
+  "family": "renamed-fields",
+  "property": "extractor_recognizes_alias_gate_fields",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "override_ok is a positive override alias gated by operator presence."
+}
+

@@ -1,0 +1,535 @@
+EXTRACTION REPORT
+source: audits/fixtures/sources/leaderboard/openclaw-infra
+nodes found: 53
+edges found: 16
+cycles detected: 0
+claim corpus: SyntheticStructuralProbe (169 claims)
+coverage: 26 parsed / 26 discovered (0 skipped, 0 errored)
+resolution issues: 406
+
+RECOGNIZED NODES
+- approval-errors.ts::isapprovalnotfounderror [high|Automatic] approval-errors.ts:18-31
+- approval-gateway-resolver.ts::resolveapprovalovergateway [medium|Automatic] approval-gateway-resolver.ts:16-79
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap [medium|Automatic] approval-handler-bootstrap.ts:19-167
+- approval-handler-bootstrap.ts::starthandlerforcontext [medium|Automatic] approval-handler-bootstrap.ts:56-91
+- approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability [medium|Automatic] approval-handler-runtime.ts:468-716
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan [medium|Automatic] approval-native-delivery.ts:42-131
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice [medium|Automatic] approval-native-route-coordinator.ts:240-274
+- approval-native-route-coordinator.ts::report [medium|Automatic] approval-native-route-coordinator.ts:286-315
+- approval-native-route-coordinator.ts::observerequest [medium|Automatic] approval-native-route-coordinator.ts:318-333
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext [medium|Automatic] approval-native-route-notice.ts:26-38
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan [medium|Automatic] approval-native-runtime.ts:35-135
+- approval-turn-source.ts::hasapprovalturnsourceroute [medium|Automatic] approval-turn-source.ts:4-18
+- approval-view-model.ts::buildexecmetadata [medium|Automatic] approval-view-model.ts:21-36
+- approval-view-model.ts::buildpluginmetadata [medium|Automatic] approval-view-model.ts:38-55
+- approval-view-model.ts::buildpendingapprovalview [medium|Automatic] approval-view-model.ts:99-120
+- channel-approval-auth.ts::resolveapprovalcommandauthorization [medium|Automatic] channel-approval-auth.ts:12-50
+- exec-approval-channel-runtime.ts::handleexpired [medium|Automatic] exec-approval-channel-runtime.ts:95-105
+- exec-approval-channel-runtime.ts::handlerequested [medium|Automatic] exec-approval-channel-runtime.ts:107-168
+- exec-approval-channel-runtime.ts::anonymous_callback_226 [medium|Automatic] exec-approval-channel-runtime.ts:226-300
+- exec-approval-forwarder.ts::buildrequestmessage [medium|Automatic] exec-approval-forwarder.ts:224-272
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors [medium|Automatic] exec-approval-reply.ts:119-164
+- exec-approval-reply.ts::parseexecapprovalcommandtext [medium|Automatic] exec-approval-reply.ts:213-229
+- exec-approval-reply.ts::getexecapprovalreplymetadata [medium|Automatic] exec-approval-reply.ts:262-296
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload [medium|Automatic] exec-approval-reply.ts:298-364
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate [medium|Automatic] exec-approval-surface.ts:40-73
+- exec-approval-surface.ts::supportsnativeexecapprovalclient [medium|Automatic] exec-approval-surface.ts:75-81
+- exec-approvals-allowlist.ts::isskillautoallowedsegment [medium|Automatic] exec-approvals-allowlist.ts:193-216
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath [high|Automatic] exec-approvals-allowlist.ts:226-246
+- exec-approvals-allowlist.ts::isskillpreludereadsegment [medium|Automatic] exec-approvals-allowlist.ts:271-286
+- exec-approvals-allowlist.ts::isskillpreludemarkersegment [medium|Automatic] exec-approvals-allowlist.ts:288-298
+- exec-approvals-allowlist.ts::resolvesegmentsatisfaction [medium|Automatic] exec-approvals-allowlist.ts:493-521
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain [medium|Automatic] exec-approvals-allowlist.ts:544-579
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 [high|Automatic] exec-approvals-allowlist.ts:596-633
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath [medium|Automatic] exec-approvals-allowlist.ts:812-856
+- exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation [medium|Automatic] exec-approvals-allowlist.ts:858-871
+- exec-approvals-allowlist.ts::evaluateshellallowlist [medium|Automatic] exec-approvals-allowlist.ts:1079-1221
+- exec-approvals-analysis.ts::splitshellpipeline [medium|Automatic] exec-approvals-analysis.ts:81-354
+- exec-approvals-analysis.ts::splitcommandchainwithoperators [medium|Automatic] exec-approvals-analysis.ts:617-726
+- exec-approvals.ts::coerceallowlistentries [medium|Automatic] exec-approvals.ts:283-310
+- exec-approvals.ts::ensureallowlistids [medium|Automatic] exec-approvals.ts:312-327
+- exec-approvals.ts::stripallowlistcommandtext [medium|Automatic] exec-approvals.ts:329-345
+- exec-approvals.ts::writeexecapprovalsraw [medium|Automatic] exec-approvals.ts:487-506
+- exec-approvals.ts::requiresexecapproval [high|Automatic] exec-approvals.ts:772-790
+- exec-approvals.ts::resolveexecapprovalalloweddecisions [high|Automatic] exec-approvals.ts:1017-1025
+- exec-safe-bin-policy-validator.ts::ispathliketoken [high|Automatic] exec-safe-bin-policy-validator.ts:9-24
+- exec-safe-bin-policy-validator.ts::issafeliteraltoken [medium|Automatic] exec-safe-bin-policy-validator.ts:34-39
+- net/fetch-guard.ts::rewriteredirectinitforcrossorigin [medium|Automatic] net/fetch-guard.ts:259-278
+- net/fetch-guard.ts::fetchwithssrfguard [medium|Automatic] net/fetch-guard.ts:282-450
+- outbound/outbound-policy.ts::enforcecrosscontextpolicy [medium|Automatic] outbound/outbound-policy.ts:91-141
+- path-alias-guards.ts::assertnopathaliasescape [medium|Automatic] path-alias-guards.ts:12-34
+- plugin-approvals.ts::approvaldecisionlabel [medium|Automatic] plugin-approvals.ts:38-46
+- runtime-guard.ts::runtimesatisfies [medium|Automatic] runtime-guard.ts:65-71
+- system-run-approval-binding.ts::matchsystemrunapprovalenvhash [medium|Automatic] system-run-approval-binding.ts:160-199
+
+RESOLUTION ISSUES
+- approval-errors.ts::isapprovalnotfounderror -> readapprovalnotfounddetailsreason (Unresolved)
+- approval-errors.ts::isapprovalnotfounderror -> readerrorcode (Unresolved)
+- approval-errors.ts::isapprovalnotfounderror -> test (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> catch (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> createoperatorapprovalsgatewayclient (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> gatewayclient.start (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> gatewayclient.stopandwait (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> params.approvalid.startswith (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> params.senderid.trim (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> requestresolve (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> catch_handler_callback_75 (Unresolved)
+- approval-gateway-resolver.ts::resolveapprovalovergateway -> err (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> clearretrytimer (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> createsubsystemlogger (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> getchannelruntimecontext (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> invalidateactivehandler (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> resolvechannelapprovalcapability (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> watchchannelruntimecontexts (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> activegeneration (Unresolved)
+- approval-handler-bootstrap.ts::startchannelapprovalhandlerbootstrap -> existingcontext (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> catch (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> handler.start (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> handler.stop (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> stophandler (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> catch_handler_callback_78 (Unresolved)
+- approval-handler-bootstrap.ts::starthandlerforcontext -> catch_handler_callback_88 (Unresolved)
+- approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability -> createchannelapprovalhandler (Unresolved)
+- approval-handler-runtime.ts::createchannelapprovalhandlerfromcapability -> createsubsystemlogger (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> adapter.describedeliverycapabilities (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> adapter.resolveapproverdmtargets (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> adapter.resolveorigintarget (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> dedupetargets (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> plannedtargets.push (Unresolved)
+- approval-native-delivery.ts::resolvechannelnativeapprovaldeliveryplan -> plannedtargets (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> array.from (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> clearpendingapprovalroutenotice (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> entry.reports.has (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> entry.reports.values (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> notice.requestgateway (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> pendingapprovalroutenotices.get (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> resolveapprovalroutenotice (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> approvalid (Unresolved)
+- approval-native-route-coordinator.ts::maybefinalizeapprovalroutenotice -> runtimeid (Unresolved)
+- approval-native-route-coordinator.ts::report -> creatependingapprovalroutenotice (Unresolved)
+- approval-native-route-coordinator.ts::report -> entry.expectedruntimeids.add (Unresolved)
+- approval-native-route-coordinator.ts::report -> entry.reports.set (Unresolved)
+- approval-native-route-coordinator.ts::report -> params.handledkinds.has (Unresolved)
+- approval-native-route-coordinator.ts::report -> pendingapprovalroutenotices.get (Unresolved)
+- approval-native-route-coordinator.ts::report -> pendingapprovalroutenotices.set (Unresolved)
+- approval-native-route-coordinator.ts::report -> entry (Unresolved)
+- approval-native-route-coordinator.ts::report -> runtimeid (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> activeapprovalrouteruntimes.values (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> array.from (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> creatependingapprovalroutenotice (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> entry.expectedruntimeids.add (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> filter (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> map (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> params.handledkinds.has (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> pendingapprovalroutenotices.get (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> pendingapprovalroutenotices.set (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> entry (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> filter_handler_callback_328 (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> map_handler_callback_329 (Unresolved)
+- approval-native-route-coordinator.ts::observerequest -> runtimeid (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> array.from (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> destinations.map (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> filter (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> formathumanlist (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> uniquedestinations.tosorted (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> boolean (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> destinations.map_handler_callback_29 (Unresolved)
+- approval-native-route-notice.ts::resolveapprovalroutedelsewherenoticetext -> uniquedestinations.tosorted_handler_callback_36 (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> deliveredkeys.add (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> deliveredkeys.has (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> deliveredtargets.push (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> params.delivertarget (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> params.ondelivered (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> params.ondeliveryerror (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> params.onduplicateskipped (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> params.preparetarget (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> pendingentries.push (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> entry (Unresolved)
+- approval-native-runtime.ts::deliverapprovalrequestviachannelnativeplan -> plannedtarget (Unresolved)
+- approval-turn-source.ts::hasapprovalturnsourceroute -> loadconfig (Unresolved)
+- approval-turn-source.ts::hasapprovalturnsourceroute -> params.turnsourcechannel.trim (Unresolved)
+- approval-view-model.ts::buildexecmetadata -> array.isarray (Unresolved)
+- approval-view-model.ts::buildexecmetadata -> metadata.push (Unresolved)
+- approval-view-model.ts::buildexecmetadata -> request.request.envkeys.join (Unresolved)
+- approval-view-model.ts::buildpluginmetadata -> metadata.push (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> buildexecviewbase (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> buildpluginviewbase (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> request.id.startswith (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> resolveexecapprovalrequestalloweddecisions (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> execrequest (Unresolved)
+- approval-view-model.ts::buildpendingapprovalview -> pluginrequest (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> approvalcapability.authorizeactoraction (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> approvalcapability.getactionavailabilitystate (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> getchannelplugin (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> isimplicitsamechatapprovalauthorization (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> normalizemessagechannel (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> resolvechannelapprovalcapability (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> channel (Unresolved)
+- channel-approval-auth.ts::resolveapprovalcommandauthorization -> resolved (Unresolved)
+- exec-approval-channel-runtime.ts::handleexpired -> adapter.finalizeexpired (Unresolved)
+- exec-approval-channel-runtime.ts::handleexpired -> clearpendingentry (Unresolved)
+- exec-approval-channel-runtime.ts::handleexpired -> log.debug (Unresolved)
+- exec-approval-channel-runtime.ts::handleexpired -> approvalid (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> adapter.deliverrequested (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> adapter.finalizeresolved (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> adapter.shouldhandle (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> clearpendingentry (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> log.debug (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> math.max (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> nowms (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> pending.delete (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> pending.get (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> pending.has (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> pending.set (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> settimeout (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> shouldkeeprunning (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> timeoutid.unref (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> entry (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> request (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> settimeout_handler_callback_163 (Unresolved)
+- exec-approval-channel-runtime.ts::handlerequested -> timeoutms (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> adapter.beforegatewayclientstart (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> adapter.isconfigured (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> client.request (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> client.start (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> client.stop (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> createoperatorapprovalsgatewayclient (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> log.debug (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> resolveapprovalreplaymethods (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> stopclientifinactive (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> client (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> eventkinds (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> method (Unresolved)
+- exec-approval-channel-runtime.ts::anonymous_callback_226 -> request (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> alloweddecisions.includes (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> alloweddecisions.join (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> array.isarray (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> formatapprovalcommand (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> formatexecapprovalexpiresin (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> lines.join (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> lines.push (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> request.request.envkeys.join (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> resolveexecapprovalcommanddisplay (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> resolveexecapprovalrequestalloweddecisions (Unresolved)
+- exec-approval-forwarder.ts::buildrequestmessage -> nowms (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> alloweddecisions.includes (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> buildexecapprovalcommandtext (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> descriptors.push (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> params.approvalcommandid.trim (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> resolvealloweddecisions (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalactiondescriptors -> params (Unresolved)
+- exec-approval-reply.ts::parseexecapprovalcommandtext -> normalizeoptionallowercasestring (Unresolved)
+- exec-approval-reply.ts::parseexecapprovalcommandtext -> raw.trim (Unresolved)
+- exec-approval-reply.ts::parseexecapprovalcommandtext -> trimmed.match (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> array.isarray (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> normalizeoptionalstring (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> record.alloweddecisions.filter (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> channeldata (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> execapproval (Unresolved)
+- exec-approval-reply.ts::getexecapprovalreplymetadata -> record.alloweddecisions.filter_handler_callback_282 (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> alloweddecisions.includes (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> buildapprovalcommandfence (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> buildapprovalinteractivereply (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> buildfence (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> date.now (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> descriptors.slice (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> formatexecapprovalexpiresin (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> info.join (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> info.push (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> lines.join (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> lines.push (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> normalizeoptionalstring (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> number.isfinite (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> params.approvalcommandid.trim (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> params.warningtext.trim (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> resolvealloweddecisions (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> params (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> secondaryactions (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> secondaryfence (Unresolved)
+- exec-approval-reply.ts::buildexecapprovalpendingreplypayload -> warningtext (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> capability.getactionavailabilitystate (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> capability.getexecinitiatingsurfacestate (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> getchannelplugin (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> isdeliverablemessagechannel (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> labelforchannel (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> loadconfig (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> normalizemessagechannel (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> normalizeoptionalstring (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> resolvechannelapprovalcapability (Unresolved)
+- exec-approval-surface.ts::resolveexecapprovalinitiatingsurfacestate -> channel (Unresolved)
+- exec-approval-surface.ts::supportsnativeexecapprovalclient -> hasnativeexecapprovalcapability (Unresolved)
+- exec-approval-surface.ts::supportsnativeexecapprovalclient -> normalizemessagechannel (Unresolved)
+- exec-approval-surface.ts::supportsnativeexecapprovalclient -> channel (Unresolved)
+- exec-approval-surface.ts::supportsnativeexecapprovalclient -> normalized (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> boolean (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> execution.rawexecutable.trim (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> has (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> ispathscopedexecutabletoken (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> normalizeskillbinname (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> normalizeskillbinresolvedpath (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> params.skillbintrust.get (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> resolveexecutiontargetresolution (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> executablename (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> rawexecutable (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> resolution (Unresolved)
+- exec-approvals-allowlist.ts::isskillautoallowedsegment -> resolvedpath (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> filepath.replace (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> filter (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> lowernormalized.endswith (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> lowernormalized.split (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> normalizelowercasestringorempty (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> boolean (Unresolved)
+- exec-approvals-allowlist.ts::isskillmarkdownpreludepath -> normalized (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> normalizelowercasestringorempty (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> resolveexecutiontargetresolution (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> resolveskillpreludepath (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> trim (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> cwd (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludereadsegment -> rawpath (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludemarkersegment -> normalizelowercasestringorempty (Unresolved)
+- exec-approvals-allowlist.ts::isskillpreludemarkersegment -> resolveexecutiontargetresolution (Unresolved)
+- exec-approvals-allowlist.ts::resolvesegmentsatisfaction -> issafebinusage (Unresolved)
+- exec-approvals-allowlist.ts::resolvesegmentsatisfaction -> resolveexecutiontargetresolution (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain -> analyzeshellcommand (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain -> evaluatesegments (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain -> iswindowsplatform (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain -> matches.push (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellwrapperinlinechain -> splitcommandchain (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> boolean (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> matches.push (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> resolveinlinechainfallback (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> resolvesegmentallowlistmatch (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> segmentallowlistentries.push (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> segmentsatisfiedby.push (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> by (Unresolved)
+- exec-approvals-allowlist.ts::segments.every_handler_callback_596 -> match (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> argv.slice (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> array.isarray (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> find (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> includes (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> isdispatchwrapperexecutable (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> isshellwrapperexecutable (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> isshellwrappersegment (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> map (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> normalizeexecutabletoken (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> resolvecommandresolutionfromargv (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> resolveexecutiontargetcandidatepath (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> resolveinlinecommandmatch (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> argv (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> carriedexecutable (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> carriedname (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> find_handler_callback_844 (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> map_handler_callback_843 (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> posix_inline_command_flags (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> resolution (Unresolved)
+- exec-approvals-allowlist.ts::resolveshellwrapperpositionalargvcandidatepath -> wrapper (Unresolved)
+- exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation -> command.trim (Unresolved)
+- exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation -> string.raw (Unresolved)
+- exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation -> test (Unresolved)
+- exec-approvals-allowlist.ts::isdirectshellpositionalcarrierinvocation -> trimmed (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> allowlistmatches.push (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> allowskillpreludeatindex.add (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> allowskillpreludeatindex.has (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> analysis.segments.map (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> analysisfailure (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> analyzeshellcommand (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> chainevaluations.some (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> chainparts.map (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> evaluateexecallowlist (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> finalizedevaluations.entries (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> hasshelllinecontinuation (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> isskillpreludeonlyevaluation (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> iswindowsplatform (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> pickexecallowlistcontext (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> reachableskillids.add (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> reachableskillids.clear (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> resolveskillpreludeids (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> resolvetrustedskillexecutionids (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> segmentallowlistentries.push (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> segments.push (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> segmentsatisfiedby.push (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> some (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> analysis.segments.map_handler_callback_1191 (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> analysis.segments.map_handler_callback_1194 (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> chainevaluations.some_handler_callback_1141 (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> chainparts.map_handler_callback_1125 (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> index (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> params (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> skillid (Unresolved)
+- exec-approvals-allowlist.ts::evaluateshellallowlist -> some_handler_callback_1176 (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> command.slice (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> disallowed_pipeline_tokens.has (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> hasunquotedheredocexpansiontoken (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> heredocline.replace (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> isdoublequoteescape (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> isescapedlinecontinuation (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> isshellcommentstart (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> parseheredocdelimiter (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> pendingheredocs.push (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> pendingheredocs.shift (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> pushpart (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> ch (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> command (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> heredocline (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> i (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> next (Unresolved)
+- exec-approvals-analysis.ts::splitshellpipeline -> scanindex (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> buf.trim (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> isdoublequoteescape (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> isescapedlinecontinuation (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> isshellcommentstart (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> parts.push (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> pushpart (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> command (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> i (Unresolved)
+- exec-approvals-analysis.ts::splitcommandchainwithoperators -> next (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> array.isarray (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> item.trim (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> pattern.trim (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> result.push (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> allowlist (Unresolved)
+- exec-approvals.ts::coerceallowlistentries -> item (Unresolved)
+- exec-approvals.ts::ensureallowlistids -> allowlist.map (Unresolved)
+- exec-approvals.ts::ensureallowlistids -> array.isarray (Unresolved)
+- exec-approvals.ts::ensureallowlistids -> allowlist (Unresolved)
+- exec-approvals.ts::ensureallowlistids -> allowlist.map_handler_callback_319 (Unresolved)
+- exec-approvals.ts::stripallowlistcommandtext -> allowlist.map (Unresolved)
+- exec-approvals.ts::stripallowlistcommandtext -> array.isarray (Unresolved)
+- exec-approvals.ts::stripallowlistcommandtext -> allowlist (Unresolved)
+- exec-approvals.ts::stripallowlistcommandtext -> allowlist.map_handler_callback_336 (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> assertsafeexecapprovalsdestination (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> crypto.randomuuid (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> ensuredir (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> fs.chmodsync (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> fs.existssync (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> fs.renamesync (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> fs.rmsync (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> fs.writefilesync (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> path.join (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> dir (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> filepath (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> raw (Unresolved)
+- exec-approvals.ts::writeexecapprovalsraw -> temppath (Unresolved)
+- exec-approvals.ts::resolveexecapprovalalloweddecisions -> normalizeexecask (Unresolved)
+- exec-safe-bin-policy-validator.ts::ispathliketoken -> test (Unresolved)
+- exec-safe-bin-policy-validator.ts::ispathliketoken -> trimmed.startswith (Unresolved)
+- exec-safe-bin-policy-validator.ts::ispathliketoken -> value.trim (Unresolved)
+- exec-safe-bin-policy-validator.ts::ispathliketoken -> trimmed (Unresolved)
+- exec-safe-bin-policy-validator.ts::issafeliteraltoken -> hasglobtoken (Unresolved)
+- exec-safe-bin-policy-validator.ts::issafeliteraltoken -> value (Unresolved)
+- net/fetch-guard.ts::rewriteredirectinitforcrossorigin -> dropbodyheaders (Unresolved)
+- net/fetch-guard.ts::rewriteredirectinitforcrossorigin -> init.method.touppercase (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> assertexplicitproxyallowed (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> assertexplicitproxysupportspinneddns (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> asserthostnameallowedwithpolicy (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> boolean (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> buildtimeoutabortsignal (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> capturehttpexchange (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> closedispatcher (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> createhttp1envhttpproxyagent (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> createpinneddispatcher (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> createpolicydispatcherwithoutpinneddns (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> defaultfetch (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> fetchwithruntimedispatcher (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> hasproxyenvconfigured (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> includes (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> isambientglobalfetch (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> ismockedfetch (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> isredirectstatus (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> logwarn (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> math.floor (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> math.max (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> nextparsedurl.tostring (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> number.isfinite (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> parsedurl.tostring (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> release (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> resolveguardedfetchmode (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> resolvepinnedhostnamewithpolicy (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> response.body.cancel (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> response.headers.get (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> retainsafeheadersforcrossoriginredirect (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> rewriteredirectinitformethod (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> visited.add (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> visited.has (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> currentinit (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> defaultfetch (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> dispatcher (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> init (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> nexturl (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> params (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> parsedurl (Unresolved)
+- net/fetch-guard.ts::fetchwithssrfguard -> pinned (Unresolved)
+- outbound/outbound-policy.ts::enforcecrosscontextpolicy -> context_guarded_actions.has (Unresolved)
+- outbound/outbound-policy.ts::enforcecrosscontextpolicy -> iscrosscontexttarget (Unresolved)
+- outbound/outbound-policy.ts::enforcecrosscontextpolicy -> params.toolcontext.currentchannelid.trim (Unresolved)
+- outbound/outbound-policy.ts::enforcecrosscontextpolicy -> resolvecontextguardtarget (Unresolved)
+- path-alias-guards.ts::assertnopathaliasescape -> assertnohardlinkedfinalpath (Unresolved)
+- path-alias-guards.ts::assertnopathaliasescape -> resolveboundarypath (Unresolved)
+- runtime-guard.ts::runtimesatisfies -> isatleast (Unresolved)
+- runtime-guard.ts::runtimesatisfies -> parsesemver (Unresolved)
+- runtime-guard.ts::runtimesatisfies -> min_node (Unresolved)
+- runtime-guard.ts::runtimesatisfies -> parsed (Unresolved)
+
+AXIOM STATUS
+- CERTIFIABLE: SUPPORTED (projection verdict passed)
+- GOVERNANCE-OBSERVABLE: SKIPPED (graph has 53 nodes, above exhaustive observable-determinacy limit 10)
+- CORRIGIBLE: SUPPORTED (projection verdict passed)
+- COMPOSITIONAL SAFETY: SUPPORTED (projection verdict passed)
+- NON-VACUOUS: REJECTED (all examined claims reached Deny; the graph refused every governed claim)
+
+DIAGNOSTIC CHECKS
+- graph consistency: passed (169 perturbations)
+- graph solidarity: passed (22 perturbations)
+- graph monotonicity: passed (3380 perturbations)
+- graph strategyproofness (derived via solidarity_monotonicity_imply_strategyproof; empirical monitor): passed (845 perturbations)
+- graph certifiability (implements CERTIFIABLE projection): passed (6615 perturbations)
+- graph observable determinacy (implements GOVERNANCE-OBSERVABLE projection): skipped (graph has 53 nodes, above exhaustive observable-determinacy limit 10)
+- graph corrigibility (implements CORRIGIBLE projection): passed (3 perturbations)
+- graph compositional safety (implements COMPOSITIONAL SAFETY projection): passed (169 perturbations)
+- graph nonvacuity (implements NON-VACUOUS axiom): REJECTED -- all examined claims reached Deny; the graph refused every governed claim
+
+PARADOX SUITE
+- compositional Alabama: none
+- feedback monotonicity: none
+- path dependence: none
+
+SPECTRAL ANALYSIS
+- graph connectivity: DISCONNECTED
+- connected components: 37
+- spectral gap (lambda_2): 0.000
+- max degree: 2
+- signal range: 0.40
+- cv (exact): 48/1
+- C*(δ=0.100): N/A
+- RG trajectory (k=1..3 cv): N/A
+- RG trajectory (k=1..3 C*): N/A
+- spectral well-connected (θ=17/20): no
+- capacity bound: N/A
+- capacity saturated at ε=0.100: N/A
+- cv (Cheeger upper bound): N/A
+- localizability bound: N/A
+- CV x localizability: N/A
+
+GOVERNANCE FACTOR EXPOSURE
+Governance Factor Exposure
+  consistency        0.00  [..........]
+  solidarity         0.00  [..........]
+  monotonicity       0.00  [..........]
+  strategyproofness  0.00  [..........]
+  nonvacuity         1.00  [##########]
+
+PROTOCOL STATE ASSESSMENT
+- current state: UNDECLARED
+- governance-observable: YES (graph extracted for principal inspection)
+- can extract-compile: NO (requires no cycles, at least one passing axiom, and no rejected axioms)
+- can measure: NO (spectral analysis unavailable)
+- supervisory algebra: {pause, deny, sandbox, degrade, rollback, reroute, stop}
+- boundary-relative compositional safety: 50 governance nodes have 1135 transitive external dependencies not in the governance graph (causal boundary analysis)
+- blocking for LIVE:
+  - 1 axiom check(s) rejected; sacrifices required before promotion
+  - spectral analysis could not compute algebraic connectivity (disconnected graph or single node)
+  - 50 governance nodes have 1135 transitive external dependencies not in the governance graph (causal boundary analysis)
+  - no monitoring infrastructure detected
+
+RECOMMENDED SACRIFICES
+1. nonvacuity -- all examined claims reached Deny; the graph refused every governed claim

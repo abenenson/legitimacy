@@ -1,0 +1,9 @@
+{
+  "fixture_id": "dead-code-005",
+  "family": "dead-code",
+  "property": "extractor_excludes_unreachable_hook_branches",
+  "should_hold": true,
+  "evidence_tier": "heuristic",
+  "notes": "The nested deny hook is never called from the outer policy."
+}
+

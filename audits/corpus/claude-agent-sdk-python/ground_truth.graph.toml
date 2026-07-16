@@ -1,0 +1,76 @@
+[ground_truth]
+status = "reviewed"
+harness_id = "claude-agent-sdk-python"
+reviewer_id = "consensus"
+reviewed_at = "2026-05-04T00:00:00Z"
+scope = "corpus theorem PythonHookCore model"
+
+[[node]]
+id = "python_hook_core_model.py::PreToolUseHookSpecificOutput"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed source-modeled governance node python_hook_core_model.py::PreToolUseHookSpecificOutput"
+
+[[node]]
+id = "python_hook_core_model.py::pre_tool_use_permission_decision"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed source-modeled governance node python_hook_core_model.py::pre_tool_use_permission_decision"
+
+[[node]]
+id = "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision"
+kind = "binary"
+default_decision = "source-modeled"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed source-modeled governance node python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision"
+
+[[edge]]
+from = "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision"
+to = "python_hook_core_model.py::pre_tool_use_permission_decision"
+kind = "dispatch"
+source_span = "theorem/python_hook_core_model.py"
+notes = "Reviewer confirmed explicit hook registration dispatch."
+
+[[decision]]
+node = "python_hook_core_model.py::PreToolUseHookSpecificOutput"
+predicate = "value == allow"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::PreToolUseHookSpecificOutput"
+predicate = "value == ask"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::PreToolUseHookSpecificOutput"
+predicate = "value == deny"
+decision = "deny"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::pre_tool_use_permission_decision"
+predicate = "value == allow"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::pre_tool_use_permission_decision"
+predicate = "value == deny"
+decision = "deny"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::pre_tool_use_permission_decision"
+predicate = "value == ask"
+decision = "permit"
+source_span = "theorem/python_hook_core_model.py"
+
+[[decision]]
+node = "python_hook_core_model.py::registration::PreToolUse::pre_tool_use_permission_decision"
+predicate = "hook_registration:PreToolUse >= 1.0"
+decision = "escalate"
+source_span = "theorem/python_hook_core_model.py"

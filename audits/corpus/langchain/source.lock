@@ -1,0 +1,8 @@
+[source]
+id = "langchain"
+source_repo = "https://github.com/langchain-ai/langchain"
+source_commit = "1c08d478d98690ac0bc5e6aa80796078e56969de"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

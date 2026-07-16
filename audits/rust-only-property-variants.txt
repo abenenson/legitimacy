@@ -1,0 +1,13 @@
+# Rust-only GovernanceProperty variants.
+#
+# Format:
+# VariantName wire_name reason-token
+#
+# These variants are runtime monitoring labels for graph-side kernel axiom
+# checks. Lean keeps theorem-facing GovernanceProperty scoped to the five
+# protocol properties with direct `propertyHolds` projections; widening Lean
+# without theorem consumers would fabricate semantics instead of closing parity.
+Certifiability certifiability kernel-axiom-runtime-monitoring
+ObservableDeterminacy observable_determinacy kernel-axiom-runtime-monitoring
+Corrigibility corrigibility kernel-axiom-runtime-monitoring
+CompositionalSafety compositional_safety kernel-axiom-runtime-monitoring

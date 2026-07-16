@@ -1,0 +1,58 @@
+[reviewed_ground_truth]
+schema_version = 1
+metric = "node and edge precision/recall against curated answer-key consensus; kappa fields are schema-agreement checks, not independent-review evidence"
+
+[[reviewed_harness]]
+harness_id = "autogen"
+ground_truth = "autogen/ground_truth.graph.toml"
+review_notes = "autogen/review_notes.md"
+node_precision = 1.0
+node_recall = 1.0
+edge_precision = 1.0
+edge_recall = 1.0
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+
+[[reviewed_harness]]
+harness_id = "claude-agent-sdk-python"
+ground_truth = "claude-agent-sdk-python/ground_truth.graph.toml"
+review_notes = "claude-agent-sdk-python/review_notes.md"
+node_precision = 1.0
+node_recall = 1.0
+edge_precision = 1.0
+edge_recall = 1.0
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+
+[[reviewed_harness]]
+harness_id = "crewai"
+ground_truth = "crewai/ground_truth.graph.toml"
+review_notes = "crewai/review_notes.md"
+node_precision = 1.0
+node_recall = 1.0
+edge_precision = 1.0
+edge_recall = 1.0
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+
+[[reviewed_harness]]
+harness_id = "langgraph"
+ground_truth = "langgraph/ground_truth.graph.toml"
+review_notes = "langgraph/review_notes.md"
+node_precision = 1.0
+node_recall = 1.0
+edge_precision = 1.0
+edge_recall = 1.0
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0
+
+[[reviewed_harness]]
+harness_id = "nemo-guardrails"
+ground_truth = "nemo-guardrails/ground_truth.graph.toml"
+review_notes = "nemo-guardrails/review_notes.md"
+node_precision = 1.0
+node_recall = 1.0
+edge_precision = 1.0
+edge_recall = 1.0
+cohen_kappa_nodes = 1.0
+cohen_kappa_edges = 1.0

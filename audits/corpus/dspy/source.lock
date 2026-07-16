@@ -1,0 +1,8 @@
+[source]
+id = "dspy"
+source_repo = "https://github.com/stanfordnlp/dspy"
+source_commit = "2974a6550a403e9b8c90ca9e34331d67d3102fa6"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]

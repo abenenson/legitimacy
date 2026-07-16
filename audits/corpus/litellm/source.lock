@@ -1,0 +1,8 @@
+[source]
+id = "litellm"
+source_repo = "https://github.com/BerriAI/litellm"
+source_commit = "c011a7e3ba4218015c808f9891cba9dae48056a1"
+license = "MIT"
+extraction_mode = "heuristic"
+allow_partial = false
+notes = ["Created by legitimacy corpus add."]
