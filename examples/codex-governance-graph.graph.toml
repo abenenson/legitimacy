@@ -1,0 +1,54 @@
+# Codex governance pipeline — graph policy format
+# Derived from codex governance audit (audits/codex-governance-audit.md)
+# Source: codex-rs/core/src/tools/sandboxing.rs:162-199
+
+[graph]
+name = "codex-governance"
+version = "1.0"
+
+# --- exec-policy node ---
+# Models default_exec_approval_requirement() from sandboxing.rs:162
+# policy_strictness < 0.3  → Permit  (AskForApproval::Never / OnFailure)
+# policy_strictness 0.3-0.7 → Escalate (NeedsApproval, restricted FS)
+# policy_strictness ≥ 0.7  → Deny    (Forbidden: Granular(!sandbox_approval))
+
+[[nodes]]
+id = "exec-policy"
+type = "binary"
+default = "permit"
+combination = "first_match"
+
+[[nodes.gates]]
+type = "threshold_gate"
+field = "policy_strictness"
+min = 0.7
+decision = "deny"
+
+[[nodes.gates]]
+type = "threshold_gate"
+field = "policy_strictness"
+min = 0.3
+decision = "escalate"
+
+# --- guardian node ---
+# Models GuardianApprovalRequest handler from guardian/approval_request.rs
+# Reviews Shell, ExecCommand, ApplyPatch, McpToolCall, NetworkAccess, Execve
+
+[[nodes]]
+id = "guardian"
+type = "binary"
+default = "permit"
+combination = "first_match"
+
+[[nodes.gates]]
+type = "content_match"
+regex = "rm\\s+-rf|sudo\\s|eval\\s.*\\|"
+decision = "deny"
+
+# --- pipeline edge ---
+# exec-policy escalates to guardian for review
+
+[[edges]]
+from = "exec-policy"
+to = "guardian"
+transform = "pass_through"

@@ -1,0 +1,24 @@
+[rule]
+name = "subagent-promotion"
+version = "1.0"
+
+[claimants]
+type = "SubAgent"
+id_field = "agent_id"
+
+[estate]
+type = "AutonomyTier"
+total = 100.0
+unit = "compute"
+
+[claims]
+ordering = "reliability_score"
+
+[priority_classes]
+safety_critical = { level = 0 }
+standard = { level = 1 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.5, 0.7, 1.3, 1.5]
+strengthening = [0.1, 0.5, 1.0]

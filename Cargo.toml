@@ -1,0 +1,51 @@
+[package]
+name = "legitimacy"
+version = "0.1.0"
+edition = "2024"
+description = "Research artifact for compiling agentic AI governance rules into semantic legitimacy kernels."
+repository = "https://github.com/abenenson/legitimacy"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+authors = ["Adam Benenson <adam.benenson@gmail.com>"]
+keywords = ["ai-governance", "formal-verification", "lean", "legitimacy", "compiler"]
+categories = ["command-line-utilities", "development-tools", "science"]
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "legitimacy"
+path = "cli/main.rs"
+
+[[bin]]
+name = "legitimacy-audit-agent"
+path = "src/bin/legitimacy-audit-agent.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+thiserror = "1"
+clap = { version = "4", features = ["derive"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+regex = "1"
+sha2 = "0.10"
+syn = { version = "2", features = ["full"] }
+gray_matter = "0.3"
+uuid = { version = "1", features = ["v4"] }
+unicode-ident = "1"
+# tree-sitter core: 0.25 series.
+# Language grammars track their own release cadence; the tree-sitter-language
+# compatibility crate (0.1.x) bridges ABI differences at runtime.
+# Latest published: python=0.25, rust=0.24, typescript=0.23.
+tree-sitter = "0.25"
+tree-sitter-python = "0.25"
+tree-sitter-rust = "0.24"
+tree-sitter-typescript = "0.23"
+num-rational = "0.4"
+
+[dev-dependencies]
+proptest = "1.11.0"
+serial_test = "3"

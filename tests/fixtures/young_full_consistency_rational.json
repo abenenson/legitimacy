@@ -1,0 +1,131 @@
+{
+  "schema_version": "young-full-consistency-rational-v1",
+  "lean_theorem": "lean_full_consistency_executable_iff_axiom",
+  "mode": "full",
+  "claims": [
+    {
+      "claimant_id": "alice",
+      "strength": "1"
+    },
+    {
+      "claimant_id": "bob",
+      "strength": "2"
+    },
+    {
+      "claimant_id": "carol",
+      "strength": "3"
+    }
+  ],
+  "estate": {
+    "total": "6",
+    "unit": "units"
+  },
+  "original_allocation": [
+    {
+      "claimant_id": "alice",
+      "share": "1"
+    },
+    {
+      "claimant_id": "bob",
+      "share": "2"
+    },
+    {
+      "claimant_id": "carol",
+      "share": "3"
+    }
+  ],
+  "reductions": [
+    {
+      "removed": [
+        "alice"
+      ],
+      "reduced_estate": "5",
+      "allocation": [
+        {
+          "claimant_id": "bob",
+          "share": "2"
+        },
+        {
+          "claimant_id": "carol",
+          "share": "3"
+        }
+      ]
+    },
+    {
+      "removed": [
+        "bob"
+      ],
+      "reduced_estate": "4",
+      "allocation": [
+        {
+          "claimant_id": "alice",
+          "share": "1"
+        },
+        {
+          "claimant_id": "carol",
+          "share": "3"
+        }
+      ]
+    },
+    {
+      "removed": [
+        "carol"
+      ],
+      "reduced_estate": "3",
+      "allocation": [
+        {
+          "claimant_id": "alice",
+          "share": "1"
+        },
+        {
+          "claimant_id": "bob",
+          "share": "2"
+        }
+      ]
+    },
+    {
+      "removed": [
+        "alice",
+        "bob"
+      ],
+      "reduced_estate": "3",
+      "allocation": [
+        {
+          "claimant_id": "carol",
+          "share": "3"
+        }
+      ]
+    },
+    {
+      "removed": [
+        "alice",
+        "carol"
+      ],
+      "reduced_estate": "2",
+      "allocation": [
+        {
+          "claimant_id": "bob",
+          "share": "2"
+        }
+      ]
+    },
+    {
+      "removed": [
+        "bob",
+        "carol"
+      ],
+      "reduced_estate": "1",
+      "allocation": [
+        {
+          "claimant_id": "alice",
+          "share": "1"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "verdict": "admissible",
+    "coalitions_tested": 6,
+    "survivor_checks": 9
+  }
+}

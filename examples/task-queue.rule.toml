@@ -1,0 +1,28 @@
+# Task queue governance
+# Models which queued work items receive a limited execution slot.
+
+[rule]
+name = "task-queue"
+version = "1.0"
+
+[claimants]
+type = "WorkItem"
+id_field = "task_id"
+
+[estate]
+type = "ExecutionSlots"
+total = 2.0
+unit = "tasks_per_cycle"
+
+[claims]
+ordering = "priority_score"
+
+[priority_classes]
+incident = { level = 0 }
+scheduled = { level = 1 }
+backlog = { level = 2 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.5, 1.0, 1.5, 2.0]
+strengthening = [0.1, 0.5, 1.0]

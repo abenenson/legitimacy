@@ -1,0 +1,28 @@
+# Memory promotion governance
+# Models which observations are promoted from transient notes into durable memory.
+
+[rule]
+name = "memory-promotion"
+version = "1.0"
+
+[claimants]
+type = "Observation"
+id_field = "observation_id"
+
+[estate]
+type = "DurableMemorySlots"
+total = 50.0
+unit = "promotions_per_window"
+
+[claims]
+ordering = "evidence_strength"
+
+[priority_classes]
+correction = { level = 0 }
+corroborated = { level = 1 }
+single_source = { level = 2 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.5, 0.8, 1.2]
+strengthening = [0.1, 0.5]

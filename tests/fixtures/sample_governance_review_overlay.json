@@ -1,0 +1,17 @@
+{
+  "reviewed_nodes": [
+    {
+      "node_id": "policy.rs::approval_gate",
+      "note": "reviewed governance entrypoint"
+    }
+  ],
+  "reviewed_edges": [],
+  "alias_hints": [
+    {
+      "caller": "policy.rs::approval_gate",
+      "target_symbol": "review_guard",
+      "callee": "a/review.rs::review_guard",
+      "note": "reviewed import-aware resolution"
+    }
+  ]
+}

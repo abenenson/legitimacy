@@ -1,0 +1,66 @@
+# Claude Agent SDK hooks — safety-clearance variant.
+#
+# This is the same rule as claude-agent-sdk-hooks.rule.toml, but with
+# monotonicity_inversion = true.  The hooks rule is deliberately anti-monotone:
+# higher context strength (more evidence of dangerousness) should produce *less*
+# access, not more.  Standard monotonicity flags this as a violation; inverted
+# monotonicity treats it as the expected contract.
+#
+# With inversion enabled, the rule is admissible: strengthening a claim never
+# increases its allocation.
+
+[rule]
+name = "claude-agent-sdk-hooks-inverted"
+version = "1.0"
+kind = "claude_agent_sdk_hooks"
+
+[claimants]
+type = "ToolInvocation"
+id_field = "invocation_id"
+
+[estate]
+type = "HookDecision"
+total = 1.0
+unit = "pass_block"
+
+[claims]
+ordering = "context_specificity"
+
+[priority_classes]
+tool_invocation = { level = 0 }
+
+[[instances]]
+id = "Read:README.md"
+priority_class = "tool_invocation"
+strength = 0.3
+metrics = { baseline_allow = 1.0, dangerous_pattern = 0.0, sensitive_path = 0.0, block_threshold = 0.8 }
+
+[[instances]]
+id = "Bash:pwd"
+priority_class = "tool_invocation"
+strength = 0.4
+metrics = { baseline_allow = 1.0, dangerous_pattern = 0.0, sensitive_path = 0.0, block_threshold = 0.8 }
+
+[[instances]]
+id = "Bash:cat_docs_secret.txt"
+priority_class = "tool_invocation"
+strength = 0.5
+metrics = { baseline_allow = 1.0, dangerous_pattern = 0.0, sensitive_path = 0.0, block_threshold = 0.8 }
+
+[[instances]]
+id = "Bash:cat_/etc/passwd"
+priority_class = "tool_invocation"
+strength = 0.7
+metrics = { baseline_allow = 1.0, dangerous_pattern = 0.0, sensitive_path = 1.0, block_threshold = 0.8 }
+
+[[instances]]
+id = "Bash:rm_-rf"
+priority_class = "tool_invocation"
+strength = 1.0
+metrics = { baseline_allow = 1.0, dangerous_pattern = 1.0, sensitive_path = 1.0, block_threshold = 0.8 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.5, 0.75, 1.25, 1.5]
+strengthening = [0.1, 0.2, 0.5]
+monotonicity_inversion = true

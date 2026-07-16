@@ -1,0 +1,74 @@
+[rule]
+name = "claude-agent-sdk-permissions"
+version = "1.0"
+kind = "claude_agent_sdk_permissions"
+
+[claimants]
+type = "ToolCall"
+id_field = "tool_name"
+
+[estate]
+type = "ExecutionAuthorization"
+total = 1.0
+unit = "authorization"
+
+[claims]
+ordering = "safety_evidence"
+
+[priority_classes]
+always_allow = { level = 0 }
+ask_user = { level = 1 }
+always_deny = { level = 2 }
+
+[[instances]]
+id = "Read"
+priority_class = "always_allow"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 1.0 }
+
+[[instances]]
+id = "Glob"
+priority_class = "always_allow"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 1.0 }
+
+[[instances]]
+id = "Grep"
+priority_class = "always_allow"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 1.0 }
+
+[[instances]]
+id = "Bash"
+priority_class = "ask_user"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 0.5 }
+
+[[instances]]
+id = "Write"
+priority_class = "ask_user"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 0.5 }
+
+[[instances]]
+id = "Edit"
+priority_class = "ask_user"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 0.5 }
+
+[[instances]]
+id = "Agent"
+priority_class = "ask_user"
+strength = 1.0
+metrics = { available = 1.0, listed = 1.0, base_authorization = 0.5 }
+
+[[instances]]
+id = "WebFetch"
+priority_class = "always_deny"
+strength = 1.0
+metrics = { available = 0.0, listed = 0.0, base_authorization = 0.5 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.5, 0.75, 1.25, 1.5]
+strengthening = [0.1, 0.5, 1.0]

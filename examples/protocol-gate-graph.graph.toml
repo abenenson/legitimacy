@@ -1,0 +1,14 @@
+[graph]
+name = "protocol-gate"
+version = "1.0"
+
+[[nodes]]
+id = "entry"
+type = "binary"
+default = "deny"
+combination = "first_match"
+
+[[nodes.gates]]
+type = "exact_match"
+value = "Read"
+decision = "permit"

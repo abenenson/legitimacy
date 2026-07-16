@@ -1,0 +1,28 @@
+# Data pipeline promotion gate
+# Models which candidate records are promoted into a curated store.
+
+[rule]
+name = "data-pipeline"
+version = "1.0"
+
+[claimants]
+type = "CandidateRecord"
+id_field = "record_id"
+
+[estate]
+type = "CuratedRecordSlots"
+total = 200.0
+unit = "records_per_batch"
+
+[claims]
+ordering = "confidence"
+
+[priority_classes]
+verified = { level = 0 }
+reviewed = { level = 1 }
+unreviewed = { level = 2 }
+
+[family]
+reductions = "remove_any_single_claimant"
+shocks = [0.3, 0.5, 0.8, 1.2, 1.5]
+strengthening = [0.05, 0.1, 0.3]
