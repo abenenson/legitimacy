@@ -14,6 +14,9 @@ import Legitimacy.Results.SpineFootprint
 #print axioms Legitimacy.non_peer_relative_collapse_or_infeasible_or_exits_kernel
 #print axioms Legitimacy.decisionSystem_solidarity_monotonicity_imply_strategyproof
 #print axioms Legitimacy.semanticKernel_iff_runtime_diagnostic_spectral_layers_unfolded
+-- The proof-carrying premise manifest is named explicitly so the canonical gate
+-- cannot keep checking `spineFootprint` after silently detaching its witnesses.
+#print axioms Legitimacy.publicSpinePremiseInhabitation
 #print axioms Legitimacy.spineFootprint
 #print axioms Legitimacy.bounded_extractor_contract_sound
 #print axioms Legitimacy.codexHooksGovernanceAdmissibilityRejectsMonotonicity

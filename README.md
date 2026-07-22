@@ -32,7 +32,7 @@ unavoidable on scarce, peer-relative surfaces. The same diagnostic is wired
 to an executable extractor over source-extracted graph models of real agent
 hook surfaces (Codex, the Claude Agent SDK).
 
-**Start here.** The papers: [the kernel object](papers/02-semantic-legitimacy-kernels.md), [the verified impossibility theorem](papers/03-impossibility-theorem.md), and [capacity and stability under unbounded capability](papers/04-spectral-scaling.md). The full set is in [papers/](papers/). Reproduce the audits with `scripts/reproduce-audit.sh`; run the canonical gate with `bash scripts/verify.sh`. The audit, worked on graphs extracted from real agent frameworks, is in [Worked extractions](#worked-extractions-the-obstruction-on-real-agent-graphs). The Lean substrate carries zero `sorry`, `admit`, or first-party `axiom`, and a single name (`spineFootprint`) conjoins the seven spine theorems.
+**Start here.** The papers: [the kernel object](papers/02-semantic-legitimacy-kernels.md), [the verified impossibility theorem](papers/03-impossibility-theorem.md), and [capacity and stability under unbounded capability](papers/04-spectral-scaling.md). The full set is in [papers/](papers/). Reproduce the audits with `scripts/reproduce-audit.sh`; run the canonical gate with `bash scripts/verify.sh`. The audit, worked on graphs extracted from real agent frameworks, is in [Worked extractions](#worked-extractions-the-obstruction-on-real-agent-graphs). The Lean substrate carries zero `sorry`, `admit`, or first-party `axiom`, and a single name (`spineFootprint`) packages all ten unique Lean anchors in the two public spine tables with concrete premise witnesses.
 
 ![The forcing triangle: consistency, solidarity, and cross-claimant monotonicity around a reachable scarce allocation stage](docs/figures/impossibility-triangle.svg)
 
@@ -81,11 +81,11 @@ kernel polices instead is unobservable authority: `hiddenAuthorityExitPipeline_e
 (`lean/Legitimacy/Impossibility/PeerRelativeClass/Escape.lean:309`) proves that
 such a pipeline exits the kernel. The five axioms are tied together with the
 rest of the public spine by `spineFootprint`
-(`lean/Legitimacy/Results/SpineFootprint.lean:28`), a single Lean statement
-that conjoins seven named spine theorems: the spectral capacity threshold and
-channel-capacity bound, the capability-scaling substrate and its shared cliff,
-the impossibility forcing argument, the activation gate, and the
-semantic-kernel bridge.
+(`lean/Legitimacy/Results/SpineFootprint.lean:221`), a proof-carrying Lean
+manifest that covers all ten unique anchors in the two public spine tables:
+the kernel object, standalone spectral rows, shared scaling cliff, forcing and
+activation results, semantic bridge, three-valued and multi-principal
+frontiers, and the stateful safety stack.
 
 A legitimate kernel is therefore a compiled object: runtime obligations, graph
 diagnostics, extraction provenance, and monitored tradeoff declarations,
@@ -479,11 +479,11 @@ The public theorem spine is the small set of named Lean statements that carries
 the artifact, in spine order: the kernel object, its forcing argument, the
 activation gate, the semantic bridge, the standalone spectral layer, and the
 wider-frontier rows. Supporting lemmas, fixtures, and evidence artifacts are
-mapped in [`docs/repository-context.md`](docs/repository-context.md). Seven of these (the spectral threshold and channel bound, the capability-scaling substrate and its shared cliff, the forcing argument, the activation gate, and the semantic bridge) are conjoined into one axiom-footprint umbrella by
-`spineFootprint` (`lean/Legitimacy/Results/SpineFootprint.lean:28`); the kernel
-object it inhabits and the three-valued, multi-principal, and safety-stack rows
-build in the same tree but are listed separately rather than folded into that
-conjunction.
+mapped in [`docs/repository-context.md`](docs/repository-context.md). All ten
+unique anchors in this table and the standalone spectral table are packaged by
+`spineFootprint` (`lean/Legitimacy/Results/SpineFootprint.lean:221`) together
+with concrete witnesses for every load-bearing premise; the typed manifest is
+the explicit maintenance boundary for future public-spine rows.
 
 | Role | Spine theorem | One-line role | Lean path |
 | --- | --- | --- | --- |
