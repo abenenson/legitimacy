@@ -14,9 +14,10 @@ positive vulnerability yields a finite, computable stability cliff,
 C*(G,s,δ) = δ/cv(G,s).
 
 That vulnerability is not merely an implementation defect. On reachable
-scarce, peer-relative pipelines, a classical Arrow/Young-lineage
-impossibility forces the governing rule to sacrifice one of consistency,
-solidarity, or cross-claimant monotonicity; on the rule's
+pipelines that transparently reach a scarce, structurally peer-relative
+allocator and preserve its permits downstream, a classical Arrow/Young-lineage
+impossibility forces the governing rule to sacrifice consistency, solidarity,
+or cross-claimant monotonicity; on the rule's
 canonical claimant-interaction lift (definitionally `uniK5` with fixed signal
 `sig5`), the same structure forces positive consistency vulnerability. The
 theorem `capability_scaling_shared_cliff` carries the
@@ -24,11 +25,11 @@ forced sacrifice and the capability cliff on one machine-checked substrate,
 and the **legitimacy kernel** turns that unavoidable sacrifice into a
 declared, monitored certificate.
 
-The concrete failure behind the forced sacrifice: when one request gathers
+The canonical witness makes the forced sacrifice concrete: when one request gathers
 stronger evidence and takes the one scarce human-review slot, a second
 request that would have been permitted is now denied. Making one decision
-more correct silently broke another, and the kernel proves this is
-unavoidable on scarce, peer-relative surfaces. The same diagnostic is wired
+more correct silently broke another; the theorem proves this tradeoff across
+the covered pipeline class. The same diagnostic is wired
 to an executable extractor over source-extracted graph models of real agent
 hook surfaces (Codex, the Claude Agent SDK).
 
@@ -43,7 +44,7 @@ hook surfaces (Codex, the Claude Agent SDK).
 | Paper | Result | Lean anchor |
 | --- | --- | --- |
 | 04 | A represented governance graph stays stable at unbounded capability exactly when its consistency vulnerability is zero; positive vulnerability gives a finite, computable stability cliff. | `stackelberg_convergence_limit_iff_zero_consistency_vulnerability` |
-| 03 | A reachable scarce peer-relative governance stage cannot keep consistency, solidarity, and cross-claimant monotonicity at once, so it must declare a sacrifice. | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` |
+| 03 | A pipeline that transparently reaches a scarce, structurally peer-relative allocator and preserves its permits downstream cannot keep consistency, solidarity, and cross-claimant monotonicity together, so the covered rule must declare a sacrifice. | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` |
 | 03+04 | The same peer-relative obstruction forces positive consistency vulnerability on the canonical claimant-interaction lift (definitionally `uniK5` with fixed signal `sig5`), so the forced sacrifice and the capability cliff are carried by one substrate. | `capability_scaling_shared_cliff` |
 | 02 | The legitimacy kernel decomposes into a runtime kernel plus an explicit bridge contract, and is inhabited by a concrete instance. | `isSemanticLegitimacyKernel_iff_runtime_and_bridge` |
 
@@ -98,14 +99,17 @@ failed but *what kind* of failure occurred.
 ## The forcing argument: why the kernel must declare a sacrifice
 
 The impossibility theorem is the kernel's forcing argument, not a separate
-headline. Take a recognizable class of governance decisions: those where one request's outcome depends on which other requests are present (*peer-relative*) and the allocated resource is *scarce*. There, three reasonable structural checks (consistency, solidarity, monotonicity) cannot all hold at once. The canonical
+headline. Take a governance pipeline that transparently reaches a scarce,
+structurally peer-relative allocator and preserves its permits downstream. In
+that class, consistency, solidarity, and cross-claimant monotonicity cannot all
+hold at once. The canonical
 statement is `reachable_peer_relative_decisive_stage_obstructs_diagnostics`
 (`lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103`), machine-checked
 in Lean 4 (Mathlib, zero `sorry`/`admit`/first-party `axiom`).
 
 The consequence for the kernel is direct and is itself a theorem. A kernel
-deployed on a scarce, peer-relative surface cannot keep all three checks
-silently, so it must *declare* which one it gives up. That obligation is
+deployed over that covered pipeline class cannot keep all three checks silently,
+so it must *declare* which one it gives up. That obligation is
 `noUndeclaredSacrificeImplication`
 (`lean/Legitimacy/Safety/KernelSafety/BinaryDecisionPipeline.lean:145`): once the
 surface is live, the forced peer-relative sacrifices are declared rather than
@@ -162,7 +166,10 @@ surface. On those extracted graphs, the theorem-backed diagnostic is the
 monotonicity rejection (`claudeAgentSDKHooksGovernanceAdmissibilityRejectsMonotonicity`, with Codex CLI and Claude Code counterparts).
 
 The rest of this document is the scope, the evidence, and the open frontier
-behind two claims that share one substrate: a legitimate governance kernel on a scarce, peer-relative surface is forced to declare a sacrifice, and the same structure prices out as a finite, computable capability cliff.
+behind two claims that share one substrate: a legitimate governance kernel over
+the covered pipeline class is forced to declare a sacrifice, and the canonical
+claimant-interaction lift prices the same structure as a finite, computable
+capability cliff.
 
 ## The wider impossibility frontier
 
