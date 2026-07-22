@@ -97,3 +97,13 @@ upstream paths each one expects.
 ## Proposing changes
 
 Open a PR with a clear description of what the change does and why. If the change touches Lean theorem statements, include a justification for any weakening. Strengthening a theorem is always welcome; weakening requires discussion.
+
+PRs may iterate in review until they meet the same verification bar as
+maintainer changes. The development repository is the canonical integration
+tree and public `master` is its curated mirror: after a change is accepted, the
+maintainer integrates it there, runs the full gate, and publishes the verified
+tree through the guarded sync. The public commit records human contributor
+credit. Accordingly, an accepted PR may close against the equivalent guarded
+commit rather than through GitHub's merge button.
+
+Final acceptance and release decisions rest with the maintainer.

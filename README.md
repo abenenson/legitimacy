@@ -518,3 +518,8 @@ diagnostic or spectral evidence from runtime evidence alone.
 BibTeX entries for papers 02, 03, and 04 are in
 [`papers/CITATION.bib`](papers/CITATION.bib): `benenson2026semantickernels`,
 `benenson2026impossibility`, and `benenson2026capacity`.
+
+## License
+
+Legitimacy is dual-licensed under the [MIT License](LICENSE-MIT) or the
+[Apache License 2.0](LICENSE-APACHE), at your option.
