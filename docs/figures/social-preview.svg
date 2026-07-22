@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+  <title id="title">Legitimacy: machine-checked governance for AI agents</title>
+  <desc id="description">Social preview for Legitimacy, a machine-checked AI-agent governance project in Lean 4 and Rust, with the forcing triangle connecting consistency, solidarity, and monotonicity.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#17233a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#3d5a80" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#3d5a80" stop-opacity="0"/>
+    </radialGradient>
+    <style><![CDATA[
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .eyebrow { fill: #9fb4d1; font-size: 24px; font-weight: 700; letter-spacing: 5px; }
+      .title { fill: #ffffff; font-size: 62px; font-weight: 750; }
+      .subtitle { fill: #c9d5e6; font-size: 29px; font-weight: 450; }
+      .meta { fill: #8fb7d9; font-size: 24px; font-weight: 650; }
+      .edge { fill: none; stroke: #7289a6; stroke-width: 3; }
+      .node { fill: #111c2f; stroke: #aabbd0; stroke-width: 2.5; }
+      .node-label { fill: #f6f8fb; font-size: 19px; font-weight: 700; }
+      .core { fill: #121b2c; stroke: #d67a70; stroke-width: 3; }
+      .core-title { fill: #ffffff; font-size: 21px; font-weight: 700; }
+      .core-sub { fill: #e89c94; font-size: 18px; font-weight: 700; }
+    ]]></style>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#background)"/>
+  <circle cx="1005" cy="320" r="355" fill="url(#glow)"/>
+  <path d="M 0 565 C 245 510, 420 610, 680 550 S 1080 505, 1280 570 L 1280 640 L 0 640 Z" fill="#0a101c" opacity="0.68"/>
+
+  <text class="eyebrow" x="76" y="122">LEGITIMACY</text>
+  <text class="title" x="72" y="190">
+    <tspan x="72" y="190">Machine-checked</tspan>
+    <tspan x="72" y="259">governance</tspan>
+    <tspan x="72" y="328">for AI agents</tspan>
+  </text>
+  <text class="subtitle" x="76" y="393">
+    <tspan x="76" y="393">Legitimacy kernels, impossibility theorems,</tspan>
+    <tspan x="76" y="434">and capability-scaling bounds</tspan>
+  </text>
+  <text class="meta" x="76" y="510">LEAN 4  ·  RUST  ·  AI GOVERNANCE</text>
+
+  <path class="edge" d="M 1010 173 L 851 465 L 1169 465 Z"/>
+
+  <rect class="node" x="888" y="88" width="244" height="82" rx="15"/>
+  <text class="node-label" x="1010" y="138" text-anchor="middle">CONSISTENCY</text>
+
+  <rect class="node" x="727" y="465" width="246" height="82" rx="15"/>
+  <text class="node-label" x="850" y="515" text-anchor="middle">SOLIDARITY</text>
+
+  <rect class="node" x="1047" y="465" width="246" height="82" rx="15"/>
+  <text class="node-label" x="1170" y="515" text-anchor="middle">MONOTONICITY</text>
+
+  <rect class="core" x="817" y="265" width="386" height="124" rx="18"/>
+  <text class="core-title" x="1010" y="313" text-anchor="middle">SCARCE PEER-RELATIVE STAGE</text>
+  <text class="core-sub" x="1010" y="354" text-anchor="middle">AT MOST TWO CAN HOLD</text>
+</svg>

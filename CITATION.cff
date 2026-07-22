@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, cite this version and the relevant manuscript listed in papers/CITATION.bib."
+title: "Legitimacy: A Machine-Checked Kernel for the Governance Layer of AI Agents"
+abstract: >-
+  A research artifact for compiling agentic AI governance rules into semantic
+  legitimacy kernels, with machine-checked impossibility theorems and
+  capability-scaling bounds in Lean 4 and an executable audit layer in Rust.
+authors:
+  - family-names: Benenson
+    given-names: Adam
+version: "1.0.0"
+type: software
+license:
+  - Apache-2.0
+  - MIT
+repository-code: "https://github.com/abenenson/legitimacy"
+url: "https://adambenenson.com/projects/legitimacy/"
+keywords:
+  - AI governance
+  - AI safety
+  - formal verification
+  - Lean 4
+  - Rust
+  - social choice
+  - mechanism design
