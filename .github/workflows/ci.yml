@@ -1,8 +1,9 @@
-name: Verification (manual/tag mirror)
+name: Verification (manual mirror)
 
 on:
-  # Heavy verification is intentionally manual. The publish path runs the same
-  # scripts independently on the trusted release host before any public action.
+  # Heavy verification is intentionally opt-in: the canonical gates run on the
+  # trusted release host, and this mirror must not consume a maintainer's limited
+  # personal Actions quota merely because a version tag was pushed.
   workflow_dispatch:
     inputs:
       gate:
@@ -13,9 +14,8 @@ on:
         options:
           - verify
           - reproduce-audit
+          - release-gate
           - all
-  push:
-    tags: ['v*']
 
 permissions:
   contents: read
@@ -81,7 +81,7 @@ jobs:
 
   release-candidate:
     name: Release candidate gate
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' && inputs.gate == 'release-gate'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
