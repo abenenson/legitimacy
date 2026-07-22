@@ -1,45 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 620" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" role="img" aria-labelledby="title description" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="title">The forcing triangle for scarce peer-relative governance</title>
+  <desc id="description">Consistency, solidarity, and cross-claimant monotonicity surround a reachable scarce allocation stage. At most two properties can hold; the third must be declared as a sacrifice.</desc>
   <defs>
-    <style>
-      .pill { fill: #f8f9fb; stroke: #2f3b52; stroke-width: 1.6; }
-      .edge { stroke: #8a94a6; stroke-width: 1.6; }
-      .head { fill: #1f2937; font-size: 19px; font-weight: bold; }
-      .sub  { fill: #4b5563; font-size: 13.5px; }
-      .core { fill: #1f2937; font-size: 16px; font-weight: bold; }
-      .coresub { fill: #4b5563; font-size: 13.5px; }
-      .verdict { fill: #a13b34; font-size: 15px; font-weight: bold; }
-    </style>
+    <style><![CDATA[
+      .pill { fill: #f8f9fb; stroke: #2f3b52; stroke-width: 2; }
+      .edge { stroke: #8a94a6; stroke-width: 2; }
+      .head { fill: #1f2937; font-size: 22px; font-weight: 700; }
+      .sub { fill: #4b5563; font-size: 16px; }
+      .core { fill: #1f2937; font-size: 20px; font-weight: 700; }
+      .coresub { fill: #4b5563; font-size: 16px; }
+      .divider { stroke: #d7a19d; stroke-width: 1.5; }
+      .verdict { fill: #9b332e; font-size: 18px; font-weight: 700; }
+    ]]></style>
   </defs>
 
-  <!-- triangle edges (between pill borders) -->
-  <line class="edge" x1="328" y1="116" x2="178" y2="438"/>
-  <line class="edge" x1="512" y1="116" x2="662" y2="438"/>
-  <line class="edge" x1="262" y1="486" x2="578" y2="486"/>
+  <!-- Triangle edges terminate at the card boundaries. -->
+  <line class="edge" x1="365" y1="144" x2="210" y2="512"/>
+  <line class="edge" x1="595" y1="144" x2="750" y2="512"/>
+  <line class="edge" x1="380" y1="580" x2="580" y2="580"/>
 
-  <!-- top: consistency -->
-  <rect class="pill" x="280" y="44" width="280" height="72" rx="12"/>
-  <text class="head" x="420" y="74" text-anchor="middle">Consistency</text>
-  <text class="sub" x="420" y="98" text-anchor="middle">removing a denied claimant</text>
-  <text class="sub" x="420" y="98" text-anchor="middle" dy="14">changes no other verdict</text>
+  <!-- Top: consistency. -->
+  <rect class="pill" x="315" y="32" width="330" height="112" rx="14"/>
+  <text class="head" x="480" y="70" text-anchor="middle">Consistency</text>
+  <text class="sub" x="480" y="105" text-anchor="middle">
+    <tspan x="480" y="105">removing a denied claimant</tspan>
+    <tspan x="480" y="128">changes no other verdict</tspan>
+  </text>
 
-  <!-- bottom-left: solidarity -->
-  <rect class="pill" x="40" y="438" width="280" height="96" rx="12"/>
-  <text class="head" x="180" y="470" text-anchor="middle">Solidarity</text>
-  <text class="sub" x="180" y="494" text-anchor="middle">uniform positive rescaling of</text>
-  <text class="sub" x="180" y="494" text-anchor="middle" dy="14">all claim strengths</text>
-  <text class="sub" x="180" y="494" text-anchor="middle" dy="28">preserves every verdict</text>
+  <!-- Bottom-left: solidarity. -->
+  <rect class="pill" x="40" y="512" width="340" height="136" rx="14"/>
+  <text class="head" x="210" y="554" text-anchor="middle">Solidarity</text>
+  <text class="sub" x="210" y="588" text-anchor="middle">
+    <tspan x="210" y="588">uniform positive rescaling of</tspan>
+    <tspan x="210" y="612">all claim strengths</tspan>
+    <tspan x="210" y="636">preserves every verdict</tspan>
+  </text>
 
-  <!-- bottom-right: monotonicity -->
-  <rect class="pill" x="520" y="438" width="280" height="96" rx="12"/>
-  <text class="head" x="660" y="470" text-anchor="middle">Monotonicity</text>
-  <text class="sub" x="660" y="494" text-anchor="middle">strengthening one claim never</text>
-  <text class="sub" x="660" y="494" text-anchor="middle" dy="14">flips another claimant</text>
-  <text class="sub" x="660" y="494" text-anchor="middle" dy="28">from Permit to Deny</text>
+  <!-- Bottom-right: monotonicity. -->
+  <rect class="pill" x="580" y="512" width="340" height="136" rx="14"/>
+  <text class="head" x="750" y="554" text-anchor="middle">Monotonicity</text>
+  <text class="sub" x="750" y="588" text-anchor="middle">
+    <tspan x="750" y="588">strengthening one claim never</tspan>
+    <tspan x="750" y="612">flips another claimant</tspan>
+    <tspan x="750" y="636">from Permit to Deny</tspan>
+  </text>
 
-  <!-- center: the stage -->
-  <rect x="225" y="248" width="390" height="118" rx="12" fill="#ffffff" stroke="#a13b34" stroke-width="2"/>
-  <text class="core" x="420" y="278" text-anchor="middle">reachable scarce allocation stage</text>
-  <text class="coresub" x="420" y="302" text-anchor="middle">claimant-symmetric &#183; finite-estate-coupled &#183;</text>
-  <text class="coresub" x="420" y="302" text-anchor="middle" dy="16">an admissible over-subscribed profile exists</text>
-  <text class="verdict" x="420" y="348" text-anchor="middle">at most two can hold &#8212; the third is a declared sacrifice</text>
+  <!-- Center: the reached allocation stage and its forced sacrifice. -->
+  <rect x="175" y="232" width="610" height="210" rx="16" fill="#ffffff" stroke="#9b332e" stroke-width="2.5"/>
+  <text class="core" x="480" y="278" text-anchor="middle">reachable scarce allocation stage</text>
+  <text class="coresub" x="480" y="317" text-anchor="middle">
+    <tspan x="480" y="317">claimant-symmetric &#183; finite-estate-coupled</tspan>
+    <tspan x="480" y="342">an admissible over-subscribed profile exists</tspan>
+  </text>
+  <line class="divider" x1="235" y1="365" x2="725" y2="365"/>
+  <text class="verdict" x="480" y="397" text-anchor="middle">
+    <tspan x="480" y="397">at most two can hold</tspan>
+    <tspan x="480" y="422">the third is a declared sacrifice</tspan>
+  </text>
 </svg>
