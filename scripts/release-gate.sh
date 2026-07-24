@@ -55,7 +55,8 @@ bash "$ROOT/scripts/verify-clean.sh"
 release_gate_step_begin paper-anchor
 anchor_name="$(
   sed -nE \
-    's/^\*\*(Status during review|Artifact status)\*\*:.*verification code anchor is `([^`]+)`.*/\2/p' \
+    -e 's/^\*\*(Status during review|Artifact status)\*\*:.*verification code anchor is `([^`]+)`.*/\2/p' \
+    -e 's/^> \*\*Artifact, data, and companion papers\.\*\*.*Verification code anchor: `([^`]+)`.*/\1/p' \
     "$ROOT/papers/03-impossibility-theorem.md" \
     | tail -n 1
 )"
