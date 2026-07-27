@@ -1,5 +1,7 @@
 # Legitimacy: A Machine-Checked Kernel for the Governance Layer of AI Agents
 
+**Current release:** [signed v1.0.0](https://github.com/abenenson/legitimacy/releases/tag/v1.0.0) · [citation metadata](CITATION.cff)
+
 A chatbot can be behaviorally aligned. An agent that allocates tool access,
 memory, escalation rights, review bandwidth, or permission to act is running
 an institution, and institutions face a question alignment training does not
