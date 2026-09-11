@@ -1,0 +1,54 @@
+{
+  "format": "legitimacy.codex-exec-v0.synthetic-source-manifest",
+  "version": "0",
+  "evidence_class": "synthetic-fixture",
+  "repository": "https://github.com/openai/codex",
+  "authoritative_source_tag": "rust-v0.144.0",
+  "tag_object_type": "tag",
+  "tag_object_sha": "e0a9ff6938d85db1a7b11a693b6aa2bc31fe5a55",
+  "peeled_source_commit_sha": "767822446c7a594caa19609ca435281a9ec67e0d",
+  "peeled_source_tree_sha": "444a05890bb4f4327dc53f44ad348cfd6431ecc8",
+  "source_files": [
+    {
+      "path": "codex-rs/exec/src/exec_events.rs",
+      "sha256": "fa46724c54076701d04d29415f22398eb1e8c45abc60b54abd95fad0ecbfe201"
+    },
+    {
+      "path": "codex-rs/exec/src/event_processor_with_jsonl_output.rs",
+      "sha256": "5181d2a5d40d20fdeb41d4fa4eeca751848b572eba82af2391529f9b1baf0cd4"
+    },
+    {
+      "path": "codex-rs/app-server-protocol/src/protocol/item_builders.rs",
+      "sha256": "c89e5d2271560bd61658df122f5fbe0b85435e2d8e1b2ec8f380cb78be947a6c"
+    },
+    {
+      "path": "codex-rs/app-server-protocol/src/protocol/v2/item.rs",
+      "sha256": "da4846f64b75a4eb352e1963db763d43b1ddcfdfe834f0b17be51fa81000af3f"
+    },
+    {
+      "path": "codex-rs/protocol/src/thread_id.rs",
+      "sha256": "b12de60f4ecdbfaf7a4878c349984389764dfa880d9da9339967744d79e7aab0"
+    },
+    {
+      "path": "codex-rs/utils/cli/src/sandbox_mode_cli_arg.rs",
+      "sha256": "ffc5526811eeb12dea1fdafeea6971d53129bec017b272459d626fe5e394a49b"
+    },
+    {
+      "path": "codex-rs/utils/cli/src/shared_options.rs",
+      "sha256": "fdec561b127ec4502cca0883e137aa0b84815a04fe0c2e04fd73dc428d645238"
+    },
+    {
+      "path": "codex-rs/exec/src/cli.rs",
+      "sha256": "e60d93d09929b1e03f62ecc04db363faa9e791f87b2ddf030d2102a3400c6566"
+    },
+    {
+      "path": "codex-rs/cli/src/main.rs",
+      "sha256": "9f0b17cfea4ffce46fdef5c155d55f85d6a9a0b39fd972e1416b49b26492d999"
+    },
+    {
+      "path": "codex-rs/exec/src/lib.rs",
+      "sha256": "bb5b8d78b22fddfdb71f5ea3c7ebc73592e7cdc4b881b32163999cd0a4cee8e6"
+    }
+  ],
+  "claim": "synthetic shapes modeled from the pinned Rust emitter; no process execution is claimed"
+}

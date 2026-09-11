@@ -49,12 +49,22 @@ verify_step_begin asi-parity-manifest
 bash "$ROOT/scripts/check-asi-parity-manifest.sh" "$ROOT"
 verify_step_begin check-spine-rooted
 bash "$ROOT/scripts/check-spine-rooted.sh" "$ROOT"
+# Fixture exporters need Mathlib before the full library build.
+verify_step_begin lean-dependency-cache
+(
+  cd "$ROOT/lean"
+  lake exe cache get >/dev/null 2>&1 || true
+)
+
+verify_step_begin check-trajectory-composition-fixtures
+bash "$ROOT/scripts/check-trajectory-composition-fixtures.sh"
+
+verify_step_begin check-executed-composition
+bash "$ROOT/scripts/check-executed-composition.sh"
 
 verify_step_begin lean-build-and-violations-scan
 (
   cd lean
-  # Warm the Mathlib olean cache when reachable; harmless no-op offline.
-  lake exe cache get >/dev/null 2>&1 || true
   lake build
   lean_violations="$(
     {
@@ -71,6 +81,9 @@ verify_step_begin lean-build-and-violations-scan
   fi
 )
 
+verify_step_begin check-audit-graph-parity
+python3 "$ROOT/scripts/check-audit-graph-parity.py"
+
 verify_step_begin check-axiom-footprint
 bash "$ROOT/scripts/check-axiom-footprint.sh"
 
@@ -80,6 +93,10 @@ verify_step_begin cargo-clippy
 cargo clippy -- -D warnings
 verify_step_begin cargo-test
 cargo test
+
+# Run the fixture-mutation probe alone: it restores checked-in bytes before exit.
+verify_step_begin audit-agent-runtime-fixture-binding
+cargo test --test audit_agent_cli runtime_fixture_substitution_cannot_rebind_lean_theorems -- --ignored --exact --test-threads=1
 
 verify_step_begin corpus-theorem-witness-cleanliness
 if [[ "${#CORPUS_THEOREM_FILES[@]}" -gt 0 ]]; then
@@ -125,6 +142,6 @@ bash scripts/check-publication-polish.sh
 verify_step_begin check-cross-branch-merge
 bash scripts/check-cross-branch-merge.sh "$ROOT"
 
-if [[ "${LEGITIMACY_RELEASE_GATE:-0}" == "1" || "$RUN_RELEASE_GATE" == "1" ]]; then
+if [[ "$RUN_RELEASE_GATE" == "1" ]]; then
   bash scripts/release-gate.sh
 fi

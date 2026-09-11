@@ -21,7 +21,8 @@ inside Lean, or semantic completeness for arbitrary source programs.
 `tree-sitter-canonical-shape-and-tokens-sha256:v2`:
 
 1. discover the same supported source files as extraction (`.py`, `.rs`, `.ts`,
-   `.tsx`, excluding test/spec/declaration files);
+   `.tsx`, excluding test/spec/declaration files); symlink entries are skipped
+   by the directory walk and are not included in discovered-file counts;
 2. sort by repository-relative path;
 3. parse each file with the corresponding tree-sitter grammar and reject parser
    errors;
@@ -40,6 +41,12 @@ literal token, not a comment.
 
 `governanceGraphHash` uses `serde-json-pretty-sha256:v1` over the canonical
 pretty JSON serialization of the extracted `GovernanceGraph`.
+This includes source-location text in node names when the extractor emits it.
+A comment or blank line inserted above a Python function can therefore leave
+`sourceAstHash` unchanged while changing `governanceGraphHash`. An old witness
+will not verify against that newly extracted graph. AST-hash invariance is not
+whole-witness invariance; regenerate the graph and witness together after such
+an edit. This conservative invalidation does not imply a policy-semantic change.
 
 ## Witness
 

@@ -290,7 +290,7 @@ The spectral side gives `C*` structural teeth via:
 
 - `GovGraph.cv_spectral_bound` in `Legitimacy.Spectral.Capacity.CriticalCapability`: `cv` is bounded above by the smallest singular-value-style spectral quantity on the graph.
 - `C_star_spectral_bound` in `Legitimacy.Spectral.Capacity.CriticalCapability`: `C*` is bounded below by `δ` divided by that spectral upper bound on `cv`.
-- `governance_graph_C_star_expander_bound` in `Legitimacy.Spectral.Capacity.CriticalCapability`: for expander-class governance graphs, `C*` admits an explicit lower bound in terms of the expander parameters.
+- `governance_graph_C_star_expander_bound` in `Legitimacy.Spectral.Capacity.CriticalCapability`: under explicit expander-class premises — positive minimum removed degree, positive spectral gap `λ₂`, and every vertex degree at least `λ₂` — `C*` is bounded below by `δ · λ₂ / (signalRange(s) · maxDeg)`.
 
 Together these do more than define `C*` under the theorem's positive-`cv` hypothesis: they make it computable from the graph's spectral data. The spectral lower bound on `C*` is standalone graph mathematics: it ties the certification threshold to the graph's own spectral gap, independent of any channel-capacity or impossibility statement. The expander bound and the concrete fixtures witness non-vacuity for graph classes where `cv > 0`, hence finite `C*`, hence an actual ceiling on the stated zero-error certification problem.
 

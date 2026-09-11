@@ -28,6 +28,9 @@ import Legitimacy.Diagnostics.Pipeline
 import Legitimacy.Impossibility.ConstructiveCompanion
 import Legitimacy.Results.NonPeerRelative
 import Legitimacy.Protocol.Protocol
+import Legitimacy.Protocol.CompiledStepPolicy
+import Legitimacy.Protocol.CompiledStepPolicyFixtures
+import Legitimacy.Protocol.TrajectoryComposition
 import Legitimacy.Protocol.Corrigibility
 import Legitimacy.Protocol.CorrigibilityExamples
 import Legitimacy.Protocol.CorrigibilityRG
@@ -175,5 +178,7 @@ import Legitimacy.CaseStudies.ClaudeCodeHarness
 import Legitimacy.CaseStudies.GeneralAdjudicatedRepair
 import Legitimacy.CaseStudies.UniversalRepair
 import Legitimacy.Detection.UniversalCompleteness
+
+import Legitimacy.Protocol.ExecutedComposition
 
 set_option autoImplicit false

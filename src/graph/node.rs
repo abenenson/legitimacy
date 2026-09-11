@@ -598,8 +598,19 @@ fn evaluate_peer_relative(
         .iter()
         .filter(|value| **value <= current_value)
         .count();
-    let rank = less_or_equal as f64 / values.len() as f64;
-    Ok(rank >= percentile)
+    Ok(peer_relative_rank_at_least_percentile(
+        less_or_equal,
+        values.len(),
+        percentile,
+    ))
+}
+
+pub(crate) fn peer_relative_rank_at_least_percentile(
+    rank: usize,
+    total: usize,
+    percentile: f64,
+) -> bool {
+    rank as f64 / total as f64 >= percentile
 }
 
 fn numeric_field(claim: &GovernanceClaim, field: &str) -> Result<f64, LegitimacyError> {

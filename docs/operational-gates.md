@@ -64,15 +64,31 @@ target/release/legitimacy extract tests/fixtures --review-overlay tests/fixtures
 Compile and inspect policy artifacts:
 
 ```bash
-legitimacy compile examples/claude-agent-sdk-permissions.rule[.]toml
-legitimacy paradox examples/claude-agent-sdk-hooks.rule[.]toml
-legitimacy certify examples/claude-agent-sdk-permissions.rule[.]toml --claimant Read --outcome 1
+legitimacy compile examples/claude-agent-sdk-permissions.rule.toml
+legitimacy paradox examples/claude-agent-sdk-hooks.rule.toml
+legitimacy certify examples/claude-agent-sdk-permissions.rule.toml --claimant Read --outcome 1
 ```
 
-Run the protocol state machine over a graph policy artifact:
+### Ledger location and write access
+
+`compile`, `certify`, `paradox`, and `sacrifice` persist records through the
+default SQLite ledger. Starting at the current working directory, the CLI
+chooses the nearest ancestor containing `Cargo.toml`, or the working directory
+itself if none exists, then appends `.legitimacy/ledger.sqlite3`. That directory
+must be writable, including SQLite's WAL files. These commands currently have
+no ledger-path override; `audit --ledger PATH` selects a ledger for reading.
+Run from a deliberate, trusted working directory. Running inside an unrelated
+Rust project selects that project's ledger rather than the Legitimacy checkout's.
+A valid hash chain establishes internal consistency, not ledger origin.
+
+### Protocol checkpoints
+
+Run the protocol state machine over a graph policy artifact. The JSON files are
+trusted operator-local checkpoints, with the
+[state trust contract](protocol-state-trust.md) applying to every transition:
 
 ```bash
-legitimacy protocol init examples/protocol-gate-graph.graph[.]toml > state.compiled.json
+legitimacy protocol init examples/protocol-gate-graph.graph.toml > state.compiled.json
 legitimacy protocol measure state.compiled.json > state.measured.json
 legitimacy protocol activate state.measured.json > state.live.json
 legitimacy protocol status state.live.json
@@ -85,3 +101,6 @@ legitimacy protocol audit state.live.json
 `scripts/verify.sh` is the routine recommended check for a clean checkout. It checks formatting, clippy, the standard `cargo test` suite, Lean build, zero Lean `sorry`/`admit`/first-party `axiom`, spectral fixtures, public-surface documentation, doc alignment, legacy branding, and publication polish.
 
 `scripts/release-gate.sh` and `scripts/verify.sh --release-gate` additionally replay slow transcript snapshots and extraction fixtures, run `scripts/verify-clean.sh` to remove `lean/.lake/build/lib/lean/Legitimacy*` and force a fresh `lake build`, check the README Lean-gate status line, the paper verification anchor, and stale package directories. GitHub Actions provides an optional, manually dispatched mirror; repository-local execution remains the canonical gate, and pushing a version tag does not spend Actions minutes automatically.
+
+The internal selected-authority execution boundary is specified in
+[Selected-Authority Process Contract](selected-authority-process-contract.md).

@@ -43,19 +43,73 @@ pub(crate) fn proportional_allocate(
     estate: &Estate,
 ) -> Result<Allocation, LegitimacyError> {
     validate_claims(claims, "proportional rule")?;
-    let total_strength: f64 = claims.iter().map(|c| c.strength.value()).sum();
     let mut allocation = Allocation::default();
 
     if claims.is_empty() {
         return Ok(allocation);
     }
 
+    // Sum bounded ratios instead of strengths: finite inputs can have an
+    // unrepresentable total. At least one term is exactly one. Compensation
+    // reduces accumulation error without changing the proportional rule.
+    let scale = claims
+        .iter()
+        .map(|c| c.strength.value())
+        .fold(0.0, f64::max);
+    let mut scaled_total = 0.0;
+    let mut correction = 0.0;
     for claim in claims {
-        let share = (claim.strength.value() / total_strength) * estate.total.value();
+        let term = claim.strength.value() / scale - correction;
+        let next = scaled_total + term;
+        correction = (next - scaled_total) - term;
+        scaled_total = next;
+    }
+
+    for claim in claims {
+        let share = scaled_proportional_share(
+            claim.strength.value(),
+            scale,
+            scaled_total,
+            estate.total.value(),
+        );
         allocation.insert(claim.claimant_id.clone(), share);
     }
 
     Ok(allocation)
+}
+
+/// Compute strength * estate / (scale * scaled_total) without overflowing
+/// the denominator or underflowing a tiny strength/scale ratio prematurely.
+/// Inputs are finite, strength/scale are positive, and scaled_total >= 1.
+fn scaled_proportional_share(strength: f64, scale: f64, scaled_total: f64, estate: f64) -> f64 {
+    if estate == 0.0 {
+        return 0.0;
+    }
+    let (strength_mantissa, strength_exponent) = positive_binary_parts(strength);
+    let (scale_mantissa, scale_exponent) = positive_binary_parts(scale);
+    let (estate_mantissa, estate_exponent) = positive_binary_parts(estate);
+    let mantissa = (strength_mantissa / scale_mantissa) / scaled_total * estate_mantissa;
+    let exponent = strength_exponent - scale_exponent + estate_exponent;
+    // The final multiplication performs subnormal rounding. Constructing
+    // 2^exponent first would erase representable results when exponent < -1074.
+    if exponent < -1022 {
+        (mantissa * 2.0_f64.powi(exponent + 1022)) * f64::MIN_POSITIVE
+    } else {
+        mantissa * 2.0_f64.powi(exponent)
+    }
+}
+
+/// Exact positive finite decomposition x = mantissa * 2^exponent, 1 <= mantissa < 2.
+fn positive_binary_parts(value: f64) -> (f64, i32) {
+    let (normal, adjustment) = if value < f64::MIN_POSITIVE {
+        (value * 4_503_599_627_370_496.0, -52)
+    } else {
+        (value, 0)
+    };
+    let bits = normal.to_bits();
+    let exponent = ((bits >> 52) & 0x7ff) as i32 - 1023 + adjustment;
+    let mantissa = f64::from_bits((bits & ((1_u64 << 52) - 1)) | (1023_u64 << 52));
+    (mantissa, exponent)
 }
 
 /// Dispatch allocator for [`crate::DeclarativeRuleKind::Custom`].

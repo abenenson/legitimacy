@@ -3,23 +3,81 @@ use crate::GovernanceGraph;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
+/// Source dependency evidence is distinct from graph diagnostics. A bare graph
+/// (or a source mode without boundary analysis) cannot establish zero dependencies.
 #[derive(Debug, Clone, Serialize, PartialEq, Eq)]
-pub struct BoundaryCausalSafetyAssessment {
-    pub summary: String,
-    pub affected_governance_nodes: usize,
-    pub external_dependency_count: usize,
-    pub ungoverned_dependencies: Vec<UngovernedDependency>,
+#[serde(tag = "status", rename_all = "snake_case")]
+pub enum BoundaryCausalSafetyAssessment {
+    Unassessed {
+        reason: String,
+    },
+    Assessed {
+        summary: String,
+        affected_governance_nodes: usize,
+        external_dependency_count: usize,
+        ungoverned_dependencies: Vec<UngovernedDependency>,
+    },
 }
 
 impl Default for BoundaryCausalSafetyAssessment {
     fn default() -> Self {
-        Self {
-            summary:
-                "0 governance nodes have 0 transitive external dependencies not in the governance graph (causal boundary analysis)"
-                    .to_string(),
-            affected_governance_nodes: 0,
-            external_dependency_count: 0,
-            ungoverned_dependencies: Vec::new(),
+        Self::Unassessed {
+            reason: "UNASSESSED: source boundary/dependency analysis was not performed; source-level LIVE readiness is not established".to_string(),
+        }
+    }
+}
+
+impl BoundaryCausalSafetyAssessment {
+    pub fn summary(&self) -> &str {
+        match self {
+            Self::Unassessed { reason } => reason,
+            Self::Assessed { summary, .. } => summary,
+        }
+    }
+
+    /// `None` means no source-boundary assessment, never a measured zero.
+    pub fn affected_governance_nodes(&self) -> Option<usize> {
+        match self {
+            Self::Unassessed { .. } => None,
+            Self::Assessed {
+                affected_governance_nodes,
+                ..
+            } => Some(*affected_governance_nodes),
+        }
+    }
+
+    /// `None` means no source-boundary assessment, never a measured zero.
+    pub fn external_dependency_count(&self) -> Option<usize> {
+        match self {
+            Self::Unassessed { .. } => None,
+            Self::Assessed {
+                external_dependency_count,
+                ..
+            } => Some(*external_dependency_count),
+        }
+    }
+
+    pub fn ungoverned_dependencies(&self) -> Option<&[UngovernedDependency]> {
+        match self {
+            Self::Unassessed { .. } => None,
+            Self::Assessed {
+                ungoverned_dependencies,
+                ..
+            } => Some(ungoverned_dependencies),
+        }
+    }
+
+    /// An unexamined source boundary blocks source-level promotion just as an
+    /// observed unresolved dependency does. Graph-only checks remain available.
+    pub fn live_blocker(&self) -> Option<&str> {
+        match self {
+            Self::Unassessed { reason } => Some(reason),
+            Self::Assessed {
+                external_dependency_count,
+                summary,
+                ..
+            } if *external_dependency_count > 0 => Some(summary),
+            Self::Assessed { .. } => None,
         }
     }
 }
@@ -101,7 +159,7 @@ pub(crate) fn assess_boundary_causal_safety(
         })
         .collect();
 
-    BoundaryCausalSafetyAssessment {
+    BoundaryCausalSafetyAssessment::Assessed {
         summary,
         affected_governance_nodes,
         external_dependency_count,

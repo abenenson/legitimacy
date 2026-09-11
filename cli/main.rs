@@ -6,7 +6,11 @@ mod protocol_support;
 mod reporting;
 #[cfg(test)]
 mod tests;
+mod trajectory;
+mod trajectory_composition;
+mod trajectory_replay;
 mod witness;
+mod workflow;
 use clap::Parser;
 use commands::{
     AuditEvent, AuditResult, AuditStatus, Cli, Command, ComplianceReport, LedgerAuditOutput,
@@ -49,6 +53,12 @@ use std::{
     process::ExitCode,
 };
 use tracing_subscriber::EnvFilter;
+#[cfg(test)]
+use workflow::policy_format_for_input;
+use workflow::{
+    PolicyFormat, audit_events, consistency_options, detect_policy_format,
+    monitor_session_for_policy, parse_evidence_entries, run_protocol_command, runtime_options,
+};
 
 fn main() -> ExitCode {
     init_tracing();
@@ -73,27 +83,76 @@ fn init_tracing() {
         .try_init();
 }
 
-fn consistency_options(allow_exponential_consistency: bool) -> FullConsistencyOptions {
-    FullConsistencyOptions {
-        allow_exponential_consistency,
-        ..FullConsistencyOptions::default()
-    }
-}
-
-fn runtime_options(allow_exponential_consistency: bool) -> RuntimeOptions {
-    RuntimeOptions {
-        compile: CompileOptions {
-            consistency: consistency_options(allow_exponential_consistency),
-        },
-    }
-}
-
 fn run() -> Result<ExitCode, LegitimacyError> {
-    let cli = Cli::parse();
+    let mut arguments = std::env::args_os().skip(1);
+    let first = arguments.next();
+    let second = arguments.next();
+    let protected_output_attempt =
+        first.as_deref().is_some_and(|argument| {
+            matches!(
+                argument.to_str(),
+                Some(
+                    "adapt-codex-exec-v0"
+                        | "canonicalize-trajectory-v0"
+                        | "build-trajectory-replay-candidate-v0"
+                        | "issue-trajectory-replay-authority-receipt-v0"
+                        | "verify-trajectory-replay-v0"
+                        | "evaluate-codex-exec-composition-v0"
+                )
+            )
+        }) || (first.as_deref().is_some_and(|argument| argument == "help")
+            && second.as_deref().is_some_and(|argument| {
+                matches!(
+                    argument.to_str(),
+                    Some(
+                        "adapt-codex-exec-v0"
+                            | "canonicalize-trajectory-v0"
+                            | "build-trajectory-replay-candidate-v0"
+                            | "issue-trajectory-replay-authority-receipt-v0"
+                            | "verify-trajectory-replay-v0"
+                            | "evaluate-codex-exec-composition-v0"
+                    )
+                )
+            }));
+    let cli = match Cli::try_parse() {
+        Ok(cli) => cli,
+        Err(error)
+            if matches!(
+                error.kind(),
+                clap::error::ErrorKind::DisplayHelp | clap::error::ErrorKind::DisplayVersion
+            ) =>
+        {
+            error
+                .print()
+                .map_err(|_| LegitimacyError::invalid_input("cli-output"))?;
+            return Ok(ExitCode::SUCCESS);
+        }
+        Err(_) if protected_output_attempt => {
+            eprintln!("legitimacy: cli-arguments");
+            return Ok(ExitCode::from(2));
+        }
+        Err(error) => {
+            error
+                .print()
+                .map_err(|_| LegitimacyError::invalid_input("cli-output"))?;
+            return Ok(ExitCode::from(2));
+        }
+    };
 
     let Some(command) = cli.command else {
         return Err(LegitimacyError::invalid_input("missing subcommand"));
     };
+    if matches!(
+        &command,
+        Command::AdaptCodexExecV0 {
+            output_type: trajectory::CodexExecOutputTypeV0::Private,
+            private_lineage_output: Some(_),
+            ..
+        }
+    ) {
+        eprintln!("legitimacy: cli-arguments");
+        return Ok(ExitCode::from(2));
+    }
 
     match command {
         Command::Compile {
@@ -459,384 +518,107 @@ fn run() -> Result<ExitCode, LegitimacyError> {
         },
         Command::Protocol { command } => run_protocol_command(command),
         Command::Corpus { command } => corpus::run(command),
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum PolicyFormat {
-    Rule,
-    Graph,
-}
-
-fn detect_policy_format(policy: &Path) -> Result<PolicyFormat, LegitimacyError> {
-    let context = policy.display().to_string();
-    let input = fs::read_to_string(policy).map_err(|source| LegitimacyError::PolicyRead {
-        path: context.clone(),
-        source,
-    })?;
-    policy_format_for_input_with_context(&input, context)
-}
-
-#[cfg(test)]
-fn policy_format_for_input(input: &str) -> Result<PolicyFormat, LegitimacyError> {
-    policy_format_for_input_with_context(input, "<inline policy format>")
-}
-
-fn policy_format_for_input_with_context(
-    input: &str,
-    context: impl Into<String>,
-) -> Result<PolicyFormat, LegitimacyError> {
-    let document: toml::Value =
-        toml::from_str(input).map_err(|source| LegitimacyError::PolicyToml {
-            context: context.into(),
-            source,
-        })?;
-
-    Ok(
-        if document
-            .get("graph")
-            .and_then(toml::Value::as_table)
-            .is_some()
-            || document
-                .get("nodes")
-                .and_then(toml::Value::as_array)
-                .is_some_and(|nodes| nodes.iter().all(toml::Value::is_table))
-        {
-            PolicyFormat::Graph
-        } else {
-            PolicyFormat::Rule
-        },
-    )
-}
-
-fn monitor_session_for_policy(
-    policy: &Path,
-    interval_secs: u64,
-    allow_exponential_consistency: bool,
-) -> Result<MonitorSession, LegitimacyError> {
-    let event_source = GovernanceEventSource::jsonl_file(default_policy_event_source_path(policy))?;
-
-    match detect_policy_format(policy)? {
-        PolicyFormat::Rule => {
-            let context = load_runtime_context_with_options(
-                policy,
-                runtime_options(allow_exponential_consistency),
-            )?;
-            let certificate = legitimacy::compile_with_sacrifices_with_family_and_options(
-                &context.parsed.rule,
-                &context.parsed.claims,
-                &context.parsed.claimants,
-                &context.parsed.estate,
-                &context.parsed.family,
-                runtime_options(allow_exponential_consistency).compile,
-            )?;
-
-            Ok(MonitorSession {
-                compiled_graph: compiled_graph_from_rule(&context.compiled),
-                declared_sacrifices: certificate.sacrifices,
-                interval_secs,
-                event_source,
-            })
-        }
-        PolicyFormat::Graph => {
-            let spec = parse_graph_file(policy)?;
-            let graph = spec.try_into_graph(policy.display().to_string())?;
-            let claims = synthetic_claims(&graph);
-            let estate = legitimacy::Estate::new(1.0, "governance_decision")?;
-            let certificate = legitimacy::compile_graph_with_sacrifices(&graph, &claims, &estate)?;
-            let compiled_graph = match certificate.compiled {
-                CompiledGovernance::Graph(compiled) => compiled,
-                CompiledGovernance::Rule(_) => {
-                    return Err(LegitimacyError::invalid_input(
-                        "graph monitor expected graph compilation metadata",
-                    ));
-                }
-            };
-
-            Ok(MonitorSession {
-                compiled_graph,
-                declared_sacrifices: certificate.sacrifices,
-                interval_secs,
-                event_source,
-            })
-        }
-    }
-}
-
-fn run_protocol_command(command: ProtocolCommand) -> Result<ExitCode, LegitimacyError> {
-    match command {
-        ProtocolCommand::Init { policy } => {
-            if detect_policy_format(&policy)? != PolicyFormat::Graph {
-                return Err(LegitimacyError::invalid_input(
-                    "protocol init currently requires a graph policy",
-                ));
-            }
-            let spec = parse_graph_file(&policy)?;
-            let graph_name = spec.graph.name.clone();
-            let graph_version = spec.graph.version.clone();
-            let graph = spec.try_into_graph(policy.display().to_string())?;
-            let compiled = compile_protocol(
-                legitimacy::protocol::declare_with_metadata(
-                    graph,
-                    Vec::new(),
-                    graph_name,
-                    graph_version,
-                )
-                .map_err(protocol_error_to_verdict)?,
-            ) // state transition errors become CLI errors
-            .map_err(protocol_error_to_verdict)?;
-            println!("{}", pretty_json(&compiled)?);
-            Ok(ExitCode::SUCCESS)
-        }
-        ProtocolCommand::Measure { state } => {
-            let state = read_protocol_state(&state, false)?;
-            let representative_claims = match &state {
-                ProtocolState::Compiled { compiled_graph, .. } => {
-                    synthetic_claims(&compiled_graph.graph)
-                }
-                other => {
-                    return Err(LegitimacyError::invalid_input(format!(
-                        "protocol measure requires a compiled state, found {}",
-                        other.name()
-                    )));
-                }
-            };
-            let measured = measure_protocol(state, representative_claims)
-                .map_err(protocol_error_to_verdict)?;
-            println!("{}", pretty_json(&measured)?);
-            Ok(ExitCode::SUCCESS)
-        }
-        ProtocolCommand::Activate {
-            state,
-            min_interval_seconds,
-            max_interval_seconds,
-            seed,
+        Command::AdaptCodexExecV0 {
+            raw_stdout_jsonl,
+            authority_receipt,
+            trusted_context,
+            output_type,
+            output,
+            private_lineage_output,
         } => {
-            if min_interval_seconds > max_interval_seconds {
-                return Err(LegitimacyError::invalid_input(format!(
-                    "protocol activate requires min_interval_seconds <= max_interval_seconds, found {min_interval_seconds} > {max_interval_seconds}"
-                )));
-            }
-
-            let state = read_protocol_state(&state, false)?;
-            let live = activate_protocol(
-                state,
-                legitimacy::protocol::MonitorConfig {
-                    min_interval_seconds,
-                    max_interval_seconds,
-                    seed,
+            trajectory::run(
+                &raw_stdout_jsonl,
+                &authority_receipt,
+                &trusted_context,
+                output_type,
+                &output,
+                private_lineage_output.as_deref(),
+            )
+            .map_err(|error| LegitimacyError::invalid_input(error.code().as_str()))?;
+            Ok(ExitCode::SUCCESS)
+        }
+        Command::CanonicalizeTrajectoryV0 { inputs, output } => {
+            trajectory_replay::canonicalize(&inputs, &output)
+                .map_err(LegitimacyError::invalid_input)?;
+            Ok(ExitCode::SUCCESS)
+        }
+        Command::BuildTrajectoryReplayCandidateV0 { inputs, output } => {
+            trajectory_replay::build_candidate(&inputs, &output)
+                .map_err(LegitimacyError::invalid_input)?;
+            Ok(ExitCode::SUCCESS)
+        }
+        Command::IssueTrajectoryReplayAuthorityReceiptV0 {
+            inputs,
+            authority_private_key,
+            issuer,
+            key_id,
+            authority_epoch,
+            output,
+        } => {
+            trajectory_replay::issue_authority_receipt(
+                &inputs,
+                &authority_private_key,
+                &issuer,
+                &key_id,
+                authority_epoch,
+                &output,
+            )
+            .map_err(LegitimacyError::invalid_input)?;
+            Ok(ExitCode::SUCCESS)
+        }
+        Command::VerifyTrajectoryReplayV0 {
+            inputs,
+            replay,
+            authority_receipt,
+            authority_trust_policy,
+            output,
+        } => {
+            trajectory_replay::verify(
+                &inputs,
+                &replay,
+                &authority_receipt,
+                &authority_trust_policy,
+                &output,
+            )
+            .map_err(LegitimacyError::invalid_input)?;
+            Ok(ExitCode::SUCCESS)
+        }
+        Command::EvaluateCodexExecCompositionV0 {
+            raw_stdout_jsonl,
+            input_authority_receipt,
+            trusted_adaptation_context,
+            shareable_sanitized_bundle,
+            private_lineage_sidecar,
+            replay_candidate,
+            replay_authority_receipt,
+            replay_authority_trust_policy,
+            composition_policy,
+            output,
+            trace_output,
+            canonical_trace_output,
+            output_set,
+        } => {
+            trajectory_composition::evaluate(
+                &trajectory_composition::CodexExecCompositionInputsV0 {
+                    raw_stdout_jsonl: &raw_stdout_jsonl,
+                    input_authority_receipt: input_authority_receipt.as_deref(),
+                    trusted_adaptation_context: trusted_adaptation_context.as_deref(),
+                    shareable_sanitized_bundle: shareable_sanitized_bundle.as_deref(),
+                    private_lineage_sidecar: private_lineage_sidecar.as_deref(),
+                    replay_candidate: &replay_candidate,
+                    replay_authority_receipt: &replay_authority_receipt,
+                    replay_authority_trust_policy: &replay_authority_trust_policy,
+                    composition_policy: &composition_policy,
+                },
+                &trajectory_composition::CodexExecCompositionOutputsV0 {
+                    result: output.as_deref(),
+                    trace: trace_output.as_deref(),
+                    canonical_trace: canonical_trace_output.as_deref(),
+                    output_set: output_set.as_deref(),
                 },
             )
-            .map_err(protocol_error_to_verdict)?;
-            println!("{}", pretty_json(&live)?);
+            .map_err(LegitimacyError::invalid_input)?;
             Ok(ExitCode::SUCCESS)
         }
-        ProtocolCommand::Status { state } => {
-            let state = read_protocol_state(&state, false)?;
-            print_protocol_status(&state);
-            Ok(ExitCode::SUCCESS)
-        }
-        ProtocolCommand::Audit { state } => match protocol_audit_output(&state) {
-            Ok(report) => {
-                let certificate_chain_valid = report.certificate_chain_valid;
-                println!("{}", pretty_json(&report)?);
-                if certificate_chain_valid {
-                    Ok(ExitCode::SUCCESS)
-                } else {
-                    eprintln!(
-                        "legitimacy: protocol audit detected tampering: certificate_chain_valid: false"
-                    );
-                    Ok(ExitCode::from(2))
-                }
-            }
-            Err(error) => {
-                eprintln!("legitimacy: protocol audit malformed ledger: {error}");
-                Ok(ExitCode::from(3))
-            }
-        },
-    }
-}
-
-fn protocol_audit_output(state_path: &Path) -> Result<ProtocolAuditOutput, LegitimacyError> {
-    let state = read_protocol_state(state_path, true)?;
-    let (ledger, latest_drift) = protocol_ledger_view(&state)?;
-
-    Ok(ProtocolAuditOutput {
-        state: state.name().to_string(),
-        certificates: ledger.certificates.len(),
-        drift_alerts: ledger.drift_alerts.len(),
-        certificate_chain_valid: verify_protocol_ledger(&ledger)?,
-        latest_drift,
-    })
-}
-
-fn read_protocol_state(
-    path: &Path,
-    allow_tampered_ledger: bool,
-) -> Result<ProtocolState, LegitimacyError> {
-    let input = fs::read_to_string(path).map_err(|source| LegitimacyError::Io {
-        context: format!("reading protocol state '{}'", path.display()),
-        source,
-    })?;
-    let state: ProtocolState =
-        serde_json::from_str(&input).map_err(|source| LegitimacyError::Json {
-            context: format!("protocol state '{}'", path.display()),
-            source,
-        })?;
-    let validation = if allow_tampered_ledger {
-        state.validate_for_audit()
-    } else {
-        state.validate()
-    };
-    validation.map_err(|error| {
-        LegitimacyError::invalid_input(format!("protocol state '{}': {error}", path.display()))
-    })?;
-    Ok(state)
-}
-
-fn parse_evidence_entries(entries: &[String]) -> Result<BTreeMap<String, String>, LegitimacyError> {
-    let mut evidence = BTreeMap::new();
-
-    for entry in entries {
-        let (key, value) = entry.split_once('=').ok_or_else(|| {
-            LegitimacyError::invalid_input(format!(
-                "invalid evidence entry '{entry}'; expected key=value"
-            ))
-        })?;
-        if key.trim().is_empty() {
-            return Err(LegitimacyError::invalid_input(format!(
-                "invalid evidence entry '{entry}'; key must not be empty"
-            )));
-        }
-        evidence.insert(key.trim().to_string(), value.to_string());
-    }
-
-    Ok(evidence)
-}
-
-fn audit_events(
-    context: &RuntimeContext,
-    policy: &Path,
-    events_path: &Path,
-) -> Result<ComplianceReport, LegitimacyError> {
-    let file = File::open(events_path).map_err(|source| LegitimacyError::Io {
-        context: format!("events file '{}'", events_path.display()),
-        source,
-    })?;
-    let reader = BufReader::new(file);
-    let mut results = Vec::new();
-    let admissible = context.compiled.is_admissible();
-
-    for (index, line) in reader.lines().enumerate() {
-        let line_number = index + 1;
-        let line = line.map_err(|source| LegitimacyError::Io {
-            context: format!("line {line_number} from '{}'", events_path.display()),
-            source,
-        })?;
-        if line.trim().is_empty() {
-            continue;
-        }
-
-        let event: AuditEvent =
-            serde_json::from_str(&line).map_err(|source| LegitimacyError::Json {
-                context: format!("line {line_number} of '{}'", events_path.display()),
-                source,
-            })?;
-
-        let result = if admissible {
-            let act_description = event.act_description.clone().unwrap_or_else(|| {
-                format!(
-                    "Audit event {} for claimant {}",
-                    event
-                        .event_id
-                        .clone()
-                        .unwrap_or_else(|| format!("line-{line_number}")),
-                    event.claimant_id
-                )
-            });
-            match certify(
-                &CertificationContext {
-                    compiled_rule: &context.compiled,
-                    rule: &context.parsed.rule,
-                    claims: &context.parsed.claims,
-                    estate: &context.parsed.estate,
-                },
-                &act_description,
-                &event.claimant_id,
-                event.outcome,
-                event.evidence.clone(),
-            ) {
-                Ok(certificate) => AuditResult {
-                    line: line_number,
-                    event_id: event.event_id,
-                    claimant_id: event.claimant_id,
-                    outcome: event.outcome,
-                    status: AuditStatus::Certified,
-                    reason: None,
-                    certificate: Some(certificate),
-                },
-                Err(error) => match audit_event_rejection_reason(&error) {
-                    Some(reason) => AuditResult {
-                        line: line_number,
-                        event_id: event.event_id,
-                        claimant_id: event.claimant_id,
-                        outcome: event.outcome,
-                        status: AuditStatus::Rejected,
-                        reason: Some(reason),
-                        certificate: None,
-                    },
-                    None => return Err(error),
-                },
-            }
-        } else {
-            AuditResult {
-                line: line_number,
-                event_id: event.event_id,
-                claimant_id: event.claimant_id,
-                outcome: event.outcome,
-                status: AuditStatus::Rejected,
-                reason: Some(format!(
-                    "rule '{}' v{} is not admissible",
-                    context.compiled.name, context.compiled.version
-                )),
-                certificate: None,
-            }
-        };
-
-        results.push(result);
-    }
-
-    let certified = results
-        .iter()
-        .filter(|result| matches!(result.status, AuditStatus::Certified))
-        .count();
-    let rejected = results.len().saturating_sub(certified);
-    let compile_violations = context
-        .compiled
-        .violations()
-        .into_iter()
-        .map(|violation| violation.description.clone())
-        .collect();
-
-    Ok(ComplianceReport {
-        policy_path: policy.display().to_string(),
-        rule_name: context.compiled.name.clone(),
-        rule_version: context.compiled.version.clone(),
-        admissible,
-        events_total: results.len(),
-        certified,
-        rejected,
-        compile_violations,
-        results,
-    })
-}
-
-fn audit_event_rejection_reason(error: &LegitimacyError) -> Option<String> {
-    match error {
-        LegitimacyError::RuleNotAdmissible { .. }
-        | LegitimacyError::CertificationRuleMismatch { .. }
-        | LegitimacyError::CertifiedOutcomeMismatch { .. }
-        | LegitimacyError::MissingAllocationShare { .. } => Some(error.to_string()),
-        _ => None,
     }
 }

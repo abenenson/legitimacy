@@ -1,0 +1,1 @@
+{"identity":"legitimacy.controlled-release.v1","forbidden":"Legitimacy.boolJointForbiddenList","effect":"both distinct synthetic fragments delivered to public","scope":"principal,channel,payload,task","task":"synthetic-release","channels":["public","vault"],"principals":2,"order":"host-sequential","guard":"local authorization AND preserve original forbidden-property exclusion"}

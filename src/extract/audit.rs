@@ -456,8 +456,8 @@ fn assess_protocol_state(
             "spectral analysis could not compute algebraic connectivity (disconnected graph or single node)".to_string(),
         );
     }
-    if boundary_causal_safety.external_dependency_count > 0 {
-        blocking_issues.push(boundary_causal_safety.summary.clone());
+    if let Some(blocker) = boundary_causal_safety.live_blocker() {
+        blocking_issues.push(blocker.to_string());
     }
     blocking_issues.push("no monitoring infrastructure detected".to_string());
 

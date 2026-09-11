@@ -55,6 +55,15 @@ The practical boundary is:
   theorems for arbitrary sources. Both are nonetheless kernel-layer axioms (see
   the cross-reference above).
 
+The Rust graph corrigibility check constructs three replacement policies:
+constant pause, deny and permit, with pass-through edges. It checks that those
+override graphs can be traversed. For well-formed nonempty acyclic graphs this
+is a structural capability of the graph representation, not a test of the
+original policy's willingness to cooperate or a deployed agent's compliance.
+The CLI's `CORRIGIBLE: SUPPORTED (projection verdict passed)` has that limited
+meaning. The current observable-determinacy check also has an exhaustive limit
+of ten nodes; larger graphs report `SKIPPED`, which blocks protocol compilation.
+
 A faithful `liftGovernanceGraphToAuditSubject` theorem that preserves all
 dispatcher semantics for arbitrary extracted graphs remains substrate-extension
 work.
@@ -123,9 +132,9 @@ This projection is a representation choice for one surface. It is **not** a clai
 that three-valued audit logic collapses to binary, and it does not contradict the
 proved three-valued impossibility. The parametric theorem
 `three_valued_composition_inadmissibility`
-(`lean/Legitimacy/Results/Composition.lean:519`), parametric through
+(`lean/Legitimacy/Results/Composition.lean:536`), parametric through
 `three_valued_escalationPolicyWitness_composition_inadmissibility`
-(`lean/Legitimacy/Results/Composition.lean:499`), shows the obstruction is real
+(`lean/Legitimacy/Results/Composition.lean:516`), shows the obstruction is real
 and irreducible: there exist three-valued governance nodes A and B that each
 individually satisfy `NodeMonotonicity3` while the composed graph A→B violates
 `GraphMonotonicity3`, because escalate opens a competitive channel that has no

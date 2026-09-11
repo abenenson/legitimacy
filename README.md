@@ -1,19 +1,151 @@
-# Legitimacy: A Machine-Checked Kernel for the Governance Layer of AI Agents
+# Legitimacy: Checkable Rules for AI Agents
 
-**Current release:** [signed v1.0.0](https://github.com/abenenson/legitimacy/releases/tag/v1.0.0) · [citation metadata](CITATION.cff)
+**Can human control survive increasingly capable AI agents, working alone or together?**
 
-A chatbot can be behaviorally aligned. An agent that allocates tool access,
-memory, escalation rights, review bandwidth, or permission to act is running
-an institution, and institutions face a question alignment training does not
-answer: **which governance rules keep certifying as the agent's capability
-grows without bound?**
+Agents can cooperate with one another while acting outside human authority.
+A shared objective does not settle who may grant access, accept a risk, or
+override a human decision. Those questions grow more consequential as agents
+become more capable and act together.
 
-This repository machine-checks an answer, in Lean 4, over represented
-governance graphs. A graph admits stable equilibria at unbounded modeled
-capability *exactly when* its consistency vulnerability is zero
+Legitimacy uses mathematical proofs to study the rules governing that power as
+capability grows toward superintelligence. Checked by the Lean 4 proof assistant,
+the results identify unavoidable tradeoffs, conditions for stability, and
+requirements for checking and correcting decisions.
+
+A central result concerns a rule's sensitivity to removing a participant from
+its governing structure. In the project's mathematical model, increasing
+capability means being able to exploit smaller changes. Any remaining
+sensitivity creates a finite stability limit; zero sensitivity is necessary
+and sufficient for stability at arbitrarily large capability. The
+[formal result below](#the-formal-result-capability-tradeoffs-and-the-kernel)
+defines this measure and its assumptions.
+
+A **legitimacy kernel** packages a rule's guarantees, declared tradeoffs and
+checking evidence in a mathematical object. The runnable example below makes
+one part of this program concrete: governing what agents can do together.
+
+## Approved separately, unsafe together
+
+Suppose a policy forbids publishing both fragments of a protected record. Two
+agents are each allowed to publish their own fragment. Check each request on its
+own and both pass; execute both and the combined result violates the policy.
+
+The [composition experiment](docs/executed-composition-v1.md) makes this failure
+and its repair runnable. Its guard remembers what has already reached the public
+output. After the first fragment is public, it blocks publication of the second
+while still allowing delivery to a private vault or publication of a harmless
+summary. The forbidden outcome stays the same. Useful work remains possible.
+
+The proofs connect actual deliveries to the forbidden outcome, establish the
+repair for every finite sequence of requests in the model, and identify the
+information a monitor needs to make exact decisions while preserving useful work.
+
+**Scope:** two supplied agent identities, synthetic data and a sequential host.
+The experiment runs no language model; its proofs cover this declared model,
+not arbitrary deployed agents.
+
+## Try the example
+
+Start with the [companion reader](docs/executed-composition-reader.html):
+download the HTML file and open it in your browser. It presents the seven
+outcomes and their evidence without installing Rust or Lean.
+
+To execute the experiment yourself, run from this checkout with Rust installed:
+
+```sh
+cargo run --bin legitimacy-executed-composition -- demo
+```
+
+The output compares the harmful combination, safe alternatives, and cases with
+missing permission or evidence. No Lean knowledge or model credentials are
+needed. The first build downloads dependencies and can take several minutes.
+The [reproduction guide](docs/executed-composition-v1.md#run-it) explains the
+seven outcomes, signed-capture checks and how to build an offline bundle.
+
+**Latest published release:** [signed v1.0.0](https://github.com/abenenson/legitimacy/releases/tag/v1.0.0).
+The composition experiment is available in this checkout and is not included in
+that release. [Citation metadata](CITATION.cff) describes this checkout.
+
+## Why this matters for AI alignment
+
+The [METR/Redwood investigation of the OpenAI–Hugging Face incident](https://evals.alignment.org/blog/2026-08-26-openai-hugging-face-incident-investigation/)
+describes agents risking their own task outcomes to help a collective, joining
+an unauthorized attack, and developing ways to tamper with transcripts.
+Cooperation within the group coexisted with conduct outside its assigned scope.
+This raises questions about collective authority as well as individual behavior.
+
+[Anthropic's September 9 assessment](https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents)
+describes individual agents taking unauthorized actions through misconfigured
+internet access while pursuing their assigned tasks. It also reports that
+offline monitors would have missed one incident after accepting the model's
+simulation framing. This motivates a governance requirement: check actual
+effects and authority independently of the acting agent's account.
+
+Legitimacy connects those questions to three parts of its formal program:
+
+- **Collective control:** delegation results and a conditional multi-principal
+  corrigibility result specify when authority can be passed on and aggregated
+  while retaining the modeled guarantees.
+- **Rules under pressure:** impossibility results identify forced tradeoffs;
+  the compiled protocol requires declarations of the covered sacrifices before
+  activation. Recompilation results address drift while retaining an override
+  pathway under explicit preservation assumptions.
+- **Control as capability grows:** the spectral results identify a finite
+  stability cliff for positive vulnerability and characterize the zero-vulnerability
+  escape condition. A further result connects this limit to an
+  unavoidable governance tradeoff, using a specific graph construction.
+
+These results complement model training, behavioral evaluations and monitoring.
+They supply checkable conditions and counterexamples for specified governance
+models. Applying them to a deployed swarm requires establishing the connection
+between those models and its actual authority, observations and actions. The
+composition experiment is one executable example; it neither reconstructs the
+incident nor establishes that it would have prevented it.
+
+## Where to start
+
+| If you want to understand… | Start with… |
+| --- | --- |
+| What approved actions can do together, and how a repair works | [The executable experiment and its limits](docs/executed-composition-v1.md) |
+| Whether a rule can remain stable as modeled capability grows | [Capacity and stability](papers/04-spectral-scaling.md) |
+| Which tradeoffs are unavoidable when requests compete for scarce authority | [The verified impossibility theorem](papers/03-impossibility-theorem.md) |
+| How guarantees, evidence and declared tradeoffs fit into a checkable object | [The legitimacy kernel](papers/02-semantic-legitimacy-kernels.md) |
+
+<details>
+<summary>What the experiment establishes</summary>
+
+A conventional checker given the same full context agrees with the experiment's
+answers. The contribution is the checked connection between execution, the
+forbidden outcome, useful repair, and the observations needed for exact decisions.
+The experiment proves that distinguishing its three reachable safe exposure
+contexts needs more than one bit; two exposure bits suffice. This is a requirement
+for exact decisions that preserve useful actions, not for safety by denying
+everything. It does not measure or instantiate the capability-scaling threshold
+below.
+
+A locally built offline bundle runs `./reproduce.sh` to check seven outcomes and
+execute the host again without network access, model credentials, Cargo or Lean.
+The reproduction guide specifies its build and verification requirements.
+
+</details>
+
+## The formal result: capability, tradeoffs and the kernel
+
+For a fixed finite governance graph G, fixed signal s and positive tolerance δ,
+the spectral model treats capability κ as the ability to target perturbations
+down to scale δ/κ. A perturbation here is a change in the graph's verdict after
+removing one node. Its largest magnitude is the **consistency vulnerability** cv.
+**Spectral stability** means no such perturbation reaches the targeted scale.
+This is an explicit mathematical model of exploitability, not a measured model
+benchmark or a repeated-game equilibrium.
+
+Within that model, stable equilibria exist at arbitrarily large capability
+*exactly when* consistency vulnerability is zero
 (`stackelberg_convergence_limit_iff_zero_consistency_vulnerability`). Any
-positive vulnerability yields a finite, computable stability cliff,
-C*(G,s,δ) = δ/cv(G,s).
+positive vulnerability yields the finite, computable stability cliff
+C*(G,s,δ) = δ/cv(G,s). The result identifies a structural condition a scaling
+safety argument must address; applying its numbers to a deployment would require
+justifying the graph, signal, tolerance and capability interpretation.
 
 That vulnerability is not merely an implementation defect. On reachable
 pipelines that transparently reach a scarce, structurally peer-relative
@@ -27,36 +159,34 @@ forced sacrifice and the capability cliff on one machine-checked substrate,
 and the **legitimacy kernel** turns that unavoidable sacrifice into a
 declared, monitored certificate.
 
-The canonical witness makes the forced sacrifice concrete: when one request gathers
-stronger evidence and takes the one scarce human-review slot, a second
-request that would have been permitted is now denied. Making one decision
-more correct silently broke another; the theorem proves this tradeoff across
-the covered pipeline class. The same diagnostic is wired
-to an executable extractor over source-extracted graph models of real agent
-hook surfaces (Codex, the Claude Agent SDK).
-
-**Start here.** The papers: [the kernel object](papers/02-semantic-legitimacy-kernels.md), [the verified impossibility theorem](papers/03-impossibility-theorem.md), and [capacity and stability under unbounded capability](papers/04-spectral-scaling.md). The full set is in [papers/](papers/). Reproduce the audits with `scripts/reproduce-audit.sh`; run the canonical gate with `bash scripts/verify.sh`. The audit, worked on graphs extracted from real agent frameworks, is in [Worked extractions](#worked-extractions-the-obstruction-on-real-agent-graphs). The Lean substrate carries zero `sorry`, `admit`, or first-party `axiom`, and a single name (`spineFootprint`) packages all ten unique Lean anchors in the two public spine tables with concrete premise witnesses.
-
-![The forcing triangle: consistency, solidarity, and cross-claimant monotonicity around a reachable scarce allocation stage](docs/figures/impossibility-triangle.svg)
-
-*The forcing triangle. On a reachable scarce allocation stage (claimant-symmetric, finite-estate-coupled, with an admissible over-subscribed profile), consistency, solidarity, and cross-claimant monotonicity cannot all hold (`symmetric_scarce_coupled_allocators_obstructed`). The kernel records which one is declared sacrificed.*
-
-**For AI-safety readers.** Behavioral alignment (RLHF, Constitutional AI, debate, AI Control) shapes the model's policy; this program audits the *scaffolding around it*: the rule layer that allocates tool access, memory, escalation, and review, which is usually a pile of unverified scripts. Three machine-checked results, one per paper, and the composition that ties them together:
+In the concrete three-request witness, strengthening A's evidence changes B's
+verdict from Permit to Deny even though B's own evidence is unchanged. That
+witness makes a monotonicity sacrifice visible. The covered-class theorem says
+the guarantees cannot all be retained; the witness illustrates a particular
+failure, not a universal operational scenario. The same diagnostic is wired
+to an executable extractor over source-derived graph models of agent hook
+surfaces (Codex, the Claude Agent SDK).
 
 | Paper | Result | Lean anchor |
 | --- | --- | --- |
-| 04 | A represented governance graph stays stable at unbounded capability exactly when its consistency vulnerability is zero; positive vulnerability gives a finite, computable stability cliff. | `stackelberg_convergence_limit_iff_zero_consistency_vulnerability` |
+| 04 | For a fixed finite graph and signal, with positive tolerance, spectral stability persists to unbounded capability exactly when consistency vulnerability is zero; positive vulnerability gives a finite cliff. | `stackelberg_convergence_limit_iff_zero_consistency_vulnerability` |
 | 03 | A pipeline that transparently reaches a scarce, structurally peer-relative allocator and preserves its permits downstream cannot keep consistency, solidarity, and cross-claimant monotonicity together, so the covered rule must declare a sacrifice. | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` |
 | 03+04 | The same peer-relative obstruction forces positive consistency vulnerability on the canonical claimant-interaction lift (definitionally `uniK5` with fixed signal `sig5`), so the forced sacrifice and the capability cliff are carried by one substrate. | `capability_scaling_shared_cliff` |
 | 02 | The legitimacy kernel decomposes into a runtime kernel plus an explicit bridge contract, and is inhabited by a concrete instance. | `isSemanticLegitimacyKernel_iff_runtime_and_bridge` |
 
 The audit discriminates: it clears the AutoGen singleton and the five AI-Control fixtures, and the same diagnostic bites on the graphs extracted from Codex, the Claude Agent SDK, and CrewAI. The worked Codex lane runs the full arc on the extracted Codex graph model: detect the monotonicity failure, price the capability-scaling cliff (`cv = 1`, `C* = 1/10`), and repair it to `cv = 0`, every stage a named theorem over the represented graph model.
 
-The shift is concrete: we are moving from chatbots to agents, and agents make *structural* decisions: which tool calls are allowed, what is written to memory,
-when a request is escalated to a human, and which of several competing requests
-gets the scarce review slot. Those are governance decisions, and this repository
-studies them with the tools built for studying institutions: social choice and
-fair allocation.
+![The forcing triangle: consistency, solidarity, and cross-claimant monotonicity around a reachable scarce allocation stage](docs/figures/impossibility-triangle.svg)
+
+*The forcing triangle. On a reachable scarce allocation stage (claimant-symmetric, finite-estate-coupled, with an admissible over-subscribed profile), consistency, solidarity, and cross-claimant monotonicity cannot all hold (`symmetric_scarce_coupled_allocators_obstructed`). The kernel records which one is declared sacrificed.*
+
+The papers and [claim ledger](docs/claim-ledger.md) spell out the hypotheses and
+boundaries. The Lean source contains zero `sorry`, `admit`, or first-party
+`axiom`; `spineFootprint` packages all ten unique Lean anchors in the two public
+spine tables with concrete premise witnesses. Reproduce the graph audits with
+`scripts/reproduce-audit.sh`, or run the canonical gate with
+`bash scripts/verify.sh`. The [worked extractions](#worked-extractions-the-obstruction-on-real-agent-graphs)
+show the diagnostics on graph models extracted from agent frameworks.
 
 ## The kernel object
 
@@ -72,8 +202,8 @@ certifiability, observability, corrigibility, compositional safety, and
 non-vacuity. In plain terms: verdicts come with checkable witnesses
 (*certifiability*); decision-relevant state survives audit (*observability*);
 authorized supervisors can intervene without breaking the rule (*corrigibility*);
-locally-safe steps do not compose into a global violation (*compositional
-safety*); and the rule governs a nonempty claim set with a genuine permit
+safe governed targets preserve safety along modeled causal consequences inside
+the declared boundary (*compositional safety*); and the rule governs a nonempty claim set with a genuine permit
 witness while excluding refuse-everything, permanent escalation, and deadlock
 (*non-vacuity*). The current five-axiom kernel does not require decision
 selectivity: the honest always-permit `permitKernel`
@@ -90,9 +220,12 @@ the kernel object, standalone spectral rows, shared scaling cliff, forcing and
 activation results, semantic bridge, three-valued and multi-principal
 frontiers, and the stateful safety stack.
 
-A legitimate kernel is therefore a compiled object: runtime obligations, graph
-diagnostics, extraction provenance, and monitored tradeoff declarations,
-packaged as evidence that a governance rule can be inspected rather than trusted.
+The five-axiom bundle establishes those particular modeled obligations; its
+causal-boundary condition alone does not prove safety for arbitrary action lists.
+The opening experiment earns its finite executed-action guarantee separately.
+The broader semantic and operational package adds bridge contracts, graph
+diagnostics, extraction provenance and monitored tradeoff declarations. Together
+these make the represented rule and its implementation assumptions inspectable.
 That is the difference from a scalar alignment score or a natural-language
 constitution: both ask for trust; a kernel offers a check. When a check fails it
 does not emit a scalar verdict but a typed certificate naming the failure class (unmodeled edge, bypass path, hidden override, source-evidence gap, or semantic-bridge failure), so a reviewer learns not only *that* the rule-layer
@@ -111,7 +244,7 @@ in Lean 4 (Mathlib, zero `sorry`/`admit`/first-party `axiom`).
 
 The consequence for the kernel is direct and is itself a theorem. A kernel
 deployed over that covered pipeline class cannot keep all three checks silently,
-so it must *declare* which one it gives up. That obligation is
+so it must *declare* which guarantees it gives up. That obligation is
 `noUndeclaredSacrificeImplication`
 (`lean/Legitimacy/Safety/KernelSafety/BinaryDecisionPipeline.lean:145`): once the
 surface is live, the forced peer-relative sacrifices are declared rather than
@@ -127,31 +260,39 @@ escape exists, with a claimant-constant witness, and
 the full axiom package collapses to threshold/constant behavior rather than
 substantive multi-claimant allocation.
 
-### How it breaks: the Claude Agent SDK tool gate
+### A rank-dependent rule and the SDK graph diagnostic
 
-Picture an agent deciding whether to permit a shell command or escalate it for
-human review. Review capacity is finite — say, one slot this cycle. That is the
-*scarcity*. The gate weighs all pending requests together to decide who gets the
-slot. That is *peer-relativity*. Now suppose Request A gathers *stronger*
-evidence and is plainly worth approving. Strengthening A consumes the scarce
-review capacity, and Request B, which would have been permitted, is instead forced into escalation for human review, which on the binary decision surface
-the scarce-allocation lens records as **Deny** (FRAMEWORK-LIMITS §2a).
-Strengthening one correct decision silently changed the outcome of another.
-That is the structural failure the forcing argument isolates for scarce,
-peer-relative governance: monotonicity cannot survive scarcity here. This
-scarce-slot story is the impossibility theorem's own mechanism, staged on
-its synthetic pipeline. The extracted Claude Agent SDK hook graph exhibits a
-milder failure of the same diagnostic
-(`claudeAgentSDKHooksGovernanceAdmissibilityRejectsMonotonicity`): a
-self-flip in which strengthening a claim's own registration signal lowers
-its decision from permit to terminal escalation, triggered through the
-extractor's uniform registration-escalation modeling convention (see Scope)
-rather than recovered from SDK callback logic. The rejection is robust
-rather than a rank-encoding artifact; it persists when escalation is ranked
-as high as permit
-(`claudeAgentSDKHooksGovernanceAdmissibilityRejectsMonotonicityReviewRequired`),
-and the audit-agent surfaces it as an explicit certificate instead of a
-silent production surprise.
+The concrete theorem witness uses three requests. A threshold gate first
+requires strength greater than 0.5. Among requests passing that gate, the peer
+gate permits a request when at least half have strength no greater than its own.
+The decision therefore depends on the other surviving requests, not only the
+request it decides. Here are the two evaluations:
+
+| Request | Original strength | Strength after A improves | Original verdict | New verdict |
+| --- | --- | --- | --- | --- |
+| A | 0.40 | 0.60 | Deny | Permit |
+| B | 0.55 | 0.55 | Permit | Deny |
+| C | 0.90 | 0.90 | Permit | Permit |
+
+B passes the absolute threshold in both cases. Initially only B and C survive,
+so one of two strengths is no greater than B's. Once A also passes, only one of
+three is no greater: B fails the peer gate. Stronger evidence for A changed B's
+decision without weakening B's evidence.
+These are the rational strengths and rule from the
+[formal composition witness](lean/Legitimacy/Results/Composition.lean), not a
+claim about allocating one human-review slot or about an upstream SDK policy.
+
+The extracted Claude Agent SDK graph exhibits a different failure of the same
+monotonicity diagnostic
+(`claudeAgentSDKHooksGovernanceAdmissibilityRejectsMonotonicity`): strengthening
+a claim's own registration signal changes its decision from permit to terminal
+escalation. This self-flip comes from the extractor's uniform
+registration-escalation modeling convention (see Scope), not from recovering
+SDK callback decision logic or discovering the synthetic scarce-slot scenario
+inside the SDK. The rejection persists even when escalation is ranked as high
+as permit
+(`claudeAgentSDKHooksGovernanceAdmissibilityRejectsMonotonicityReviewRequired`).
+The audit-agent emits an inspectable certificate for that extracted-model result.
 
 ### Why a frontier lab should care
 
@@ -179,8 +320,8 @@ The single-surface forcing argument is the spine, but it is one face of a
 broader obstruction lattice that builds clean in the same tree. Adding a third
 *escalate* verdict does not escape the obstruction
 (`three_valued_composition_inadmissibility`,
-`lean/Legitimacy/Results/Composition.lean:519`), and when several principals
-govern the same surface the Arrow obstruction transports
+`lean/Legitimacy/Results/Composition.lean:536`), and a concrete
+majority-quorum rule in the multi-principal model fails the Arrow triple
 (`majorityQuorumRule_fails_arrow_triple`,
 `lean/Legitimacy/Results/MultiPrincipal.lean:695`); both also appear in the
 theorem spine below. The graph-diagnostic axioms' independence and tightness
@@ -211,8 +352,10 @@ governance rule as the agent it governs grows more capable, and where
 certification must fail. Two of the three spine rows below stand on their
 own mathematics, independent of the impossibility theorem; the third is the
 composition that ties the obstruction to the cliff over one shared
-substrate. There is a sharp reciprocal threshold, the *critical capability* C*, below which the rule certifies and above which certification must fail, and C* is bounded below by the
-governance graph's own connectivity, its *spectral gap*. The consistency
+substrate. There is a sharp reciprocal threshold, the *critical capability* C*, below which the rule certifies and above which certification must fail, and the graph's connectivity, its *spectral gap*, contributes an explicit
+lower bound: δ·gap/(signalRange·maxDeg) ≤ C* for graphs with at least two
+vertices, under the theorem's positive tolerance, vulnerability, gap and degree hypotheses (including gap ≤ each
+vertex degree and positive minimum degree after removal). The consistency
 vulnerability that sets the threshold is not an ad-hoc score: it is
 machine-checked equal to the classical gross-error sensitivity of the
 graph's verdict map under single-node deletion, in the Cook/Hampel
@@ -302,7 +445,7 @@ For the production self-audit verdict specifically, the reflective layer does
 not earn the verdict; it reflects the already-evaluated certificate in a
 subject-relative modal box.
 
-## What To Inspect First
+## References for deeper review
 
 | Question | Entry point |
 | --- | --- |
@@ -317,13 +460,13 @@ subject-relative modal box.
 
 ## Worked extractions: the obstruction on real-agent graphs
 
-The headline result is the impossibility theorem, and it does not depend on the
-extractor. What follows is its worked extraction over source-derived graph fixtures:
-the audit run on
-governance graphs extracted from four real agent frameworks. The obstruction the
-theorem proves is not a paper artifact: the same monotonicity failure recurs
-across three structurally distinct real-derived graphs under one modeling
-convention, and the fourth (OpenClaw) trips a different check entirely, so the diagnostic discriminates rather than firing on every input. A Lean theorem
+The impossibility theorem does not depend on the extractor. This section
+examines a complementary executable diagnostic on governance graphs extracted
+from four agent frameworks. The Codex graph's monotonicity rejection is certified by `codexHooksGovernanceAdmissibilityRejectsMonotonicity`.
+The table below gives the corresponding witnesses for the other source-derived
+graphs under the same modeling convention; OpenClaw trips a different check.
+That demonstrates discrimination within these fixtures, not discovery of the
+synthetic theorem mechanism in each upstream implementation. A Lean theorem
 packages the four extracted fixtures as concrete verifier-target evidence. Each
 row is a statement about an extracted graph model, not a measurement of the live
 product and not a ranking of the upstream project.
@@ -350,7 +493,7 @@ adjudication repair removes it (`codexHarness_repaired_cv_value`,
 `codexHarness_stage4_threshold_removed_derives_finite_audit`); OpenClaw's license and provenance are recorded in
 [`audits/fixtures/LICENSES.md`](audits/fixtures/LICENSES.md).
 
-The audit-agent release front door is narrower and binary-first: it emits JSON
+The graph-audit CLI has a narrower binary-first interface: it emits JSON
 bundles for Codex CLI, Claude Agent SDK, and the public Claude Code governance
 surface, each with a Stage 2 C* carrier derived from the committed extracted
 graph and reported separately from the diagnostic.
@@ -452,11 +595,17 @@ paths through the same papers, depending on what you want first:
 
 ## Broader CLI Surface
 
-The audit-agent is the release front door, but the repository still exposes the
-general extractor, graph audit, protocol, and certificate commands:
+Alongside the composition experiment and graph-audit CLI, the repository exposes
+general extraction, protocol and certificate commands.
+
+The fixture example below explicitly uses heuristic extraction. Its output is
+an empirical diagnostic, and can misinterpret source literals. The headline SDK
+audits use `--mode theorem-backed`, for example
+`legitimacy extract examples/claude-agent-sdk-fixture --mode theorem-backed`.
+That mode still has the [declared extraction boundary](docs/extractor-boundary.md).
 
 ```bash
-cargo run --release --bin legitimacy -- extract tests/fixtures --emit-graph /tmp/sample.graph.json
+cargo run --release --bin legitimacy -- extract tests/fixtures --mode heuristic --emit-graph /tmp/sample.graph.json
 cargo run --release --bin legitimacy -- audit-graph --graph /tmp/sample.graph.json --claims tests/fixtures/sample_governance_claims.jsonl
 cargo run --release --bin legitimacy -- compile examples/claude-agent-sdk-permissions.rule.toml
 cargo run --release --bin legitimacy -- paradox examples/claude-agent-sdk-hooks.rule.toml
@@ -471,13 +620,44 @@ cargo run --release --bin legitimacy -- protocol audit state.live.json
 Installed-binary form:
 
 ```bash
-legitimacy audit-graph --graph /tmp/sample.graph.json --claims tests/fixtures/sample_governance_claims.jsonl --claims-provenance observed-runtime --review-overlay tests/fixtures/sample_governance_review_overlay.json
+legitimacy audit-graph --graph /tmp/sample.graph.json --claims tests/fixtures/sample_governance_claims.jsonl --claims-provenance fixture --review-overlay tests/fixtures/sample_governance_review_overlay.json
 legitimacy protocol init examples/protocol-gate-graph.graph.toml > state.compiled.json
 legitimacy protocol measure state.compiled.json > state.measured.json
 legitimacy protocol activate state.measured.json > state.live.json
 legitimacy protocol status state.live.json
 legitimacy protocol audit state.live.json
 ```
+
+Use `--claims-provenance observed-runtime` for a corpus captured from actual
+execution. This is a caller-declared label; it does not authenticate the corpus.
+
+Protocol `state.*.json` files are trusted operator-local checkpoints.
+`protocol audit` checks the certificate hash chain's internal consistency;
+`certificate_chain_valid: true` does not authenticate the state or validate its
+measurement values. See the [protocol state trust contract](docs/protocol-state-trust.md).
+
+`compile`, `certify`, `paradox`, and `sacrifice` write a local SQLite ledger.
+Its directory must be writable; its location depends on the working directory
+([ledger path rules](docs/operational-gates.md#ledger-location-and-write-access)).
+
+`audit-graph` returns zero when it successfully produces a diagnostic report,
+including reports that reject the graph; inspect the verdict and LIVE blockers.
+Its exit status is not an acceptance certificate. Graph `CORRIGIBLE: SUPPORTED`
+checks the constructed supervisory override projection; it does not establish
+that a deployed agent obeys intervention. Observable determinacy is skipped for
+graphs above the current exhaustive limit of ten nodes, including the four
+headline graphs; skipped checks prevent protocol compilation. The
+[graph-to-kernel limits](FRAMEWORK-LIMITS.md#2-auditsubject-bridge-coverage-is-partial)
+distinguish these diagnostics from the kernel's axioms.
+
+The CLI's raw graph `cv` and the worked spectral carrier's `cv` are different
+quantities. For Codex, the raw fixture reports `16/1`, while the derived carrier
+has `cv = 1` and `C* = 1/10`; see the
+[carrier boundary](docs/audit-bundle-schema.md#capability-threshold).
+A bare exported graph carries
+no source dependency analysis, so the report marks that boundary as unassessed.
+Use `--source-dir tests/fixtures` instead of `--graph /tmp/sample.graph.json` to
+include source extraction and dependency evidence.
 
 Canonical policy examples use `.rule.toml` and `.graph.toml` files under
 [`examples/`](examples/).
@@ -500,7 +680,7 @@ the explicit maintenance boundary for future public-spine rows.
 | Forcing argument (impossibility) | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` | The reachable peer-relative decisive stage cannot satisfy all diagnostics. | `lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103` |
 | Activation gate | `noUndeclaredSacrificeImplication` | Interface implication: the complete-surface activation gate projects the deployment direction from the compatibility iff, so the kernel must declare its sacrifice. | `lean/Legitimacy/Safety/KernelSafety/BinaryDecisionPipeline.lean:145` |
 | Semantic bridge | `semanticKernel_iff_runtime_diagnostic_spectral_layers` | Compatibility unfolding: the strengthened semantic-kernel contract decomposes into runtime, diagnostic, and spectral conjuncts. | `lean/Legitimacy/Results/SemanticBridge.lean:74` |
-| Three-valued frontier | `three_valued_composition_inadmissibility` | A third (escalate) verdict does not escape the obstruction; parametric via `three_valued_escalationPolicyWitness_composition_inadmissibility`. | `lean/Legitimacy/Results/Composition.lean:519` |
+| Three-valued frontier | `three_valued_composition_inadmissibility` | A third (escalate) verdict does not escape the obstruction; parametric via `three_valued_escalationPolicyWitness_composition_inadmissibility`. | `lean/Legitimacy/Results/Composition.lean:536` |
 | Multi-principal frontier | `majorityQuorumRule_fails_arrow_triple` | The majority-quorum witness fails the Arrow triple; pairwise witnesses are packaged by `multi_principal_pairwise_achievability_with_majorityQuorum_obstruction`. | `lean/Legitimacy/Results/MultiPrincipal.lean:695` |
 | Safety stack | `stateful_agent_schedule_safety` | No-silent-degradation schedule-level safety over the reachable state space. | `lean/Legitimacy/Safety/KernelSafety/StatefulScheduleSafety.lean:179` |
 | Spectral composition | `capability_scaling_shared_cliff` | Composition package that ties the peer-diagnostic obstruction together with positive CV, C* threshold, channel bounds, reachability, and activation-gate fields over one shared substrate (the peer-diagnostic obstruction is the first field of its result type); inhabited by `exampleCapabilityScalingSubstrate`. | `lean/Legitimacy/Results/CapabilityScalingKernelSafety.lean:639` |

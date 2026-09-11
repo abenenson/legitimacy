@@ -3,14 +3,10 @@ set -euo pipefail
 
 # Public-artifact release gate.
 #
-# Fails closed when internal workspace/process residue or stale release-prep
-# markers leak into the public tree: tracked task-tracker files, tracked
-# internal-only docs, co-author trailers, draft markers in papers/, and (when
-# the maintainer denylist is present) internal milestone/roadmap/process
-# vocabulary and local workstation paths.
-#
-# The maintainer-only vocabulary checks live in the gitignored
-# scripts/maintainer-denylist.sh; on a public clone they skip gracefully.
+# Fails closed when tracked workspace/process residue or stale release-prep
+# markers leak into the public tree: task-tracker files, internal-only docs,
+# co-author trailers, and draft/publication markers. Optional maintainer-local
+# vocabulary strengthening is outside this tracked verdict.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 failures=0
@@ -98,16 +94,6 @@ if ((${#public_paths[@]} > 0)); then
     "remove Co-authored-by trailers from public prose/code trees" \
     '^Co-authored-by:' \
     "${public_paths[@]}"
-fi
-
-# Maintainer-only vocabulary checks (gitignored denylist; public clones skip).
-DENYLIST="$ROOT/scripts/maintainer-denylist.sh"
-if [[ -f "$DENYLIST" ]]; then
-  # shellcheck source=/dev/null
-  source "$DENYLIST"
-  run_maintainer_vocab_checks "$ROOT" || failures=1
-else
-  echo "note: maintainer denylist absent; internal-vocabulary checks skipped (public clone)"
 fi
 
 if [[ -f "$ROOT/papers/README.md" ]] && grep -RInHE 'Draft Paper Candidates' "$ROOT/papers/README.md"; then

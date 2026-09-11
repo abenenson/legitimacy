@@ -211,3 +211,109 @@ fn certificate_certify_rejects_wrong_claude_permissions_outcome() {
 
     assert!(error.to_string().contains("outcome mismatch"));
 }
+
+#[test]
+fn certificate_rejects_nonfinite_and_extreme_outcomes() {
+    let (rule, claims, claimants, estate, family) = permissions_runtime();
+    let compiled = compile(&rule, &claims, &estate, &claimants, &family).unwrap();
+    let context = CertificationContext {
+        compiled_rule: &compiled,
+        rule: &rule,
+        claims: &claims,
+        estate: &estate,
+    };
+    for claimant_id in ["Read", "WebFetch"] {
+        for outcome in [
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+            f64::MAX,
+            -f64::MAX,
+        ] {
+            let result = certify(
+                &context,
+                "Adversarial numeric outcome",
+                claimant_id,
+                outcome,
+                BTreeMap::new(),
+            );
+            assert!(
+                matches!(
+                    result,
+                    Err(legitimacy::LegitimacyError::CertifiedOutcomeMismatch { .. })
+                ),
+                "must refuse {claimant_id} outcome {outcome}: {result:?}"
+            );
+        }
+    }
+}
+
+#[test]
+fn certificate_cli_refuses_nonfinite_outcomes_without_persisting_certificates() {
+    use std::{
+        fs,
+        process::Command,
+        time::{SystemTime, UNIX_EPOCH},
+    };
+    let nonce = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
+    let scratch = std::env::temp_dir().join(format!(
+        "legitimacy-certify-nonfinite-{}-{nonce}",
+        std::process::id()
+    ));
+    fs::create_dir(&scratch).unwrap();
+    fs::write(scratch.join("Cargo.toml"), "# isolated test ledger root\n").unwrap();
+    let policy = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("examples/claude-agent-sdk-permissions.rule.toml");
+    for outcome in ["inf", "-inf", "NaN", "1e309"] {
+        let output = Command::new(env!("CARGO_BIN_EXE_legitimacy"))
+            .current_dir(&scratch)
+            .arg("certify")
+            .arg(&policy)
+            .args(["--claimant", "WebFetch", &format!("--outcome={outcome}")])
+            .output()
+            .unwrap();
+        assert!(
+            !output.status.success(),
+            "must refuse {outcome}: {output:?}"
+        );
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("\"admissible\": true"));
+        assert!(
+            String::from_utf8_lossy(&output.stderr).contains("outcome mismatch"),
+            "must reach numeric validation, not fail setup: {output:?}"
+        );
+    }
+    let ledger = scratch.join(".legitimacy/ledger.sqlite3");
+    if ledger.exists() {
+        let db = rusqlite::Connection::open_with_flags(
+            &ledger,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )
+        .unwrap();
+        let count: i64 = db
+            .query_row("SELECT COUNT(*) FROM certificates", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(
+            count, 0,
+            "rejected numeric inputs must not persist certificates"
+        );
+    }
+    let allowed = Command::new(env!("CARGO_BIN_EXE_legitimacy"))
+        .current_dir(&scratch)
+        .arg("certify")
+        .arg(&policy)
+        .args(["--claimant", "Read", "--outcome=1"])
+        .output()
+        .unwrap();
+    assert!(
+        allowed.status.success(),
+        "positive certificate control: {allowed:?}"
+    );
+    let certificate: serde_json::Value = serde_json::from_slice(&allowed.stdout).unwrap();
+    assert_eq!(certificate["outcome"], 1.0);
+    assert_eq!(certificate["admissible"], true);
+    // Disposable fixture ledger only; never the caller's real ledger.
+    fs::remove_dir_all(&scratch).unwrap();
+}

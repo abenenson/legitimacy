@@ -125,6 +125,22 @@ one-decision-per-use rate converse by itself.
 `Safety.stateful_agent_schedule_safety`
 (`lean/Legitimacy/Safety/KernelSafety/StatefulScheduleSafety.lean:179`) generalizes that shape to covered stateful schedules. Each realized action before the queried horizon must be classified as kernel-governed or certificate-emitting; under that coverage hypothesis, the same invariant-or-certificate conclusion holds. Intervention-aware, nondeterministic, and fair-prefix variants are supporting schedule theorems.
 
+`CompiledGovernance.ClaimDecomposition`
+(`lean/Legitimacy/Protocol/CompiledStepPolicy.lean:80`) supplies the narrower
+compiled claim-policy seam: ordered claims are appended, singleton permits and
+composed denials are both decided by the same `compiled.graph`, and the
+peer-graph fixtures exhibit both benign and local-permit/composed-deny profiles.
+This is not yet a kernel-action trajectory. The next binding must map one exact
+nonempty `KernelStep.action_trace` to claims in order and separately prove, or
+explicitly assume, the replay simulation law.
+
+A `MonitoredSacrificeCertificate` records a target-invariant-carrying
+`KernelStep` and a fired monitoring obligation, but it does not contain a
+`KernelAxiomViolation`. Consequently
+`compiledClaimAttack_monitorRetag_ofMonitorEvidence` is a conditional monitor
+retag: it cannot establish kernel-axiom failure, action/claim causality, or
+detection completeness.
+
 #### 5. Protocol Activation Gate
 
 `ConstitutionalAIBehavioralLineage.constitutionalAI_zero_consistency_vulnerability_implies_game_strategyproof`

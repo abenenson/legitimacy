@@ -14,6 +14,7 @@ pub mod certificate;
 pub mod cli_runtime;
 pub mod compiler;
 pub mod error;
+pub mod executed_composition;
 pub mod extract;
 pub mod factor;
 pub mod graph;
@@ -29,6 +30,7 @@ pub mod rules;
 pub mod sacrifice;
 pub mod safety_spec_reduction;
 pub mod spectral;
+pub mod trajectory;
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -140,6 +142,24 @@ pub use safety_spec_reduction::{
     no_silent_rule_layer_degradation, safety_spec_reduces_to_kernel_audit,
     safety_spec_reduction_example_artifact, safety_spec_reduction_example_obligations,
     semantic_bridge_failure_artifact,
+};
+pub use trajectory::{
+    AgentActionEventV0, ArtifactBindingV0, BinaryPolicyDecisionV0,
+    DeclaredTrajectoryValidationContextV0, EncodedOccurrenceClaimV0, EventPolicyReceiptV0,
+    EvidenceV0, EvidencedV0, ExactRawRecordSetV0, InspectedTrajectoryReplayCandidateV0,
+    NormalizedEventKindV0, NormalizedValueV0, RawCaptureSealV0, RawRecordReferenceV0,
+    ReplayAuthorityErrorCodeV0, ReplayAuthorityErrorV0, ReplayAuthoritySigningKeyV0,
+    ReplayAuthorityTrustPolicyV0, ReplayErrorCodeV0, ReplayErrorV0, ReplayRecordV0,
+    SignedReplayAuthorityReceiptV0, SourceLocatorV0, TemporalCompositionKindV0,
+    TemporalCompositionResultV0, TrajectoryCompositionErrorCodeV0, TrajectoryCompositionErrorV0,
+    TrajectoryCompositionPolicyArtifactV0, TrajectoryCompositionResultV0,
+    TrajectoryReplayCandidateV0, TrajectoryTraceV0, TrajectoryValidationContextV0,
+    UnverifiedReplayAuthorityReceiptV0, ValidatedTrajectoryTraceV0,
+    VerifiedReplayAuthorityReceiptV0, VerifiedTrajectoryReplayV0, artifact_digest_v0,
+    evaluate_replay_bound_composition_v0, issue_trajectory_replay_authority_receipt_v0,
+    raw_capture_seal_v0, raw_record_digest_v0, source_locator_digest_v0, trajectory_digest_v0,
+    trajectory_replay_candidate_v0, trajectory_schema_binding_v0,
+    verify_replay_authority_receipt_v0, verify_trajectory_replay_v0,
 };
 
 /// Default tolerance for axiom checks.
@@ -464,9 +484,11 @@ impl Allocation {
     pub fn validate_feasible(&self, estate: &Estate) -> Result<(), LegitimacyError> {
         let total_allocated: f64 = self.values().sum();
         let estate_total = estate.total.value();
-        let tolerance = EPSILON + EPSILON * (total_allocated.abs() + estate_total.abs());
+        // Scale before adding to avoid overflow from otherwise finite operands.
+        // An overflowing allocation sum must fail, never pass as inf <= inf.
+        let tolerance = EPSILON + EPSILON * total_allocated.abs() + EPSILON * estate_total.abs();
 
-        if total_allocated <= estate_total + tolerance {
+        if total_allocated.is_finite() && total_allocated - estate_total <= tolerance {
             return Ok(());
         }
 

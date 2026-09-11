@@ -1,0 +1,16 @@
+{"type":"thread.started","thread_id":"00000000-0000-7000-8000-000000000001"}
+{"type":"error","message":"synthetic pre-turn diagnostic"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"synthetic configuration warning"}}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"item_1","type":"command_execution","command":"synthetic-command","aggregated_output":"","exit_code":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"synthetic-command","aggregated_output":"synthetic output","exit_code":0,"status":"completed"}}
+{"type":"item.started","item":{"id":"item_2","type":"file_change","changes":[{"path":"synthetic/a.txt","kind":"add"},{"path":"synthetic/b.txt","kind":"update"}],"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_2","type":"file_change","changes":[{"path":"synthetic/a.txt","kind":"add"},{"path":"synthetic/b.txt","kind":"update"}],"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"synthetic response"}}
+{"type":"item.completed","item":{"id":"item_4","type":"reasoning","text":"synthetic public summary"}}
+{"type":"item.completed","item":{"id":"item_5","type":"error","message":"synthetic item diagnostic"}}
+{"type":"error","message":"synthetic nonterminal stream error"}
+{"type":"item.started","item":{"id":"item_6","type":"todo_list","items":[{"text":"synthetic first step","completed":false},{"text":"synthetic second step","completed":false}]}}
+{"type":"item.updated","item":{"id":"item_6","type":"todo_list","items":[{"text":"synthetic first step","completed":true},{"text":"synthetic second step","completed":false}]}}
+{"type":"item.completed","item":{"id":"item_6","type":"todo_list","items":[{"text":"synthetic first step","completed":true},{"text":"synthetic second step","completed":false}]}}
+{"type":"turn.completed","usage":{"input_tokens":11,"cached_input_tokens":2,"output_tokens":7,"reasoning_output_tokens":3}}

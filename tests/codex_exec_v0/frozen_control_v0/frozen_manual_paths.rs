@@ -1,0 +1,32 @@
+pub(super) const ADAPTER_CORE_PATHS: &[&str] = &[
+    "src/trajectory/codex_exec_v0/source_bindings.rs",
+    "src/trajectory/codex_exec_v0/bundle.rs",
+    "src/trajectory/codex_exec_v0/bundle_wire.rs",
+    "src/trajectory/codex_exec_v0/error.rs",
+    "src/trajectory/codex_exec_v0/event.rs",
+    "src/trajectory/codex_exec_v0/event_wire.rs",
+    "src/trajectory/codex_exec_v0/framing.rs",
+    "src/trajectory/codex_exec_v0/fsm.rs",
+    "src/trajectory/codex_exec_v0/mapping.rs",
+    "src/trajectory/codex_exec_v0/mod.rs",
+    "src/trajectory/codex_exec_v0/receipt.rs",
+    "src/trajectory/codex_exec_v0/receipt_canonical.rs",
+    "src/trajectory/codex_exec_v0/receipt_context.rs",
+    "src/trajectory/codex_exec_v0/receipt_debug.rs",
+    "src/trajectory/codex_exec_v0/receipt_hex.rs",
+    "src/trajectory/codex_exec_v0/receipt_nonce.rs",
+    "src/trajectory/codex_exec_v0/receipt_validate.rs",
+    "src/trajectory/codex_exec_v0/receipt_wire.rs",
+    "src/trajectory/codex_exec_v0/receipt_workspace.rs",
+    "src/trajectory/mod.rs",
+    "src/trajectory/duplicate_json.rs",
+    "src/trajectory/canonical.rs",
+    "src/trajectory/validation.rs",
+    "src/trajectory/interchange.rs",
+];
+
+pub(super) const SANITIZER_ONLY_PATHS: &[&str] = &[
+    "src/trajectory/codex_exec_v0/sanitizer.rs",
+    "src/trajectory/codex_exec_v0/publication_authority.rs",
+    "src/trajectory/codex_exec_v0/lineage_sidecar.rs",
+];

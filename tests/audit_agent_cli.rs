@@ -7,6 +7,10 @@ use std::{
     process::Command,
 };
 
+#[path = "audit_agent_cli/lean_fixture_text.rs"]
+mod lean_fixture_text;
+use lean_fixture_text::assert_audit_agent_graph_text_matches_lean_fixture_constant;
+
 fn theorem_options() -> ExtractionOptions {
     ExtractionOptions {
         allow_partial: false,
@@ -140,143 +144,6 @@ fn assert_fixture_extracts_to_committed_graph(source_path: &str, graph_path: &st
     );
 }
 
-fn assert_theorem_file_text_matches_graph(
-    lean_path: &str,
-    theorem_lean_path: &str,
-    graph_constant: &str,
-    graph_bound_theorems: &[&str],
-    graph: &Value,
-) {
-    let lean = fs::read_to_string(lean_path).unwrap();
-    let theorem_lean = if theorem_lean_path == lean_path {
-        lean.clone()
-    } else {
-        fs::read_to_string(theorem_lean_path).unwrap()
-    };
-    for theorem in graph_bound_theorems {
-        assert_theorem_statement_mentions_graph(
-            theorem_lean_path,
-            &theorem_lean,
-            theorem,
-            graph_constant,
-        );
-    }
-
-    let nodes = graph["nodes"].as_object().unwrap();
-    for (node_id, node) in nodes {
-        let binary = node["Binary"].as_object().unwrap();
-        assert!(
-            lean.contains(&format!(".binary {node_id:?}")),
-            "Lean fixture {lean_path} is missing binary node {node_id}"
-        );
-        let name = binary["name"].as_str().unwrap();
-        assert!(
-            lean.contains(&format!("{name:?}")),
-            "Lean fixture {lean_path} is missing node name {name}"
-        );
-        for gate in binary["gates"].as_array().unwrap() {
-            assert_lean_contains_gate(lean_path, &lean, gate);
-        }
-    }
-
-    for edge in graph["edges"].as_array().unwrap() {
-        let from = edge["from"].as_str().unwrap();
-        let to = edge["to"].as_str().unwrap();
-        let snippet =
-            format!("{{ fromNode := {from:?}, toNode := {to:?}, transform := .passThrough }}");
-        assert!(
-            lean.contains(&snippet),
-            "Lean fixture {lean_path} is missing edge {from} -> {to}"
-        );
-    }
-}
-
-fn assert_theorem_statement_mentions_graph(
-    lean_path: &str,
-    lean: &str,
-    theorem: &str,
-    graph_constant: &str,
-) {
-    let statement = theorem_statement(lean, theorem)
-        .unwrap_or_else(|| panic!("Lean fixture {lean_path} is missing theorem {theorem}"));
-    assert!(
-        statement.contains(graph_constant),
-        "theorem {theorem} in {lean_path} does not mention graph constant {graph_constant}"
-    );
-}
-
-fn theorem_statement<'a>(lean: &'a str, theorem: &str) -> Option<&'a str> {
-    let declaration = format!("theorem {theorem}");
-    let start = lean.find(&declaration)?;
-    let rest = &lean[start..];
-    let end = rest.find(":= by")?;
-    Some(&rest[..end])
-}
-
-fn assert_lean_contains_gate(lean_path: &str, lean: &str, gate: &Value) {
-    let gate = gate.as_object().unwrap();
-    let (kind, payload) = gate.iter().next().unwrap();
-    let snippet = match kind.as_str() {
-        "ExactMatch" => {
-            let value = payload["value"].as_str().unwrap();
-            let decision = lean_decision(payload["decision"].as_str().unwrap());
-            format!(".exactMatch {value:?} {decision}")
-        }
-        "ThresholdGate" => {
-            let field = payload["field"].as_str().unwrap();
-            let min = payload["min"].as_f64().unwrap();
-            let min = if min.fract() == 0.0 {
-                format!("{}", min as i64)
-            } else {
-                min.to_string()
-            };
-            let decision = lean_decision(payload["decision"].as_str().unwrap());
-            format!(".thresholdGate {field:?} {min} {decision}")
-        }
-        other => panic!("binding test does not yet render {other} gates"),
-    };
-    assert!(
-        lean.contains(&snippet),
-        "Lean fixture {lean_path} is missing gate {snippet}"
-    );
-}
-
-fn lean_decision(decision: &str) -> &'static str {
-    match decision {
-        "Permit" => ".permit",
-        "Deny" => ".deny",
-        "Escalate" => ".escalate",
-        other => panic!("unknown graph decision {other}"),
-    }
-}
-
-fn assert_audit_agent_graph_text_matches_lean_fixture_constant(
-    target: &str,
-    source_path: &str,
-    graph_path: &str,
-    lean_path: &str,
-    graph_constant: &str,
-    graph_bound_theorems: &[&str],
-) {
-    let bundle = audit_agent_bundle(target, source_path);
-    let emitted = bundle["extracted_governance_graph"].clone();
-    let committed = committed_graph_value(graph_path);
-    assert_eq!(
-        emitted, committed,
-        "audit-agent extract-mode graph for {target} drifted from committed fixture"
-    );
-    let theorem_lean_path = bundle["lean"]["file_path"]
-        .as_str()
-        .expect("audit-agent bundle should include lean.file_path");
-    assert_theorem_file_text_matches_graph(
-        lean_path,
-        theorem_lean_path,
-        graph_constant,
-        graph_bound_theorems,
-        &committed,
-    );
-}
-
 fn assert_committed_fixture_theorems_apply(bundle: &Value) {
     assert_eq!(
         bundle["lean"]["theorem_applicability"],
@@ -295,6 +162,18 @@ fn assert_divergent_extraction_is_diagnostic_only(
     committed_graph_path: &str,
 ) {
     let bundle = audit_agent_bundle(target, source_path.to_str().unwrap());
+    assert_eq!(
+        bundle["verdict"]["reason"]["code"],
+        "extracted_graph_rejected"
+    );
+    assert_eq!(
+        bundle["verdict"]["reason"]["named_feature"],
+        "extracted_governance_graph"
+    );
+    assert!(
+        bundle["repaired_alternative"].is_null(),
+        "a fixture-specific repair theorem must not be attached to a different graph"
+    );
     let actual_hash = extracted_graph_hash(source_path.to_str().unwrap());
     let expected_hash = extracted_graph_hash(committed_source_path);
     let actual_nodes = bundle["extracted_governance_graph"]["nodes"]
@@ -616,11 +495,14 @@ fn audit_agent_replay_mode_runs_codex_fixture_and_emits_evidence_bundle() {
         "lean/Legitimacy/CaseStudies/CodexHarness.lean"
     );
     assert_eq!(bundle["capability_threshold"]["c_star"], "1/10");
-    assert!(
-        bundle["activation_gate"]["refusal"]
-            .as_str()
-            .unwrap()
-            .contains("DeclaredSacrifice")
+    // This fixture exceeds the observable-determinacy compilation bound.
+    // An unsupported check cannot be cured by inventing a sacrifice certificate.
+    assert_eq!(bundle["activation_verdict"]["kind"], "rejected");
+    assert_eq!(bundle["activation_gate"]["state"], "compilation_failed");
+    assert!(bundle["activation_gate"]["required_certificate_format"].is_null());
+    assert_eq!(
+        bundle["activation_gate"]["required_certificates"],
+        serde_json::json!([])
     );
 }
 
@@ -969,4 +851,95 @@ fn audit_agent_refuses_unknown_target_with_reason_code() {
     );
     let bundle: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(bundle["reason_code"], "unknown_target");
+}
+
+#[test]
+fn divergent_extraction_that_compiles_does_not_require_a_phantom_sacrifice() {
+    let source = temp_fixture_copy("examples/codex-cli-fixture", "compilation-success");
+    for entry in fs::read_dir(&source).unwrap() {
+        let entry = entry.unwrap();
+        if entry.file_name() != "compact.rs" {
+            if entry.file_type().unwrap().is_dir() {
+                fs::remove_dir_all(entry.path()).unwrap();
+            } else {
+                fs::remove_file(entry.path()).unwrap();
+            }
+        }
+    }
+    let compact = source.join("compact.rs");
+    let text = fs::read_to_string(&compact).unwrap();
+    let preamble = text.split("fn on_PreCompact").next().unwrap();
+    fs::write(&compact, format!("{preamble}fn on_PreCompact(input: HookInput) -> HookResult {{ HookResult::Allow }}\nregister_hook!(\"PreCompact\", on_PreCompact);\n")).unwrap();
+    let artifacts = extract_governance_artifacts(&source, theorem_options()).unwrap();
+    let declared = legitimacy::declare(artifacts.graph, vec![]).unwrap();
+    legitimacy::compile_protocol(declared).expect("probe must really compile without sacrifices");
+    let output = Command::new(env!("CARGO_BIN_EXE_legitimacy-audit-agent"))
+        .args(["--target", "codex-cli", source.to_str().unwrap()])
+        .output()
+        .unwrap();
+    let bundle: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(bundle["activation_verdict"]["kind"], "admissible");
+    assert_eq!(
+        bundle["activation_gate"]["state"],
+        "compiled_without_sacrifice"
+    );
+    assert!(bundle["activation_gate"]["required_certificate_format"].is_null());
+    assert_eq!(
+        bundle["activation_gate"]["required_certificates"],
+        serde_json::json!([])
+    );
+    assert!(bundle["repaired_alternative"].is_null());
+    assert!(bundle["lean"]["theorem_class"].is_null());
+    fs::remove_dir_all(source).unwrap();
+}
+
+// This destructive-to-rebuildable-fixtures probe is explicitly serialized by the
+// release verifier after the ordinary suite; the guard restores bytes on panic.
+#[test]
+#[ignore = "mutates a checkout fixture; run alone with --test-threads=1"]
+fn runtime_fixture_substitution_cannot_rebind_lean_theorems() {
+    struct RestoreFixture {
+        path: PathBuf,
+        bytes: Vec<u8>,
+    }
+    impl Drop for RestoreFixture {
+        fn drop(&mut self) {
+            fs::write(&self.path, &self.bytes).expect("restore graph fixture");
+        }
+    }
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/graphs/codex-graph.json");
+    let restore = RestoreFixture {
+        bytes: fs::read(&path).unwrap(),
+        path,
+    };
+    let expected: Value = serde_json::from_slice(&restore.bytes).unwrap();
+    let expected_hash = format!("sha256:{:x}", Sha256::digest(&restore.bytes));
+    fs::copy("examples/graphs/claude-agent-sdk-graph.json", &restore.path).unwrap();
+    for missing in [false, true] {
+        if missing {
+            fs::remove_file(&restore.path).unwrap();
+        }
+        let output = Command::new(env!("CARGO_BIN_EXE_legitimacy-audit-agent"))
+            .args(["--target", "codex-cli", "--mode", "replay-committed"])
+            .output()
+            .unwrap();
+        let bundle: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(bundle["replayed_governance_graph"], expected);
+        assert_eq!(
+            bundle["provenance"]["committed_graph_sha256"],
+            expected_hash
+        );
+        assert_eq!(
+            bundle["provenance"]["source_path"],
+            "embedded:examples/graphs/codex-graph.json"
+        );
+        assert_committed_fixture_theorems_apply(&bundle);
+        let extracted = audit_agent_bundle("codex-cli", "examples/claude-agent-sdk-fixture");
+        assert_eq!(
+            extracted["lean"]["theorem_applicability"],
+            "extracted_diagnostic_only"
+        );
+        assert!(extracted["lean"]["theorem_class"].is_null());
+        assert!(extracted["repaired_alternative"].is_null());
+    }
 }

@@ -1,0 +1,378 @@
+{
+  "format": "legitimacy.codex-exec-v0.adapter-build-input",
+  "version": "0",
+  "package": {
+    "name": "legitimacy",
+    "version": "1.1.1",
+    "edition": "2024"
+  },
+  "normative_contract": {
+    "version": "0",
+    "facts": [
+      {
+        "id": "bindings",
+        "adapter": {
+          "identity": "legitimacy.codex-exec-v0.adapter",
+          "domain": "legitimacy.codex-exec-v0.adapter-source-manifest.v0",
+          "scopes": [
+            "adapter-core"
+          ]
+        },
+        "sanitizer": {
+          "identity": "legitimacy.codex-exec-v0.sanitizer",
+          "domain": "legitimacy.codex-exec-v0.sanitizer-registered-source-manifest.v0",
+          "scopes": [
+            "adapter-core",
+            "sanitizer"
+          ]
+        },
+        "sanitizer_sources": [
+          "sanitizer.rs",
+          "sanitizer_jwt.rs",
+          "publication_authority.rs",
+          "lineage_sidecar.rs"
+        ],
+        "cli_publication": {
+          "identity": "legitimacy.codex-exec-v0.cli-publication",
+          "domain": "legitimacy.codex-exec-v0.cli-publication-registered-source-manifest.v0",
+          "scopes": [
+            "selected-cargo-build",
+            "normative-contract"
+          ]
+        },
+        "fixture_spec": {
+          "identity": "legitimacy.codex-exec-v0.fixture-spec",
+          "domain": "legitimacy.codex-exec-v0.fixture-source-manifest.v0",
+          "scopes": [
+            "fixture-spec"
+          ]
+        }
+      },
+      {
+        "id": "entropy",
+        "platform": "Linux",
+        "source": "rustix::rand::getrandom",
+        "flags": "empty",
+        "nonce_bytes": 32,
+        "fill": "retry-interrupted-accept-bounded-partial",
+        "reject": "unsupported-platform-zero-oversized-failed-all-zero"
+      },
+      {
+        "id": "process-failure-precedence",
+        "primary": [
+          "capture-stdout-overflow",
+          "capture-stderr-overflow",
+          "capture-stdin",
+          "stream-state",
+          "capture-timeout",
+          "capture-live-descendant"
+        ],
+        "live_descendant": "known-main-status-with-fresh-live-owned-descendant",
+        "cleanup": "capture-cleanup",
+        "cleanup_dominates": [
+          "cleanup-operation-error",
+          "worker-join-uncertainty",
+          "final-absence-unproven"
+        ],
+        "success_requires": [
+          "fresh-process-tree-absence",
+          "all-workers-complete"
+        ]
+      },
+      {
+        "id": "sanitized-identity",
+        "domain": "legitimacy.codex-exec-v0.sanitized-thread-id.v0",
+        "inputs": [
+          "asserted-nonce-source-label",
+          "nonce-bytes-32"
+        ],
+        "projection": [
+          "uuid-version-7",
+          "rfc-variant",
+          "canonical-lowercase"
+        ]
+      },
+      {
+        "id": "adaptation-flow",
+        "steps": [
+          "adapt-parent",
+          "sanitize-child",
+          "adapt-exact-child",
+          "build-owner-private-sidecar",
+          "consume-publication-authority",
+          "independently-readapt-pair",
+          "begin-filesystem-publication"
+        ]
+      },
+      {
+        "id": "anonymous-publication",
+        "temporary": "same-directory-o-tmpfile",
+        "mode": "0600",
+        "verification": [
+          "owner",
+          "type",
+          "link-count",
+          "content",
+          "stable-metadata"
+        ],
+        "durability": [
+          "sync-file",
+          "sync-directory"
+        ]
+      },
+      {
+        "id": "pair-order",
+        "precondition": "validate-semantic-pair",
+        "phases": [
+          "prepare-owner-private-sidecar",
+          "prepare-public-output",
+          "link-owner-private-sidecar",
+          "revalidate-committed-sidecar-immediately-before-public-link",
+          "link-public-output",
+          "revalidate-sidecar-and-public-output"
+        ]
+      },
+      {
+        "id": "commit-point",
+        "operation": "linkat",
+        "replacement": "no-clobber",
+        "point": "successful-link"
+      },
+      {
+        "id": "publication-uncertainty",
+        "pre_link": "no-created-final-name",
+        "post_link": "linked-name-may-remain-on-failure",
+        "classes": [
+          "output-identity-uncertain",
+          "output-integrity-uncertain",
+          "durability-uncertain"
+        ],
+        "cleanup": "do-not-remove-linked-name"
+      }
+    ]
+  },
+  "cargo_contract": {
+    "manifest": "Cargo.toml",
+    "build_script": "build.rs",
+    "normative_contract": "docs/codex-exec-v0-adapter.md",
+    "automatic_discovery": {
+      "lib": false,
+      "bin": false
+    },
+    "library_target": {
+      "name": "legitimacy",
+      "path": "src/lib.rs"
+    },
+    "binary_targets": [
+      {
+        "name": "legitimacy",
+        "path": "cli/main.rs"
+      },
+      {
+        "name": "legitimacy-audit-agent",
+        "path": "src/bin/legitimacy-audit-agent.rs"
+      },
+      {
+        "name": "import_codex_observed_runtime",
+        "path": "src/bin/import_codex_observed_runtime.rs"
+      },
+      {
+        "name": "legitimacy-codex-capture-v0",
+        "path": "src/bin/legitimacy-codex-capture-v0.rs"
+      },
+      {
+        "name": "legitimacy-executed-composition",
+        "path": "src/bin/legitimacy-executed-composition.rs"
+      }
+    ],
+    "compiler_read_inputs": {
+      "binary": [
+        "cli/audit_graph.rs",
+        "cli/commands.rs",
+        "cli/corpus.rs",
+        "cli/input.rs",
+        "cli/main.rs",
+        "cli/protocol_support.rs",
+        "cli/reporting.rs",
+        "cli/trajectory.rs",
+        "cli/trajectory/linux_output.rs",
+        "cli/trajectory/linux_output_rollback.rs",
+        "cli/trajectory/linux_output_set.rs",
+        "cli/trajectory/linux_output_transaction.rs",
+        "cli/trajectory/linux_path.rs",
+        "cli/trajectory_composition.rs",
+        "cli/trajectory_replay.rs",
+        "cli/witness.rs",
+        "cli/workflow.rs"
+      ],
+      "library": [
+        "fixtures/executed-composition-v1/generated/table.json",
+        "fixtures/executed-composition-v1/policy.json",
+        "fixtures/trajectory-composition-v0/policy.toml",
+        "schemas/trajectory-v0.schema.json",
+        "src/axioms/diagnostics/binary.rs",
+        "src/axioms/diagnostics/consistency.rs",
+        "src/axioms/diagnostics/graph/consistency.rs",
+        "src/axioms/diagnostics/graph/mod.rs",
+        "src/axioms/diagnostics/graph/monotonicity.rs",
+        "src/axioms/diagnostics/graph/solidarity.rs",
+        "src/axioms/diagnostics/graph/strategyproofness.rs",
+        "src/axioms/diagnostics/mod.rs",
+        "src/axioms/diagnostics/monotonicity.rs",
+        "src/axioms/diagnostics/solidarity.rs",
+        "src/axioms/diagnostics/strategyproofness.rs",
+        "src/axioms/kernel/certifiable.rs",
+        "src/axioms/kernel/compositional.rs",
+        "src/axioms/kernel/corrigible.rs",
+        "src/axioms/kernel/mod.rs",
+        "src/axioms/kernel/nonvacuity.rs",
+        "src/axioms/kernel/observable.rs",
+        "src/axioms/mod.rs",
+        "src/behavioral/constitutional_ai_lineage.rs",
+        "src/behavioral/mod.rs",
+        "src/bin/legitimacy-codex-capture-v0.rs",
+        "src/certificate.rs",
+        "src/cli_runtime.rs",
+        "src/compiler.rs",
+        "src/error.rs",
+        "src/executed_composition/mod.rs",
+        "src/executed_composition/transport.rs",
+        "src/extract/ast_hash.rs",
+        "src/extract/audit.rs",
+        "src/extract/boundary.rs",
+        "src/extract/codex_observed_runtime.rs",
+        "src/extract/corpus_pack.rs",
+        "src/extract/kernelization.rs",
+        "src/extract/mod.rs",
+        "src/extract/pattern_support.rs",
+        "src/extract/patterns.rs",
+        "src/extract/python_hook_core_graph.rs",
+        "src/extract/python_hook_core_parser.rs",
+        "src/extract/python_parser.rs",
+        "src/extract/review.rs",
+        "src/extract/rust_hook_core_graph.rs",
+        "src/extract/rust_hook_core_parser.rs",
+        "src/extract/rust_parser.rs",
+        "src/extract/schedule_witness.rs",
+        "src/extract/spectral.rs",
+        "src/extract/ts_parser.rs",
+        "src/extract/typescript_approval_core_graph.rs",
+        "src/extract/typescript_approval_core_parser.rs",
+        "src/factor.rs",
+        "src/graph/builder.rs",
+        "src/graph/cycle.rs",
+        "src/graph/edge.rs",
+        "src/graph/mod.rs",
+        "src/graph/node.rs",
+        "src/graph/traverse.rs",
+        "src/harness.rs",
+        "src/harness_impls.rs",
+        "src/ledger.rs",
+        "src/ledger/chain/backfill.rs",
+        "src/ledger/chain/mod.rs",
+        "src/ledger/chain/verify.rs",
+        "src/lib.rs",
+        "src/mechanism.rs",
+        "src/monitor.rs",
+        "src/paradox.rs",
+        "src/paradox/graph.rs",
+        "src/policy/claude_dir.rs",
+        "src/policy/graph_parser.rs",
+        "src/policy/mod.rs",
+        "src/policy/parser.rs",
+        "src/protocol/formats.rs",
+        "src/protocol/mod.rs",
+        "src/protocol/state.rs",
+        "src/protocol/supervision.rs",
+        "src/protocol/transitions.rs",
+        "src/rules.rs",
+        "src/rules/divisor.rs",
+        "src/sacrifice.rs",
+        "src/safety_spec_reduction.rs",
+        "src/spectral/binary_decision_helpers.rs",
+        "src/spectral/coarse_grain.rs",
+        "src/spectral/concrete_graphs.rs",
+        "src/spectral/critical.rs",
+        "src/spectral/measure_theoretic.rs",
+        "src/spectral/mod.rs",
+        "src/spectral/noisy_threshold_closed_form.rs",
+        "src/spectral/non_peer_relative.rs",
+        "src/spectral/positive_procedure.rs",
+        "src/spectral/stackelberg.rs",
+        "src/trajectory/authority.rs",
+        "src/trajectory/canonical.rs",
+        "src/trajectory/codex_exec_v0/bundle.rs",
+        "src/trajectory/codex_exec_v0/bundle_wire.rs",
+        "src/trajectory/codex_exec_v0/error.rs",
+        "src/trajectory/codex_exec_v0/event.rs",
+        "src/trajectory/codex_exec_v0/event_wire.rs",
+        "src/trajectory/codex_exec_v0/framing.rs",
+        "src/trajectory/codex_exec_v0/fsm.rs",
+        "src/trajectory/codex_exec_v0/lineage_sidecar.rs",
+        "src/trajectory/codex_exec_v0/mapping.rs",
+        "src/trajectory/codex_exec_v0/mod.rs",
+        "src/trajectory/codex_exec_v0/process_capture.rs",
+        "src/trajectory/codex_exec_v0/process_capture_cleanup.rs",
+        "src/trajectory/codex_exec_v0/process_capture_output.rs",
+        "src/trajectory/codex_exec_v0/process_capture_platform.rs",
+        "src/trajectory/codex_exec_v0/process_capture_signal.rs",
+        "src/trajectory/codex_exec_v0/process_capture_supervision.rs",
+        "src/trajectory/codex_exec_v0/process_capture_supervisor.rs",
+        "src/trajectory/codex_exec_v0/publication_authority.rs",
+        "src/trajectory/codex_exec_v0/receipt.rs",
+        "src/trajectory/codex_exec_v0/receipt_canonical.rs",
+        "src/trajectory/codex_exec_v0/receipt_context.rs",
+        "src/trajectory/codex_exec_v0/receipt_debug.rs",
+        "src/trajectory/codex_exec_v0/receipt_hex.rs",
+        "src/trajectory/codex_exec_v0/receipt_nonce.rs",
+        "src/trajectory/codex_exec_v0/receipt_validate.rs",
+        "src/trajectory/codex_exec_v0/receipt_wire.rs",
+        "src/trajectory/codex_exec_v0/receipt_workspace.rs",
+        "src/trajectory/codex_exec_v0/sanitizer.rs",
+        "src/trajectory/codex_exec_v0/sanitizer_jwt.rs",
+        "src/trajectory/codex_exec_v0/source_bindings.rs",
+        "src/trajectory/composition.rs",
+        "src/trajectory/duplicate_json.rs",
+        "src/trajectory/interchange.rs",
+        "src/trajectory/mod.rs",
+        "src/trajectory/replay.rs",
+        "src/trajectory/validation.rs",
+        "tests/fixtures/codex-exec-v0/source-manifest.json"
+      ]
+    },
+    "canonical_object": "tests/fixtures/codex-exec-v0/adapter-build-input.json",
+    "selected_noncompiler_inputs": {
+      "cargo": [
+        "Cargo.lock",
+        "Cargo.toml"
+      ],
+      "build_script": [
+        "build.rs",
+        "examples/graphs/claude-agent-sdk-graph.json",
+        "examples/graphs/claude-code-graph.json",
+        "examples/graphs/codex-graph.json"
+      ],
+      "review_contract": [
+        "docs/codex-exec-v0-adapter.md"
+      ]
+    },
+    "repository_configuration": {
+      "present": [],
+      "classified_absent": [
+        ".cargo/config",
+        ".cargo/config.toml",
+        "rust-toolchain",
+        "rust-toolchain.toml"
+      ]
+    },
+    "bound_inputs_sha256": "sha256:118ac5e929c2a03e6f4b6c0419aaad30fd60f3a7b5c65fb9fb3a2b0def57197c",
+    "test_only_cli_rust_sources": [
+      "cli/tests.rs",
+      "cli/trajectory/linux_output_set_tests.rs",
+      "cli/trajectory/linux_output_tests.rs",
+      "cli/trajectory/linux_output_transaction_phase_tests.rs",
+      "cli/trajectory/linux_output_transaction_tests.rs",
+      "cli/trajectory/linux_path_tests.rs"
+    ]
+  }
+}

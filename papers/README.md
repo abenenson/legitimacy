@@ -61,7 +61,7 @@ the manuscript.
 - [§2 AI Control Case Study and Verdict](05-structural-audits.md#2-ai-control-case-study-and-verdict)
 - [§3 Sleeper-agent Monotonicity Test](05-structural-audits.md#3-sleeper-agent-monotonicity-test)
 - [§4 Constitutional AI Lineage](05-structural-audits.md#4-constitutional-ai-lineage)
-- [§5 Decomposition Attack Bridge](05-structural-audits.md#5-decomposition-attack-bridge)
+- [§5 Compiled Claim-Policy Decomposition](05-structural-audits.md#5-compiled-claim-policy-decomposition)
 - [§6 Codex Harness Worked Example](05-structural-audits.md#6-codex-harness-worked-example)
 - [§7 Self-Modification Boundary and Lifecycle](05-structural-audits.md#7-self-modification-boundary-and-lifecycle)
 - [§8 Conclusion: Rule-layer Audits as a Program](05-structural-audits.md#8-conclusion-rule-layer-audits-as-a-program)

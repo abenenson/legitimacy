@@ -24,11 +24,6 @@ release_gate_step_done() {
 }
 trap release_gate_step_done EXIT
 
-release_gate_step_begin maintainer-denylist-note
-# Verification gate, NOT the publish gate: a fresh public clone legitimately lacks the
-# gitignored maintainer denylist and must still be able to run this gate. The publish
-# path enforces the scrub separately; here we only note its absence.
-[[ -f "$ROOT/scripts/maintainer-denylist.sh" ]] || echo "note: maintainer denylist absent; internal-vocabulary scrub is skipped here and must be enforced by the publish/migration step" >&2
 release_gate_step_begin canonical-axiom-inventory
 assert_canonical_axiom_inventory "$ROOT"
 release_gate_step_begin canonical-info-architecture
@@ -81,5 +76,8 @@ release_gate_step_begin stale-release-dir-check
 for stale_dir in "$ROOT/target/package" "$ROOT/target/tmp-crate"; do
   [[ ! -d "$stale_dir" ]] || fail "stale release packaging directory exists: ${stale_dir#$ROOT/}"
 done
+
+release_gate_step_begin selected-authority-release-gate
+bash "$ROOT/scripts/selected-authority-release-gate.sh"
 
 echo "release gate: OK"

@@ -1,8 +1,9 @@
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use legitimacy::{Certificate, GovernanceDriftAlert, LedgerAuditReport, extract::ExtractionMode};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, path::PathBuf};
 
+use crate::trajectory::CodexExecOutputTypeV0;
 use crate::{audit_graph, input::ClaimCorpusInputProvenance, witness};
 
 #[derive(Parser, Debug)]
@@ -156,6 +157,154 @@ pub(crate) enum Command {
         #[command(subcommand)]
         command: CorpusCommand,
     },
+    /// Adapt a sealed Codex 0.144.0 exec JSONL capture into a trajectory bundle.
+    AdaptCodexExecV0 {
+        /// Exact stdout JSONL attachment, including the final LF.
+        #[arg(long)]
+        raw_stdout_jsonl: PathBuf,
+        /// Private typed authority receipt for the exact attachment.
+        #[arg(long)]
+        authority_receipt: PathBuf,
+        /// Out-of-band expected commitment and downstream policy context.
+        #[arg(long)]
+        trusted_context: PathBuf,
+        /// Explicit private or shareable-sanitized output type.
+        #[arg(long, value_enum)]
+        output_type: CodexExecOutputTypeV0,
+        /// New output path; existing files are never replaced.
+        #[arg(long)]
+        output: PathBuf,
+        /// Owner-private lineage sidecar required for shareable-sanitized output.
+        #[arg(long, required_if_eq("output_type", "shareable-sanitized"))]
+        private_lineage_output: Option<PathBuf>,
+    },
+    /// Materialize the official canonical bytes of a separately validated trajectory.
+    CanonicalizeTrajectoryV0 {
+        #[command(flatten)]
+        inputs: TrajectoryValidationInputsV0,
+        /// New output path; existing files are never replaced.
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Build an unverified deterministic replay candidate from a validated trajectory.
+    BuildTrajectoryReplayCandidateV0 {
+        #[command(flatten)]
+        inputs: TrajectoryValidationInputsV0,
+        /// New output path; existing files are never replaced.
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Independently recompute and sign a replay-authority receipt.
+    IssueTrajectoryReplayAuthorityReceiptV0 {
+        #[command(flatten)]
+        inputs: TrajectoryValidationInputsV0,
+        /// Owner-private file containing exactly 32 Ed25519 secret-key bytes.
+        #[arg(long)]
+        authority_private_key: PathBuf,
+        /// Pinned lowercase authority issuer identity.
+        #[arg(long)]
+        issuer: String,
+        /// Pinned lowercase authority key identity.
+        #[arg(long)]
+        key_id: String,
+        /// Nonzero authority epoch accepted by the corresponding trust policy.
+        #[arg(long)]
+        authority_epoch: u64,
+        /// New output path; existing files are never replaced.
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Recompute replay integrity and verify a signed authority receipt.
+    VerifyTrajectoryReplayV0 {
+        #[command(flatten)]
+        inputs: TrajectoryValidationInputsV0,
+        /// Existing deterministic replay candidate JSON line.
+        #[arg(long)]
+        replay: PathBuf,
+        /// Independently issued signed replay-authority receipt JSON line.
+        #[arg(long)]
+        authority_receipt: PathBuf,
+        /// Separately configured pinned replay-authority trust policy JSON line.
+        #[arg(long)]
+        authority_trust_policy: PathBuf,
+        /// New verified-success output path; existing files are never replaced.
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Evaluate composition only from an adapter-derived Codex 0.144.0 trajectory.
+    ///
+    /// Re-adapts the exact stdout JSONL under the supplied input authority and trusted
+    /// adaptation context, then verifies the independently authorized replay against that
+    /// adapter-owned trace before evaluating the exact composition-policy bytes. This command
+    /// accepts no caller-authored trace or normalized event values. It does not establish
+    /// completeness, truth, intent access, enforcement, concurrency safety, principal
+    /// discovery, or incident prevention.
+    EvaluateCodexExecCompositionV0 {
+        /// Exact Codex 0.144.0 stdout JSONL attachment, including the final LF.
+        #[arg(long)]
+        raw_stdout_jsonl: PathBuf,
+        /// Existing private typed Codex input-authority receipt for the exact attachment.
+        #[arg(
+            long,
+            requires = "trusted_adaptation_context",
+            conflicts_with = "shareable_sanitized_bundle"
+        )]
+        input_authority_receipt: Option<PathBuf>,
+        /// Existing trusted adaptation context binding private authority and policy.
+        #[arg(
+            long,
+            requires = "input_authority_receipt",
+            conflicts_with = "shareable_sanitized_bundle"
+        )]
+        trusted_adaptation_context: Option<PathBuf>,
+        /// Closed public sanitized bundle used as typed derived authority and context.
+        #[arg(
+            long,
+            required_unless_present = "input_authority_receipt",
+            conflicts_with = "input_authority_receipt"
+        )]
+        shareable_sanitized_bundle: Option<PathBuf>,
+        /// Optional owner-private sidecar for a separate exact parent-lineage admission.
+        #[arg(long, requires = "shareable_sanitized_bundle")]
+        private_lineage_sidecar: Option<PathBuf>,
+        /// Inspected deterministic replay candidate to verify against the adapted trace.
+        #[arg(long)]
+        replay_candidate: PathBuf,
+        /// Independently signed replay-authority receipt for the complete replay tuple.
+        #[arg(long)]
+        replay_authority_receipt: PathBuf,
+        /// Separately configured pinned replay-authority trust policy.
+        #[arg(long)]
+        replay_authority_trust_policy: PathBuf,
+        /// Exact canonical trajectory-composition policy bytes.
+        #[arg(long)]
+        composition_policy: PathBuf,
+        /// Legacy result path; requires both legacy trace paths and is not crash-atomic.
+        #[arg(long, requires_all = ["trace_output", "canonical_trace_output"], conflicts_with = "output_set")]
+        output: Option<PathBuf>,
+        /// Legacy official compact trace path; requires the complete legacy set.
+        #[arg(long, requires_all = ["output", "canonical_trace_output"], conflicts_with = "output_set")]
+        trace_output: Option<PathBuf>,
+        /// Legacy exact canonical trace path; requires the complete legacy set.
+        #[arg(long, requires_all = ["output", "trace_output"], conflicts_with = "output_set")]
+        canonical_trace_output: Option<PathBuf>,
+        /// New directory containing trace.json, canonical-trace.bin, and composition-result.json.
+        #[arg(long, required_unless_present = "output")]
+        output_set: Option<PathBuf>,
+    },
+}
+
+#[derive(Args, Debug)]
+pub(crate) struct TrajectoryValidationInputsV0 {
+    /// Closed TrajectoryTraceV0 JSON wire.
+    #[arg(long)]
+    pub(crate) trace: PathBuf,
+    /// Vendor-neutral JSON carrier containing exact ordered raw-record strings.
+    #[arg(long)]
+    pub(crate) raw_records: PathBuf,
+    /// Declared adapter, policy, capture, and derivation bindings; no derivation is executed.
+    #[arg(long)]
+    pub(crate) declared_context: PathBuf,
 }
 
 #[derive(Clone, Copy, Debug, ValueEnum)]

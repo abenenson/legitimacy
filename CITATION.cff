@@ -8,8 +8,7 @@ abstract: >-
 authors:
   - family-names: Benenson
     given-names: Adam
-version: "1.0.0"
-date-released: 2026-07-24
+version: "1.1.1"
 type: software
 license:
   - Apache-2.0

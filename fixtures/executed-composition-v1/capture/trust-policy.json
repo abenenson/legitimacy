@@ -1,0 +1,1 @@
+{"accepted_authority_epoch":1,"algorithm":"ed25519","issuer":"controlled-release-host","key_id":"ephemeral-capture-key","trust_policy_format":"legitimacy.trajectory.replay-authority-trust-policy","trust_policy_version":"0","verification_key":"ed25519:468059c32d21433f61f3cfc1aa0d76e7be70589b4f6408ff597545073d40bb76"}

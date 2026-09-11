@@ -98,8 +98,13 @@ fn ensure_matching_outcome(
     expected_outcome: f64,
     actual_outcome: f64,
 ) -> Result<(), LegitimacyError> {
-    let tolerance = EPSILON + EPSILON * (expected_outcome.abs() + actual_outcome.abs());
-    if (expected_outcome - actual_outcome).abs() <= tolerance {
+    // Scale each operand before adding: finite magnitudes can overflow a sum.
+    // Non-finite inputs must never pass via the IEEE `infinity <= infinity` case.
+    let tolerance = EPSILON + EPSILON * expected_outcome.abs() + EPSILON * actual_outcome.abs();
+    if expected_outcome.is_finite()
+        && actual_outcome.is_finite()
+        && (expected_outcome - actual_outcome).abs() <= tolerance
+    {
         return Ok(());
     }
 
@@ -144,4 +149,34 @@ fn civil_from_days(days_since_unix_epoch: i64) -> (i32, u32, u32) {
     let year = year + if month <= 2 { 1 } else { 0 };
 
     (year as i32, month as u32, day as u32)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn outcome_tolerance_cannot_overflow_for_finite_values() {
+        let compiled = CompiledRule {
+            name: "numeric-comparison".to_string(),
+            version: "1".to_string(),
+            axiom_verdicts: vec![],
+            strategyproofness: crate::StrategyproofnessVerdict::Strategyproof,
+            family_description: String::new(),
+            compiled_at: String::new(),
+        };
+        for (expected, actual, accepted) in [
+            (f64::MAX, f64::MAX, true),
+            (f64::MAX, f64::MAX / 2.0, false),
+            (f64::MAX, -f64::MAX, false),
+            (1.0, 1.0 + EPSILON, true),
+            (1.0, 1.0 + 10.0 * EPSILON, false),
+        ] {
+            assert_eq!(
+                ensure_matching_outcome(&compiled, "a", expected, actual).is_ok(),
+                accepted,
+                "expected {expected}, actual {actual}"
+            );
+        }
+    }
 }

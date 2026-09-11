@@ -104,6 +104,29 @@ children, with `StatefulExamples` remaining a re-export umbrella. It should
 also state the intended dependency order and warn against placing new proof
 content in the umbrella.
 
+## Compiled Claim Policy And Action Boundary
+
+`Legitimacy.Protocol.CompiledStepPolicy` owns the canonical claim-native
+decision seam. Its state is `List ClaimQ`, its local action is `ClaimQ`, and
+`CompiledGovernance.appendClaim` preserves source order. Singleton local
+decisions and accumulated-profile denial both evaluate
+`graphDecide compiled.graph`; `CompiledGovernance` stores no policy function.
+The peer-graph fixtures prove both a benign two-claim profile and an inhabited
+three-claim `ClaimDecompositionAttack` over an existing compiled artifact.
+
+`Legitimacy.Bridges.DecompositionAttackKernelBridge` is only a conditional
+monitor-retag layer. It accepts an already-emitted
+`MonitoredSacrificeCertificate` plus the certificate's canonical compiled
+claim attack. It does not derive monitor evidence, bind claims to kernel
+actions, or prove `KernelAxiomViolation`.
+
+The dependent trajectory milestone must bind one exact nonempty action trace:
+an `encodeAction : D.actionSpace.Action → ClaimQ` maps
+`step.action_trace`, and all graph facts range over exactly
+`step.action_trace.map encodeAction`. This supplies syntactic order and length
+binding. Semantic replay still requires either a concrete claim action space
+with a proved law or an explicit action/claim simulation premise.
+
 ## Kernel Trajectory And Stateful Schedule Boundary
 
 `TransitionSequence`, `applyStatefulTrajectory`, and

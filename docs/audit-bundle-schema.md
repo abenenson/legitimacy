@@ -36,9 +36,10 @@ Replay mode is explicit and does not accept a source path:
 target/release/legitimacy-audit-agent --target codex-cli --mode replay-committed || echo "expected rejection exit: $?"
 ```
 
-In replay mode, `provenance.source_path` is the committed graph fixture path.
+In replay mode, `provenance.source_path` is `embedded:<repo-relative fixture path>`.
 Replay bundles emit `provenance.committed_graph_sha256`, which hashes the raw
-checked-in graph JSON bytes. Extract bundles emit
+graph JSON bytes embedded when the binary was built. Runtime filesystem changes
+cannot replace this reference fixture or change its theorem applicability. Extract bundles emit
 `provenance.extracted_graph_sha256`, which hashes the normalized in-memory graph
 produced by extraction. `source_pointer.file` points at that graph fixture and
 `line_start = line_end = 0` is a documented sentinel, not a source-code span.
@@ -58,7 +59,7 @@ Expected JSON shape:
   "provenance": {
     "mode": "extract",
     "source_path": "/abs/path/to/examples/codex-cli-fixture",
-    "binary_version": "legitimacy-audit-agent 0.1.0 (<build-sha>)",
+    "binary_version": "legitimacy-audit-agent 1.1.1 (<build-sha>)",
     "extracted_graph_sha256": "sha256:9ea01868920ec0efeb9a50974202ceb2ca33507aea761068559052902d304c62"
   },
   "lean": {
@@ -87,8 +88,8 @@ uses `extracted_governance_graph`.
   "verdict": { "kind": "rejected" },
   "provenance": {
     "mode": "replay-committed",
-    "source_path": "/abs/path/to/examples/graphs/codex-graph.json",
-    "binary_version": "legitimacy-audit-agent 0.1.0 (<build-sha>)",
+    "source_path": "embedded:examples/graphs/codex-graph.json",
+    "binary_version": "legitimacy-audit-agent 1.1.1 (<build-sha>)",
     "committed_graph_sha256": "sha256:7eea523bb24362cbfd8673195e412aea09025509f0f1472ea5dfee94f1d81fb3",
     "committed_graph_path": "examples/graphs/codex-graph.json",
     "committed_graph_commit": "f49fa1b41539f38dcfc6e1031e7293c13489a88a"
@@ -123,7 +124,7 @@ Expected JSON shape:
   "provenance": {
     "mode": "extract",
     "source_path": "/abs/path/to/examples/claude-agent-sdk-fixture",
-    "binary_version": "legitimacy-audit-agent 0.1.0 (<build-sha>)",
+    "binary_version": "legitimacy-audit-agent 1.1.1 (<build-sha>)",
     "extracted_graph_sha256": "sha256:bcafeb05d5011d7ece593d4524a38c830c93a0d131d0a8f8073cb16958162584"
   },
   "lean": {
@@ -169,7 +170,7 @@ Expected JSON shape:
   "provenance": {
     "mode": "extract",
     "source_path": "/abs/path/to/examples/claude-code-fixture",
-    "binary_version": "legitimacy-audit-agent 0.1.0 (<build-sha>)",
+    "binary_version": "legitimacy-audit-agent 1.1.1 (<build-sha>)",
     "extracted_graph_sha256": "sha256:09daa4687eda7ef4b86b5055cc55f2a8f218a4252ea23732d5645dffd4e08671"
   },
   "lean": {
@@ -208,13 +209,13 @@ handler implementation.
 - `provenance.mode`: audit mode, either `extract` for source-walked extraction
   or `replay-committed` for checked-in graph replay.
 - `provenance.source_path`: canonical source tree path in extract mode, or
-  canonical committed graph fixture path in replay mode.
+  `embedded:<repo-relative fixture path>` in replay mode.
 - `provenance.binary_version`: audit-agent package version plus the build git
   SHA, suffixed with `-dirty` when built from uncommitted `src/` changes.
 - `provenance.extracted_graph_sha256`: extract-mode SHA-256 over the normalized
   in-memory extracted graph.
 - `provenance.committed_graph_sha256`: replay-mode SHA-256 over the raw
-  checked-in graph fixture bytes.
+  graph fixture bytes embedded at build time.
 - `provenance.committed_graph_path`: replay-mode repository-relative path to
   the committed graph fixture.
 - `provenance.committed_graph_commit`: replay-mode last commit touching the
@@ -230,9 +231,31 @@ handler implementation.
 
 `source_pointer` is the bundle's anchor to the audited source tree:
 `source_pointer.file` records where the source-path or replay fixture anchor was
-resolved. `verdict.reason.named_feature` is the specific extracted-graph node
-that triggered the rejection. These may cite different files when the rejected
-node is not at the same handler as the source path resolution.
+resolved. `verdict.reason.named_feature` is a canonical navigation anchor when
+the extracted graph matches the committed fixture; divergent graphs use the
+graph-level label `extracted_governance_graph`. It does not identify a uniquely
+causal node for rejection.
+
+## Activation evidence
+
+The audit verdict and protocol compilation result answer different questions.
+`activation_verdict` and `activation_gate` report the actual compiler result:
+
+- Successful compilation yields `admissible` and `compiled_without_sacrifice`,
+  with an empty refusal, null `required_certificate_format`, and empty
+  `required_certificates`.
+- Unsacrificed violations yield `requires_sacrifice` and
+  `requires_declared_sacrifice`. `required_certificates` includes every reported
+  property; the singular format retains the first certificate for compatibility.
+- Unsupported, skipped, or other compilation failures yield `rejected` and
+  `compilation_failed`, with the actual refusal and no sacrifice certificates.
+  A certificate for an unrelated diagnostic cannot discharge a skipped check.
+
+`repaired_alternative` names a proved alternative only when the input graph
+matches the binary's reference fixture; it is null for divergent extractions.
+The canonical verification gate compares complete evaluated Lean graph values
+with the embedded JSON inputs, including defaults, combination logic, ordered
+gates, numeric fields, and edges.
 
 ## Capability Threshold
 

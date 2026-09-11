@@ -91,8 +91,16 @@ exist to materialize byte-stable fixture data for parity checks. -/
 lean_exe asi_parity_fixture_export where
   root := `Legitimacy.Fixtures.ExportAsiParity
 
+/-- Generated normalized-trajectory policy composition parity projection. -/
+lean_exe trajectory_composition_fixture_export where
+  root := `Legitimacy.Fixtures.ExportTrajectoryComposition
+
 /-- Named RustHookCore fixture target. It is intentionally opt-in because the
 module models a concrete extractor fixture rather than a paper-facing theorem
 facade export. -/
 lean_lib RustHookCoreCodexHooksFixture where
   roots := #[`Legitimacy.Extract.RustHookCore.Fixtures.CodexHooks]
+
+/-- Complete finite transition table; Rust consumes these Lean decisions. -/
+lean_exe executed_composition_export where
+  root := `Legitimacy.Fixtures.ExportExecutedComposition

@@ -173,15 +173,16 @@ fn external_risk_check(action: &str) -> bool {
     let report = analyze_extraction(&source_dir).expect("fixture should extract governance");
     let boundary = &report.artifacts.boundary_causal_safety;
 
-    assert_eq!(boundary.affected_governance_nodes, 1);
-    assert_eq!(boundary.external_dependency_count, 1);
+    assert_eq!(boundary.affected_governance_nodes(), Some(1));
+    assert_eq!(boundary.external_dependency_count(), Some(1));
     assert_eq!(
-        boundary.summary,
+        boundary.summary(),
         "1 governance nodes have 1 transitive external dependencies not in the governance graph (causal boundary analysis)"
     );
     assert!(
         boundary
-            .ungoverned_dependencies
+            .ungoverned_dependencies()
+            .expect("source dependency analysis must have run")
             .iter()
             .any(|dependency| dependency.dependency == "external_risk_check")
     );
@@ -191,7 +192,7 @@ fn external_risk_check(action: &str) -> bool {
             .protocol_assessment
             .blocking_issues
             .iter()
-            .any(|issue| issue == &boundary.summary)
+            .any(|issue| issue == boundary.summary())
     );
 }
 
@@ -231,17 +232,19 @@ fn deep_risk_check(action: &str) -> bool {
     let report = analyze_extraction(&source_dir).expect("fixture should extract governance");
     let boundary = &report.artifacts.boundary_causal_safety;
 
-    assert_eq!(boundary.affected_governance_nodes, 1);
-    assert_eq!(boundary.external_dependency_count, 2);
+    assert_eq!(boundary.affected_governance_nodes(), Some(1));
+    assert_eq!(boundary.external_dependency_count(), Some(2));
     assert!(
         boundary
-            .ungoverned_dependencies
+            .ungoverned_dependencies()
+            .expect("source dependency analysis must have run")
             .iter()
             .any(|dependency| dependency.dependency == "nested_risk_check")
     );
     assert!(
         boundary
-            .ungoverned_dependencies
+            .ungoverned_dependencies()
+            .expect("source dependency analysis must have run")
             .iter()
             .any(|dependency| dependency.dependency == "deep_risk_check")
     );
@@ -542,4 +545,55 @@ fn unique_source_dir(label: &str) -> PathBuf {
         .unwrap()
         .as_nanos();
     std::env::temp_dir().join(format!("legitimacy-{label}-{nanos}"))
+}
+
+#[test]
+fn measured_zero_source_dependencies_are_distinct_from_unassessed_boundary() {
+    let source_dir = unique_source_dir("boundary-measured-zero");
+    fs::create_dir_all(&source_dir).unwrap();
+    fs::write(
+        source_dir.join("policy.rs"),
+        r#"
+enum Decision { Permit, Deny }
+pub fn approval_gate(action: &str) -> Decision {
+    if action == "read" { return Decision::Permit; }
+    Decision::Deny
+}
+"#,
+    )
+    .unwrap();
+    let report = analyze_extraction(&source_dir).unwrap();
+    let measured = &report.artifacts.boundary_causal_safety;
+    assert_eq!(measured.external_dependency_count(), Some(0));
+    assert_eq!(measured.live_blocker(), None);
+    let measured_json = serde_json::to_value(measured).unwrap();
+    assert_eq!(measured_json["status"], "assessed");
+    assert_eq!(measured_json["external_dependency_count"], 0);
+
+    let missing = legitimacy::BoundaryCausalSafetyAssessment::default();
+    assert_eq!(missing.external_dependency_count(), None);
+    assert_eq!(missing.affected_governance_nodes(), None);
+    assert!(missing.ungoverned_dependencies().is_none());
+    let missing_json = serde_json::to_value(&missing).unwrap();
+    assert_eq!(missing_json["status"], "unassessed");
+    for field in [
+        "external_dependency_count",
+        "affected_governance_nodes",
+        "ungoverned_dependencies",
+    ] {
+        assert!(
+            missing_json.get(field).is_none(),
+            "missing evidence must not fabricate {field}: {missing_json}"
+        );
+    }
+    let blocker = missing.live_blocker().unwrap().to_string();
+    let audit = legitimacy::audit_governance_graph(
+        &report.artifacts.graph,
+        legitimacy::extract::synthetic_claims(&report.artifacts.graph),
+        legitimacy::ClaimCorpusProvenance::SyntheticStructuralProbe,
+        missing,
+    )
+    .unwrap();
+    assert!(audit.protocol_assessment.blocking_issues.contains(&blocker));
+    fs::remove_dir_all(source_dir).unwrap();
 }

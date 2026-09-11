@@ -92,3 +92,80 @@ class PreToolUseHookSpecificOutput(TypedDict):
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("PreToolUseHookSpecificOutput"), "{stdout}");
 }
+
+#[test]
+fn exported_graph_cannot_turn_missing_source_boundary_evidence_into_zero_dependencies() {
+    let directory = unique_dir("boundary-evidence-roundtrip");
+    fs::create_dir_all(&directory).unwrap();
+    let graph_path = directory.join("exported.graph.json");
+    let binary = env!("CARGO_BIN_EXE_legitimacy");
+    let extracted = Command::new(binary)
+        .args([
+            "extract",
+            "tests/fixtures",
+            "--emit-graph",
+            graph_path.to_str().unwrap(),
+        ])
+        .output()
+        .unwrap();
+    assert!(extracted.status.success(), "{extracted:?}");
+    let extraction_text = String::from_utf8(extracted.stdout).unwrap();
+    assert!(
+        extraction_text.contains("requires_permission"),
+        "{extraction_text}"
+    );
+    assert!(
+        extraction_text.contains("1 transitive external dependencies"),
+        "{extraction_text}"
+    );
+
+    let source_audit = Command::new(binary)
+        .args([
+            "audit-graph",
+            "--source-dir",
+            "tests/fixtures",
+            "--claims",
+            "tests/fixtures/sample_governance_claims.jsonl",
+        ])
+        .output()
+        .unwrap();
+    assert!(source_audit.status.success(), "{source_audit:?}");
+    let source_text = String::from_utf8(source_audit.stdout).unwrap();
+    let source_blockers = source_text
+        .split("- blocking for LIVE:")
+        .nth(1)
+        .expect("source audit must state its LIVE blockers");
+    assert!(
+        source_blockers.contains("1 transitive external dependencies"),
+        "{source_text}"
+    );
+
+    let graph_audit = Command::new(binary)
+        .args([
+            "audit-graph",
+            "--graph",
+            graph_path.to_str().unwrap(),
+            "--claims",
+            "tests/fixtures/sample_governance_claims.jsonl",
+        ])
+        .output()
+        .unwrap();
+    // Exit success means diagnostics ran, not that source-level promotion is safe.
+    assert!(graph_audit.status.success(), "{graph_audit:?}");
+    let graph_text = String::from_utf8(graph_audit.stdout).unwrap();
+    assert!(graph_text.contains("DIAGNOSTIC CHECKS"), "{graph_text}");
+    assert!(
+        !graph_text.contains("0 transitive external dependencies"),
+        "{graph_text}"
+    );
+    let graph_blockers = graph_text
+        .split("- blocking for LIVE:")
+        .nth(1)
+        .expect("missing source evidence must be a LIVE blocker");
+    assert!(
+        graph_blockers
+            .contains("UNASSESSED: source boundary/dependency analysis was not performed"),
+        "{graph_text}"
+    );
+    fs::remove_dir_all(directory).unwrap();
+}

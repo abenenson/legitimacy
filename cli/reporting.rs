@@ -30,7 +30,7 @@ pub fn print_extraction_artifacts_report(
     );
     println!(
         "boundary-relative compositional safety: {}",
-        artifacts.boundary_causal_safety.summary
+        artifacts.boundary_causal_safety.summary()
     );
     if artifacts.review_overlay.is_some() {
         println!("review overlay: applied");
@@ -405,7 +405,7 @@ pub fn print_extraction_report(
     println!("- supervisory algebra: {}", SUPERVISORY_ALGEBRA_SUMMARY);
     println!(
         "- boundary-relative compositional safety: {}",
-        assessment.boundary_causal_safety.summary
+        assessment.boundary_causal_safety.summary()
     );
     if !assessment.blocking_issues.is_empty() {
         println!("- blocking for LIVE:");

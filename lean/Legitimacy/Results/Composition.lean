@@ -267,6 +267,25 @@ inductive Decision3 where
   | Escalate : Decision3
   deriving Repr, DecidableEq
 
+namespace Decision3
+
+/-- Embed a binary governance decision into the non-escalating fragment. -/
+def ofBinary : BinaryDecision → Decision3
+  | BinaryDecision.Permit => Decision3.Permit
+  | BinaryDecision.Deny => Decision3.Deny
+
+@[simp] theorem ofBinary_eq_permit_iff (decision : BinaryDecision) :
+    ofBinary decision = Decision3.Permit ↔
+      decision = BinaryDecision.Permit := by
+  cases decision <;> simp [ofBinary]
+
+@[simp] theorem ofBinary_eq_deny_iff (decision : BinaryDecision) :
+    ofBinary decision = Decision3.Deny ↔
+      decision = BinaryDecision.Deny := by
+  cases decision <;> simp [ofBinary]
+
+end Decision3
+
 /-- A three-valued governance node. -/
 def GovernanceNodeFn3 := List ClaimQ → ClaimantId → Decision3
 
@@ -368,9 +387,7 @@ lemma thresholdNode3_monotone (lo hi : ℚ) :
 
 /-- Peer-relative gate wrapped as a three-valued node. -/
 def peerRelativeNode3 : GovernanceNodeFn3 := fun claims k =>
-  match peerRelativeNode claims k with
-  | BinaryDecision.Permit => Decision3.Permit
-  | BinaryDecision.Deny   => Decision3.Deny
+  Decision3.ofBinary (peerRelativeNode claims k)
 
 /-- The peer-relative node (wrapped) is three-valued monotone. -/
 lemma peerRelativeNode3_monotone : NodeMonotonicity3 peerRelativeNode3 := by
@@ -385,8 +402,8 @@ lemma peerRelativeNode3_monotone : NodeMonotonicity3 peerRelativeNode3 := by
     simp only [h2, Decision3.rank]; omega
   | Deny =>
     cases h2 : peerRelativeNode (strengthenClaim k s' hs' claims) k with
-    | Permit => simp [Decision3.rank]
-    | Deny => simp [Decision3.rank]
+    | Permit => simp [Decision3.ofBinary, Decision3.rank]
+    | Deny => simp [Decision3.ofBinary, Decision3.rank]
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Three-valued Counterexample
@@ -479,8 +496,8 @@ private theorem escalationPolicyWitness_base_permits_bob
     graphDecide3 [node, peerRelativeNode3] baseClaims3 1 =
       BinaryDecision.Permit := by
   rcases hnode with ⟨_, hBob, _, hfilter, _⟩
-  simp [graphDecide3, hBob, hfilter, peerRelativeNode3, peerRelativeNode,
-    lookupStrength, countAtMost, bob3, carol3]
+  simp [graphDecide3, hBob, hfilter, peerRelativeNode3, Decision3.ofBinary,
+    peerRelativeNode, lookupStrength, countAtMost, bob3, carol3]
 
 private theorem escalationPolicyWitness_strengthened_denies_bob
     {node : GovernanceNodeFn3} (hnode : EscalationPolicyWitness node) :

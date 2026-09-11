@@ -9,7 +9,7 @@ use legitimacy::{
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
-    fmt, fs,
+    fmt,
     path::{Path, PathBuf},
     process::ExitCode,
 };
@@ -17,6 +17,7 @@ use std::{
 #[derive(Debug, Parser)]
 #[command(
     name = "legitimacy-audit-agent",
+    version = concat!(env!("CARGO_PKG_VERSION"), " (", env!("LEGITIMACY_BUILD_GIT_COMMIT"), ")"),
     about = "Audit frontier-agent governance surfaces with theorem-backed evidence bundles",
     override_usage = "legitimacy-audit-agent --target <TARGET> [--mode extract] <SOURCE_PATH>\n       legitimacy-audit-agent --target <TARGET> --mode replay-committed"
 )]
@@ -114,6 +115,16 @@ impl Target {
             Self::CodexCli => Some("examples/graphs/codex-graph.json"),
             Self::ClaudeAgentSdk => Some("examples/graphs/claude-agent-sdk-graph.json"),
             Self::ClaudeCode => Some("examples/graphs/claude-code-graph.json"),
+        }
+    }
+
+    fn graph_fixture_bytes(self) -> &'static [u8] {
+        match self {
+            Self::CodexCli => include_bytes!("../../examples/graphs/codex-graph.json"),
+            Self::ClaudeAgentSdk => {
+                include_bytes!("../../examples/graphs/claude-agent-sdk-graph.json")
+            }
+            Self::ClaudeCode => include_bytes!("../../examples/graphs/claude-code-graph.json"),
         }
     }
 
@@ -256,7 +267,8 @@ struct CapabilityThreshold {
 struct ActivationGateEvidence {
     state: String,
     refusal: String,
-    required_certificate_format: ProtocolDeclaredSacrifice,
+    required_certificate_format: Option<ProtocolDeclaredSacrifice>,
+    required_certificates: Vec<ProtocolDeclaredSacrifice>,
 }
 
 #[derive(Debug, Serialize)]
@@ -412,7 +424,20 @@ fn run(cli: Cli) -> Result<EvidenceBundle, AuditRefusal> {
         }
         AuditMode::Extract => extract_input(target, mode, cli.source_path.as_deref())?,
     };
-    let named_feature = input.named_feature.clone();
+    let matches_fixture = matches!(
+        input.theorem_applicability,
+        TheoremApplicability::MatchesCommittedFixture
+    );
+    let named_feature = if matches_fixture {
+        input.named_feature.clone()
+    } else {
+        "extracted_governance_graph".to_string()
+    };
+    let rejection_code = if matches_fixture {
+        target.reason_code()
+    } else {
+        "extracted_graph_rejected"
+    };
     let graph = input.graph;
     let claims = synthetic_claims(&graph);
     let audit_result = audit_governance_graph(
@@ -422,38 +447,30 @@ fn run(cli: Cli) -> Result<EvidenceBundle, AuditRefusal> {
         Default::default(),
     );
 
-    let (verdict, property) = match audit_result {
+    let verdict = match audit_result {
         Ok(audit) => {
             let rejected = audit.axiom_results.iter().find_map(|result| {
                 matches!(result.verdict, Some(legitimacy::Verdict::Rejected { .. }))
                     .then(|| result.axiom.clone())
             });
-            let property = rejected
-                .as_deref()
-                .and_then(property_from_axiom)
-                .unwrap_or(GovernanceProperty::Monotonicity);
-            let verdict = match rejected {
+            match rejected {
                 Some(diagnostic) => Verdict::Rejected {
                     reason: RejectionReason {
-                        code: target.reason_code().to_string(),
+                        code: rejection_code.to_string(),
                         diagnostic,
                         named_feature: named_feature.clone(),
                     },
                 },
                 None => Verdict::Admissible,
-            };
-            (verdict, property)
+            }
         }
-        Err(error) if !input.fixture_backed => (
-            Verdict::Rejected {
-                reason: RejectionReason {
-                    code: "audit_evaluation_failed".to_string(),
-                    diagnostic: error.to_string(),
-                    named_feature: named_feature.clone(),
-                },
+        Err(error) if !input.fixture_backed => Verdict::Rejected {
+            reason: RejectionReason {
+                code: "audit_evaluation_failed".to_string(),
+                diagnostic: error.to_string(),
+                named_feature: named_feature.clone(),
             },
-            GovernanceProperty::Monotonicity,
-        ),
+        },
         Err(error) => {
             return Err(AuditRefusal {
                 reason_code: "audit_evaluation_failed",
@@ -462,8 +479,7 @@ fn run(cli: Cli) -> Result<EvidenceBundle, AuditRefusal> {
         }
     };
 
-    let required_certificate_format = required_sacrifice(property, target);
-    let activation_refusal = activation_refusal(&graph);
+    let (activation_verdict, activation_gate) = activation_evidence(&graph, target);
     let graph_facts = GraphStructuralFacts::from_graph(&graph);
     let provenance_mode = input.provenance.mode;
     let (extracted_governance_graph, replayed_governance_graph) = match provenance_mode {
@@ -474,7 +490,7 @@ fn run(cli: Cli) -> Result<EvidenceBundle, AuditRefusal> {
     Ok(EvidenceBundle {
         target,
         verdict,
-        activation_verdict: Verdict::RequiresSacrifice { property },
+        activation_verdict,
         extracted_governance_graph,
         replayed_governance_graph,
         provenance: input.provenance,
@@ -486,12 +502,13 @@ fn run(cli: Cli) -> Result<EvidenceBundle, AuditRefusal> {
             graph_facts,
             &input.theorem_applicability,
         ),
-        activation_gate: ActivationGateEvidence {
-            state: "requires_declared_sacrifice".to_string(),
-            refusal: activation_refusal,
-            required_certificate_format,
-        },
-        repaired_alternative: target.repaired_alternative().map(str::to_string),
+        activation_gate,
+        repaired_alternative: matches!(
+            input.theorem_applicability,
+            TheoremApplicability::MatchesCommittedFixture
+        )
+        .then(|| target.repaired_alternative().map(str::to_string))
+        .flatten(),
     })
 }
 
@@ -502,7 +519,7 @@ fn replay_committed_input(target: Target) -> Result<GraphInput, AuditRefusal> {
         source_pointer: replay_source_pointer(target, fixture.relative_path),
         provenance: EvidenceProvenance {
             mode: AuditMode::ReplayCommitted,
-            source_path: committed_graph_source_path(fixture.relative_path)?,
+            source_path: format!("embedded:{}", fixture.relative_path),
             binary_version: binary_version(),
             extracted_graph_sha256: None,
             committed_graph_sha256: Some(fixture.sha256),
@@ -510,8 +527,8 @@ fn replay_committed_input(target: Target) -> Result<GraphInput, AuditRefusal> {
             committed_graph_commit: target.graph_fixture_commit().map(str::to_string),
             statement: format!(
                 "This bundle replays the committed {} audit fixture. The \
-                 committed_graph_sha256 field hashes the raw checked-in graph fixture bytes; \
-                 replayed_governance_graph below is loaded from that fixture and is NOT the \
+                 committed_graph_sha256 field hashes the raw graph fixture bytes embedded at build time; \
+                 replayed_governance_graph below is loaded from those immutable bytes and is NOT the \
                  result of running extraction on --source-path.",
                 target_label(target)
             ),
@@ -589,21 +606,17 @@ fn load_committed_graph(target: Target) -> Result<LoadedGraphFixture, AuditRefus
             message: "target has no committed graph fixture".to_string(),
         });
     };
-    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join(relative_path);
-    let bytes = fs::read(&path).map_err(|error| AuditRefusal {
-        reason_code: "graph_fixture_unreadable",
-        message: format!("failed to read '{}': {error}", path.display()),
-    })?;
-    let graph = serde_json::from_slice(&bytes).map_err(|error| AuditRefusal {
+    let bytes = target.graph_fixture_bytes();
+    let graph = serde_json::from_slice(bytes).map_err(|error| AuditRefusal {
         reason_code: "graph_fixture_malformed",
-        message: format!("failed to parse '{}': {error}", path.display()),
+        message: format!("failed to parse embedded '{relative_path}': {error}"),
     })?;
     let canonical_sha256 = graph_sha256(&graph)?;
     let node_count = graph.nodes.len();
     Ok(LoadedGraphFixture {
         graph,
         relative_path,
-        sha256: sha256_label(&bytes),
+        sha256: sha256_label(bytes),
         canonical_sha256,
         node_count,
     })
@@ -763,10 +776,6 @@ fn resolved_source_path(source_path: &Path) -> Result<String, AuditRefusal> {
         })
 }
 
-fn committed_graph_source_path(relative_path: &str) -> Result<String, AuditRefusal> {
-    resolved_source_path(&Path::new(env!("CARGO_MANIFEST_DIR")).join(relative_path))
-}
-
 fn target_label(target: Target) -> &'static str {
     match target {
         Target::CodexCli => "Codex CLI",
@@ -775,31 +784,67 @@ fn target_label(target: Target) -> &'static str {
     }
 }
 
-fn activation_refusal(graph: &GovernanceGraph) -> String {
-    let declared = match declare(graph.clone(), Vec::new()) {
-        Ok(declared) => declared,
-        Err(error) => return activation_refusal_message(error),
-    };
-    match compile_protocol(declared) {
-        Ok(_) => "compiled_without_required_sacrifice".to_string(),
-        Err(error) => activation_refusal_message(error),
+fn activation_evidence(
+    graph: &GovernanceGraph,
+    target: Target,
+) -> (Verdict, ActivationGateEvidence) {
+    let result = declare(graph.clone(), Vec::new()).and_then(compile_protocol);
+    match result {
+        Ok(_) => (
+            Verdict::Admissible,
+            ActivationGateEvidence {
+                state: "compiled_without_sacrifice".to_string(),
+                refusal: String::new(),
+                required_certificate_format: None,
+                required_certificates: Vec::new(),
+            },
+        ),
+        Err(ProtocolError::UnsacrificedViolations { properties }) if !properties.is_empty() => {
+            let certificates: Vec<_> = properties
+                .iter()
+                .copied()
+                .map(|property| required_sacrifice(property, target))
+                .collect();
+            (
+                Verdict::RequiresSacrifice {
+                    property: properties[0],
+                },
+                ActivationGateEvidence {
+                    state: "requires_declared_sacrifice".to_string(),
+                    refusal: format!(
+                        "activation refused before live promotion: undeclared violations for {properties:?}; \
+                         submit a DeclaredSacrifice certificate for each reported property before retrying"
+                    ),
+                    required_certificate_format: certificates.first().cloned(),
+                    required_certificates: certificates,
+                },
+            )
+        }
+        Err(error) => (
+            Verdict::Rejected {
+                reason: RejectionReason {
+                    code: "protocol_compilation_failed".to_string(),
+                    diagnostic: error.to_string(),
+                    named_feature: "protocol_compilation".to_string(),
+                },
+            },
+            ActivationGateEvidence {
+                state: "compilation_failed".to_string(),
+                refusal: format!("activation refused before live promotion: {error}"),
+                required_certificate_format: None,
+                required_certificates: Vec::new(),
+            },
+        ),
     }
-}
-
-fn activation_refusal_message(error: ProtocolError) -> String {
-    format!(
-        "activation refused before live promotion: {error}; submit a DeclaredSacrifice \
-         certificate for the reported diagnostic before retrying"
-    )
 }
 
 fn required_sacrifice(property: GovernanceProperty, target: Target) -> ProtocolDeclaredSacrifice {
     ProtocolDeclaredSacrifice {
         property,
         justification: format!(
-            "Declare and monitor the forced {} sacrifice for {}.",
+            "Declare and monitor the compiler-reported {} violation for {}.",
             property.as_str(),
-            target.reason_code()
+            target_label(target)
         ),
         monitoring_specs: vec![MonitoringSpec {
             metric: property.as_str().to_string(),
@@ -807,21 +852,6 @@ fn required_sacrifice(property: GovernanceProperty, target: Target) -> ProtocolD
             frequency_seconds: 300,
             alert_channel: "governance-risk".to_string(),
         }],
-    }
-}
-
-fn property_from_axiom(value: &str) -> Option<GovernanceProperty> {
-    match value {
-        "graph consistency" => Some(GovernanceProperty::Consistency),
-        "graph solidarity" => Some(GovernanceProperty::Solidarity),
-        "graph monotonicity" => Some(GovernanceProperty::Monotonicity),
-        "graph strategyproofness" => Some(GovernanceProperty::Strategyproofness),
-        "graph certifiability" => Some(GovernanceProperty::Certifiability),
-        "graph observable determinacy" => Some(GovernanceProperty::ObservableDeterminacy),
-        "graph corrigibility" => Some(GovernanceProperty::Corrigibility),
-        "graph compositional safety" => Some(GovernanceProperty::CompositionalSafety),
-        "graph nonvacuity" => Some(GovernanceProperty::NonVacuous),
-        _ => None,
     }
 }
 
@@ -836,4 +866,51 @@ fn emit_json<T: Serialize>(value: &T) -> Result<(), LegitimacyError> {
         })?
     );
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use legitimacy::{Decision, Gate, GateLogic, GraphBuilder, NodeId};
+
+    #[test]
+    fn sacrifice_evidence_contains_exactly_the_compilers_unsacrificed_properties() {
+        let graph = GraphBuilder::new()
+            .unwrap()
+            .add_node(GovernanceNode::Binary {
+                id: NodeId::new("threshold").unwrap(),
+                name: "threshold".to_string(),
+                gates: vec![Gate::ThresholdGate {
+                    field: "strength".to_string(),
+                    min: 1.0,
+                    decision: Decision::Deny,
+                }],
+                default: Decision::Permit,
+                combination: GateLogic::FirstMatch,
+            })
+            .unwrap()
+            .build()
+            .unwrap();
+        let expected = match declare(graph.clone(), vec![]).and_then(compile_protocol) {
+            Err(ProtocolError::UnsacrificedViolations { properties }) => properties,
+            other => panic!("probe must reach the unsacrificed violation boundary: {other:?}"),
+        };
+        assert!(!expected.is_empty());
+        let (verdict, evidence) = activation_evidence(&graph, Target::CodexCli);
+        assert!(
+            matches!(verdict, Verdict::RequiresSacrifice { property } if property == expected[0])
+        );
+        assert_eq!(
+            evidence
+                .required_certificates
+                .iter()
+                .map(|c| c.property)
+                .collect::<Vec<_>>(),
+            expected
+        );
+        assert_eq!(
+            evidence.required_certificate_format.unwrap().property,
+            expected[0]
+        );
+    }
 }

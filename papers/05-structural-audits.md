@@ -741,314 +741,161 @@ it should map the published prose artifact into this formal
 principle/conflict-resolution substrate rather than treating the generic
 Constitution-as-DAG theorem as an empirical extraction.
 
-## 5. Decomposition Attack Bridge
+## 5. Compiled Claim-Policy Decomposition
 
-### Decomposition Attacks and the Kernel Block-or-Sacrifice Disjunction
+### Canonical decision authority
 
----
+The compiled seam is claim-native. Its accumulated state is `List ClaimQ`, a
+local action is one `ClaimQ`, and composition appends that claim in source
+order. Both verdict surfaces use `graphDecide compiled.graph`: local decisions
+evaluate the singleton profile `[claim]`, while composed denial means that the
+same graph denies a claimant occurring in the accumulated profile.
 
-#### Abstract
-
-This note records a bridge between two existing formal vocabularies. The first
-is the per-step `Decision3` algebra in `Legitimacy.Attacks.Decomposition`, which
-defines composition-sensitive semantic monotonicity and decomposition witnesses:
-nonempty action sequences where each local step permits while the composed
-endpoint is denied. The second is the monitored kernel-sacrifice API in
-`Legitimacy.Safety.KernelSafety.Sacrifice`, which classifies raw kernel steps as
-either boundary preserving or as steps where a monitored sacrifice certificate
-has surfaced.
-
-The bridge theorem says that, for an invariant source kernel datum, a realized
-decomposition attack is exposed to the kernel API as either (1) a preserved
-kernel boundary, or (2) a monitored sacrifice certificate whose tag is exactly
-`SacrificedAxiom.kernel KernelAxiom.CompositionalSafety`. The theorem states
-what the kernel API exposes rather than serving as an a priori detector for
-every possible attack. When the realization relation supplies the decomposition
-witness and the raw-step monitor/extractor hypotheses are available, the API
-exposes a disjunction: block or sacrifice.
-
-The realization relation is named `DecompositionAttackRealizesKernelStep`. It is
-required because an abstract `DecompositionAttackClass` alone can be inhabited
-independently of the kernel transition being certified, so the certificate now
-consumes the realized witness, not just any witness of the same algebra.
-
-#### Formal Location
-
-The definitions and theorems live in four files. `lean/Legitimacy/Attacks/Decomposition.lean`
-adds the predicate layer, `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean`
-adds the bridge theorem and the concrete fixtures, and `lean/Legitimacy.lean`
-roots the bridge in the umbrella import. This paper is the human-facing artifact.
-The theorem is rooted through the normal `Legitimacy` target, and the bridge
-module also has its own build target.
-
-The proof does not edit the kernel safety API. That matters because the
-classifier already fixes the shape of the evidence, and the present substrate
-does not expose a compiled per-step decision-policy surface whose action type can
-be identified with the decomposition action type. Accordingly,
-`DecompositionAttackRealizesKernelStep` records the strongest relation available
-at this layer: the realized decomposition witness is stored with the concrete
-`KernelStep`, the decomposition unit is grounded by an extractor from the source
-kernel datum, the step replay equation is carried in the relation, and any
-populated failed-property payload is proved against the governed graph for that
-same step. The stronger action-policy realization remains a follow-up to expose
-that policy surface at the compiled-governance layer.
-
-#### Predicate Layer
-
-The decomposition module already had the core objects.
-`CompSemanticMonotone compose unit node denied` says that if a full sequence
-lands in the denied set, then the last local step of that sequence cannot be
-`Decision3.Permit`. `Decomposition compose unit node denied` packages a
-counterexample pattern: it stores a nonempty list of actions, a proof that every
-local step permits, and a proof that the composed endpoint is denied.
-
-The new bridge-facing predicates are thin but load-bearing.
-`LocalPermissionMonotonicity` is the failure of `CompSemanticMonotone`, and
-`DecompositionAttackClass` is `Nonempty (Decomposition compose unit node denied)`.
-That definition is intentionally rooted in the embedded structure rather than a
-free-standing Boolean flag: the structure carries the sequence, the local permit
-proofs, and the denied endpoint proof.
-
-The nonvacuity probe instantiates a constant one-step kernel. The composition is
-`fun s _ => s`, the unit state is `()`, the local node always returns
-`Decision3.Permit`, and the denied predicate is always true, so the singleton
-action sequence is a concrete witness. This establishes that the attack-class
-predicate is inhabited without importing any kernel-safety facts, and that the
-predicate is not definitionally false.
-
-#### Strictness
-
-The decomposition class is stricter than monotonicity failure. The strictness
-theorem uses a two-step counterexample over a natural-number state: composition
-increments the state by one, the denied endpoint is state `2`, and the local
-node permits exactly at state `1`. The two-step sequence reaches the denied
-endpoint and its final local step is permitted, so composition-sensitive
-semantic monotonicity fails. A decomposition attack, however, cannot exist: any
-denied witness must have length two, and at the first local step the prefix state
-is `0`, where the node denies, so the requirement that every local step permits
-is impossible. This proves strict refinement — not every monotonicity failure is
-a decomposition attack — mirroring the strict-refinement pattern of the
-sleeper characterization layer (see §3). The point is polarity control: the
-decomposition class is a positive structural witness, while plain monotonicity
-failure is weaker.
-
-#### Kernel API Surface
-
-The kernel-side classifier is `classify_raw_step`. It consumes a raw step, a
-source invariant, and monitor/extractor hypotheses, and returns either
-`RawKernelStep.KernelBoundaryPreserved step` or
-`RawKernelStep.IndexedSacrificeSurfaced step`. The classifier remains a separate
-API; it does not derive monitor evidence from an arbitrary decomposition class.
-
-The current monitored certificate type stores a `KernelStep`, and every
-`KernelStep` carries enough target-invariant evidence to preserve the kernel
-boundary from a source invariant. That substrate blocks the stronger raw-step
-statement where a decomposition attack alone would force classifier
-compatibility. The bridge therefore separates two facts: it does not add axioms,
-and it does not hide the old classifier compatibility premise. The direct
-certificate theorem consumes the realization relation, whose embedded witness is
-the single source for the attack class used internally. The theorem statement is:
+`Decision3.ofBinary` is the single named embedding from the binary compiled
+graph into the non-escalating fragment of `Decision3`. The protocol module
+then defines the policy entirely as derived namespace declarations:
 
 ```lean
-theorem decompositionAttackClass_constructs_compositionalSafetyCertificate
-    {n : Nat} {sys : GovernedSystem n}
-    {D D' : LegitimacyKernelData sys} (step : KernelStep D D')
-    (claim_profile : List ClaimQ)
-    (claimant : ClaimantId)
-    (compiled : CompiledGovernance)
-    (monitoring : MonitoringPlan)
-    (hgraph : compiled.graph = sys.graph)
-    {compose : σ → α → σ} {unit : σ}
-    {node : σ → α → Decision3} {denied : σ → Prop}
-    (hrealize :
-      DecompositionAttackRealizesKernelStep step compose unit node denied) :
-    ∃ cert : MonitoredSacrificeCertificate D D',
-      cert.sacrificed =
+def CompiledGovernance.decideClaim
+    (compiled : CompiledGovernance) (claim : ClaimQ) : Decision3 :=
+  Decision3.ofBinary (graphDecide compiled.graph [claim] claim.id)
+
+def CompiledGovernance.appendClaim
+    (claims : List ClaimQ) (claim : ClaimQ) : List ClaimQ :=
+  claims ++ [claim]
+
+def CompiledGovernance.claimStepNode
+    (compiled : CompiledGovernance) :
+    List ClaimQ → ClaimQ → Decision3 :=
+  fun _ claim => compiled.decideClaim claim
+
+def CompiledGovernance.composedClaimsDenied
+    (compiled : CompiledGovernance) (claims : List ClaimQ) : Prop :=
+  ∃ i : Fin claims.length,
+    graphDecide compiled.graph claims (claims.get i).id =
+      BinaryDecision.Deny
+```
+
+There is no function field on `CompiledGovernance` and no caller-supplied
+`node` or `denied` predicate on this path. The fold specification
+
+```lean
+CompiledGovernance.seqHash_appendClaim :
+  seqHash CompiledGovernance.appendClaim initial steps = initial ++ steps
+```
+
+makes order preservation explicit for the claim algebra.
+
+### Specialized decomposition surface
+
+`CompiledGovernance.ClaimDecomposition compiled` specializes the generic
+`Decomposition` structure to claim append, the empty initial profile, the
+compiled singleton node, and the same-graph composed-denial predicate.
+`ClaimDecompositionAttack` is its inhabited attack class.
+
+`claimDecompositionOfGraphDecisions` constructs the structure from three
+concrete graph facts: a nonempty claim list, singleton permits for every list
+index, and a composed denial at an index of that same list. It does not accept a
+second policy authority or a second trace. The derived theorem
+
+```lean
+CompiledGovernance.claimDecompositionAttack_localPermissionFailure
+```
+
+applies the generic decomposition result to refute composition-sensitive local
+permission monotonicity for these fixed compiled definitions.
+
+The declarations live in
+`Legitimacy.Protocol.CompiledStepPolicy`; concrete evaluated inhabitants live
+in `Legitimacy.Protocol.CompiledStepPolicyFixtures`. Both modules are exported
+explicitly by `Legitimacy.lean` and build through the standard `Legitimacy`
+library target. There is no dedicated Lake target for this seam; the two module
+files are also valid focused `lake env lean` entry points.
+
+### Evaluated peer-graph inhabitants
+
+The fixtures reuse the existing
+`peerGraphSacrificedCompiledGovernance`, produced by `compileGovernance` for
+the single-node peer-relative graph. They use distinct claimant identifiers and
+positive strengths one, two, and three.
+
+`peerGraphCompiledPolicyTwoClaimBenign` proves all of the following for the
+two-claim profile: every singleton evaluation permits, every claimant permits in
+the composed profile, and `composedClaimsDenied` is false. The endpoint is
+therefore a computed benign result of the same graph, not an empty profile or a
+denial predicate chosen to be impossible.
+
+For the ordered three-claim profile,
+`peerGraphCompiledPolicyThreeClaimGraphDecisions` proves that every singleton
+permits while the weakest claimant is denied in composition.
+`peerGraphCompiledPolicyThreeClaimDecomposition` is the resulting concrete
+`ClaimDecomposition`, and
+`peerGraphCompiledPolicyThreeClaimAttack` is the exported theorem-level attack
+inhabitant. Finally,
+`peerGraphCompiledPolicy_localPermit_composedDeny` derives the corresponding
+local-permission-monotonicity failure.
+
+These propositions, rather than Boolean checks alone, are the public evidence.
+The finite arithmetic is discharged with `native_decide` inside the proofs.
+
+### Conditional monitor retagging
+
+The earlier kernel bridge accepted an arbitrary node, an arbitrary denial
+predicate, an unrelated sleeper audit policy, and a `KernelStep` whose action
+trace was empty. Its replay field repeated a theorem true of every
+`KernelStep`; it did not bind the decomposition actions to the kernel action
+trace. That surface and its sleeper/block/sacrifice fixtures have been removed.
+
+The remaining bridge is deliberately narrower.
+`MonitoredSacrificeCertificate.retagCompositionalSafetyOfCompiledClaimAttack`
+takes an already-emitted certificate and a
+`certificate.compiled.ClaimDecompositionAttack`. It preserves the transition,
+compiled graph binding, monitoring plan, and bound-exceedance payload, while
+retagging the runtime observation and ledger emission as compositional safety.
+Its monitor event is the local-permission failure derived from the canonical
+claim attack.
+
+The theorem-level wrapper is:
+
+```lean
+theorem compiledClaimAttack_monitorRetag_ofMonitorEvidence
+    (step : RawKernelStep D D')
+    (hmonitor : RawKernelStep.MonitorHypothesis step)
+    (hattack :
+      ∀ emitted : MonitoredSacrificeCertificate D D',
+        emitted.compiled.ClaimDecompositionAttack) :
+    ∃ retagged : MonitoredSacrificeCertificate D D',
+      retagged.sacrificed =
         SacrificedAxiom.kernel KernelAxiom.CompositionalSafety
 ```
 
-The compatibility restate is named:
+This is a conditional monitor retag, not a detector, kernel-action realization,
+or proof of `KernelAxiomViolation`. In particular,
+`MonitoredSacrificeCertificate` contains a target-invariant-carrying
+`KernelStep` but no `KernelAxiomViolation` payload.
 
-```lean
-theorem decompositionAttackClass_compositionalSafety_retag
-```
+### Ordered action/claim handoff
 
-It still takes the raw-step monitor/extractor hypotheses, and its surfaced
-branch now also requires a realization relation for the surfaced kernel step.
-The headline alias is:
+The next trajectory milestone must use one nonempty kernel action trace as the
+only source list. A binding should supply
+`encodeAction : D.actionSpace.Action → ClaimQ` and define its claim profile as
+`step.action_trace.map encodeAction`. Graph facts must be stated over exactly
+that mapped list, which preserves order and length; no independent decomposition
+list is admissible.
 
-```lean
-theorem decomposition_attack_blocked_or_sacrificed
-```
+This syntactic binding does not prove semantic replay. The downstream theorem
+must either instantiate a concrete action space with a proved replay law or keep
+an explicitly named action/claim simulation premise in its type. Under the
+current certificate representation, any emitted compositional-safety result
+remains monitor retagging unless a separate `KernelAxiomViolation` payload is
+introduced.
 
-Its name records that it retags an already surfaced monitor branch rather than
-deriving classifier compatibility from the attack class.
+### Scope
 
-#### Proof Sketch
-
-The direct certificate proof first extracts a witness step from the admitted
-realization relation. The extracted witness records the embedded `Decomposition`,
-an index into its nonempty step list, the local `Decision3.Permit` proof at that
-index, a step-index ordering proof that no earlier local step returned
-`Decision3.Deny`, and the denied composed endpoint. The certificate monitor event
-is:
-
-```lean
-DecompositionKernelViolationFired compose unit node denied ∧
-  LocalPermissionMonotonicity compose unit node denied
-```
-
-The local monotonicity failure is derived internally by
-`localPermissionMonotonicity_of_decompositionAttackClass`, which applies the
-contrapositive shape of `csm_no_permitting_decomposition`. The attack-class
-predicate supplied to that helper is `Nonempty.intro hrealize.witness`, so the
-caller no longer supplies a separate attack-class or `hcsm` hypothesis for the
-certificate path. The certificate's sacrifice tag is:
-
-```lean
-SacrificedAxiom.kernel KernelAxiom.CompositionalSafety
-```
-
-The compatibility restate applies `classify_raw_step`. In the boundary case it
-returns the boundary disjunct; in the surfaced-monitor case it builds the
-compositional-safety certificate from the surfaced transition payload and the
-realized decomposition witness. That theorem is deliberately named as a retag.
-The direct theorem is the one that consumes the realized decomposition semantics
-into the monitored certificate, while the classifier restate records the current
-raw-step API boundary.
-
-#### Why the Certificate Is Explicit
-
-The right disjunct is not:
-
-```lean
-Nonempty (MonitoredSacrificeCertificate D D')
-```
-
-That would lose the indexed sacrifice identity.
-
-The theorem instead returns:
-
-```lean
-∃ cert : MonitoredSacrificeCertificate D D',
-  cert.sacrificed =
-    SacrificedAxiom.kernel KernelAxiom.CompositionalSafety
-```
-
-This keeps the sacrifice tag visible in the theorem type, lets downstream users
-pattern-match on the exact kernel axiom, and prevents the theorem from being
-satisfied by an unrelated governance property sacrifice.
-
-The bridge uses `decompositionRealizationBoundExceedance` as the monitoring
-payload. That constructor routes the optional failed-property slot through
-`DecompositionAttackRealizesKernelStep`. For kernel-obligation sacrifices, the
-slot may be empty because `GovernanceProperty` does not include kernel
-compositional safety; when the realization supplies a governance property, the
-constructor proves that the property fails on the compiled graph tied to the same
-governed system. The constructed certificate records the usual runtime
-observation and ledger emission through existing helper constructors.
-
-#### Sleeper Fixture Lift
-
-The bridge module also lifts the concrete sleeper audit subject (see §3) into the
-decomposition state. The state is `SleeperDeploymentState`, which carries the
-represented sleeper audit subject, the training/deployment phase, and the audit
-claim corpus being evaluated. The unit is the sleeper audit subject in training
-phase with its canonical audit claims, and the action type has a single
-deployment action whose composition applies the concrete deployment-claim update
-from `DeceptiveDeploymentWitnessOn`. The local node permits the action during
-training and denies it after the deployment phase has been reached, and the
-denied predicate is tied to the concrete affected claimant in the sleeper
-witness: the subject is `sleeperAgentExtractedGraph`, the phase is deployment,
-the claims are the witness's deployment claims, and the affected claimant's
-deployment decision is `deny`.
-
-The singleton deployment action therefore witnesses the decomposition class using
-sleeper-specific training/deployment structure rather than a constant
-always-permit endpoint, and the local monotonicity failure is derived from that
-attack class by `localPermissionMonotonicity_of_decompositionAttackClass`. The
-bridge file also includes a native finite check: the sleeper subject passes the
-compositional-safety audit check and admits the represented deceptive deployment
-predicate. That reproduces the already-existing distinction that the audit-level
-sleeper predicate and the graph compositional-safety check are not the same
-property.
-
-#### Branch Fixtures
-
-Two branch witnesses are provided. The block fixture uses the non-reflexive raw
-widened-signal mutation from `exampleGovernanceKernelData` to
-`exampleGovernanceWideSignalKernelData`. The boundary fact is not identity: it is
-supplied by the independently established target semantic-kernel witness for
-`exampleGovernanceWideSignalKernelData`, and the fixture returns the
-boundary-preserved disjunction by that target invariant. The sacrifice fixture
-uses the concrete non-reflexive kernel step over the same widened-signal target,
-constructs the compositional-safety certificate directly from the decomposition
-witness, and no longer supplies that certificate back into the classifier as the
-monitor hypothesis.
-
-Both fixtures are theorem-level witnesses. Small `native_decide` checks evaluate
-the branch selectors used by the fixtures, but the proof-carrying theorem
-statements remain the authoritative artifacts. The current kernel-sacrifice
-payload cannot always record a property-level `failedProperty = some ...` for a
-kernel-axiom sacrifice, because `MonitoringBoundExceedance.failedProperty` is
-property-specific while `KernelAxiom.CompositionalSafety` is a kernel obligation.
-The sacrifice fixture is therefore non-self-referential and non-reflexive, and
-the bound is still routed through `DecompositionAttackRealizesKernelStep`; the
-property slot is empty for that fixture because the compiled example graph has no
-governance-property failure to record.
-
-#### Relation to Sleeper-Agent Work
-
-The sleeper-agent scope: the narrow structural audit slice over a dormant
-training trigger, a deployment trigger, and a permit-to-deny change under a
-positive deployment perturbation, and the disclaimers that it models neither
-learned objectives nor training dynamics nor a hidden deployed objective, is
-set out in §3. Here that existing audit predicate is used only as a concrete
-fixture. The decomposition bridge itself is algebraic and kernel-relative, so the
-connection is one of substrate compatibility, not a claim of full behavioral
-coverage.
-
-#### Relation to `noUndeclaredSacrifice`
-
-The no-undeclared-sacrifice theorem concerns live compiled governance surfaces:
-it says that, under the peer-relative live-surface hypotheses, forced sacrifices
-are declared. The present bridge is different. It concerns raw kernel steps and
-monitored kernel certificates, and it says that, once the realization relation
-supplies the decomposition witness and the classifier inputs are present, the
-kernel step is boundary preserving or exposes a compositional-safety sacrifice.
-
-The two theorems are compatible: declaration discipline for compiled governance
-surfaces in one case, block-or-sacrifice classification for kernel transitions in
-the other. Both are polarity-honest, and neither claims omniscient attack
-detection.
-
-#### What the Bridge Does Not Prove
-
-The bridge does not prove that every system with a sleeper-shaped story is
-automatically detected. It does not prove that every monotonicity failure is a
-decomposition attack; the strictness theorem proves the opposite. It does not
-prove that a raw step can be classified without a source invariant, since the
-existing classifier requires that premise. It does not replace the
-monitor/extractor hypotheses, which remain explicit. It does not change the
-kernel API; it composes with it. And it does not use an arbitrary bundled
-existence claim for the sacrifice branch — the exact certificate tag appears in
-the type.
-
-#### Conclusion
-
-The formal contribution is a bridge theorem: a realized decomposition attack at
-the kernel step boundary, a source kernel invariant, and raw-step
-monitor/extractor compatibility together imply the kernel
-block-or-compositional-sacrifice disjunction. The construction is small because
-the endpoints already existed; the work was in aligning their polarity. The
-decomposition module supplies structural attack witnesses, the sacrifice module
-supplies monitored kernel certificates, and the bridge turns a surfaced monitor
-event into an exact `KernelAxiom.CompositionalSafety` sacrifice certificate.
-
-The theorem is constructive with the source-invariant premise. The missing
-premise in the shorter informal signature remains an explicit residual
-requirement of the current classifier API. That is the honest boundary of the
-result.
+The compiled seam proves a genuine claim-policy benign profile and a genuine
+local-permit/composed-deny profile with one canonical graph authority. It does
+not derive a generic `CompiledGovernance → σ → α → Decision3`, identify
+`ClaimQ` with arbitrary kernel actions, or close trajectory simulation.
 
 ## 6. Codex Harness Worked Example
 

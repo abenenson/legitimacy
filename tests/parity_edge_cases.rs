@@ -262,7 +262,7 @@ fn rust_statuses_for_claim_case(
             .into_iter()
             .map(|check| {
                 let status = if check == "non_vacuous" {
-                    kernel_status(check_graph_nonvacuity(graph, &claims, &cycles))
+                    kernel_status(check_graph_nonvacuity(graph, claims, &cycles))
                 } else {
                     "skipped".to_string()
                 };
@@ -271,50 +271,50 @@ fn rust_statuses_for_claim_case(
             .collect();
     }
 
-    let fields = graph_fields(&claims);
+    let fields = graph_fields(claims);
     let shocks = graph_shocks(&fields);
     let deltas = graph_deltas(&fields);
     vec![
         (
             "consistency".to_string(),
-            verdict_status(check_graph_consistency(graph, &claims)),
+            verdict_status(check_graph_consistency(graph, claims)),
         ),
         (
             "solidarity".to_string(),
-            verdict_status(check_graph_solidarity(graph, &claims, &shocks)),
+            verdict_status(check_graph_solidarity(graph, claims, &shocks)),
         ),
         (
             "monotonicity".to_string(),
             verdict_status(monotonicity_check_via_polarity_schema(
                 graph,
-                &claims,
+                claims,
                 &deltas,
                 &Default::default(),
             )),
         ),
         (
             "strategyproofness".to_string(),
-            verdict_status(check_graph_strategyproofness(graph, &claims)),
+            verdict_status(check_graph_strategyproofness(graph, claims)),
         ),
         (
             "certifiability".to_string(),
-            kernel_status(check_graph_certifiability(graph, &claims)),
+            kernel_status(check_graph_certifiability(graph, claims)),
         ),
         (
             "observable_determinacy".to_string(),
-            kernel_status(check_graph_observable_determinacy(graph, &claims)),
+            kernel_status(check_graph_observable_determinacy(graph, claims)),
         ),
         (
             "corrigibility".to_string(),
-            kernel_status(check_graph_corrigibility(graph, &claims)),
+            kernel_status(check_graph_corrigibility(graph, claims)),
         ),
         (
             "compositional_safety".to_string(),
-            kernel_status(check_graph_compositional_safety(graph, &claims)),
+            kernel_status(check_graph_compositional_safety(graph, claims)),
         ),
         (
             "non_vacuous".to_string(),
-            kernel_status(check_graph_nonvacuity(graph, &claims, &cycles)),
+            kernel_status(check_graph_nonvacuity(graph, claims, &cycles)),
         ),
     ]
     .into_iter()
@@ -820,7 +820,7 @@ fn deterministic_strategyproofness_graph(index: usize) -> GovernanceGraph {
                 decision: Decision::Permit,
             },
         };
-        let default = if (index + node_index) % 4 == 0 {
+        let default = if (index + node_index).is_multiple_of(4) {
             Decision::Permit
         } else {
             Decision::Deny
@@ -848,7 +848,7 @@ fn deterministic_strategyproofness_graph(index: usize) -> GovernanceGraph {
             legitimacy::GovernanceEdge::new(
                 NodeId::new(format!("r{index}-{node_index}")).unwrap(),
                 NodeId::new(format!("r{index}-{}", node_index + 1)).unwrap(),
-                if (index + node_index) % 2 == 0 {
+                if (index + node_index).is_multiple_of(2) {
                     EdgeTransform::PassThrough
                 } else {
                     EdgeTransform::ClaimModification { delta: 0.1 }

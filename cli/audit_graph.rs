@@ -115,7 +115,8 @@ pub(crate) fn run(command: AuditGraphCommand) -> Result<ExitCode, LegitimacyErro
                         files_parsed: 0,
                         files_skipped: 0,
                         files_errored: 0,
-                        complete: true,
+                        // Graph loading establishes no source extraction coverage.
+                        complete: false,
                         files: Vec::new(),
                     },
                     recognized_nodes: Vec::new(),

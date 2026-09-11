@@ -1,0 +1,25 @@
+policy_format = "legitimacy.trajectory-composition.policy"
+policy_format_version = "0"
+policy_identity = "policy.trajectory-composition.peer-half"
+policy_version = "0"
+occurrence_encoder_identity = "legitimacy.trajectory-composition.occurrence-index-strength"
+occurrence_encoder_version = "0"
+historical_property_identity = "legitimacy.trajectory-composition.every-observed-prefix-green"
+historical_property_version = "0"
+
+[graph]
+name = "trajectory-composition-peer-half"
+version = "0"
+
+[[nodes]]
+id = "peer-half"
+type = "binary"
+name = "peer-half"
+default = "deny"
+combination = "first_match"
+
+[[nodes.gates]]
+type = "peer_relative"
+field = "strength"
+percentile = 0.5
+decision = "permit"

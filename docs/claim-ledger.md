@@ -104,7 +104,7 @@ Rust evidence:
   `leaderboard_extracted_graphs_are_byte_identical_across_runs_and_match_canonical_snapshots`
   `tests/autogen_parity.rs:466`
 - `tests::extract::extract_output_is_byte_stable_for_multi_violation_fixture`
-  `tests/extract.rs:251`
+  `tests/extract.rs:254`
 
 Reviewer note: Lean proves the contract shape. It does not verify arbitrary
 tree-sitter parsing or Rust execution.
@@ -516,28 +516,40 @@ Reviewer note: this bridges a constructed CAI-shaped rule layer to the spectral
 behavioral game. It is not a behavioral embedding of Anthropic's full CAI
 training process.
 
-### C18. Decomposition attacks hit a block-or-sacrifice disjunction.
+### C18. Compiled claim policy has benign and decomposition-sensitive profiles.
 
-Status: **Formally proved** for the modeled decomposition bridge.
+Status: **Formally proved** for the claim-native compiled policy; monitor
+retagging remains conditional on already-emitted monitor evidence.
 
-Public source: paper 05, "5. Decomposition Attack Bridge"; paper 03, "1.4
-Contributions".
+Public source: paper 05, "5. Compiled Claim-Policy Decomposition"; paper 03,
+"6.2 Decomposition Attacks".
 
-Lean evidence:
+Compiled policy evidence:
 
-- `Legitimacy.decomposition_attack_blocked_or_sacrificed`
-  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:291`
-- `Legitimacy.sleeperAgentDecompositionAttackClass`
-  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:377`
-- `Legitimacy.sacrifice_leg_witness`
-  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:474`
-- `Legitimacy.block_leg_witness`
-  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:501`
+- `Legitimacy.CompiledGovernance.ClaimDecomposition`
+  `lean/Legitimacy/Protocol/CompiledStepPolicy.lean:80`
+- `Legitimacy.CompiledGovernance.claimDecompositionOfGraphDecisions`
+  `lean/Legitimacy/Protocol/CompiledStepPolicy.lean:90`
+- `Legitimacy.peerGraphCompiledPolicyTwoClaimBenign`
+  `lean/Legitimacy/Protocol/CompiledStepPolicyFixtures.lean:56`
+- `Legitimacy.peerGraphCompiledPolicyThreeClaimAttack`
+  `lean/Legitimacy/Protocol/CompiledStepPolicyFixtures.lean:117`
+- `Legitimacy.peerGraphCompiledPolicy_localPermit_composedDeny`
+  `lean/Legitimacy/Protocol/CompiledStepPolicyFixtures.lean:122`
+
+Conditional monitor-retag evidence:
+
+- `Legitimacy.Safety.MonitoredSacrificeCertificate.retagCompositionalSafetyOfCompiledClaimAttack`
+  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:32`
+- `Legitimacy.compiledClaimAttack_monitorRetag_ofMonitorEvidence`
+  `lean/Legitimacy/Bridges/DecompositionAttackKernelBridge.lean:75`
 
 Rust evidence: none.
 
-Reviewer note: the theorem is about the modeled kernel step and certificate
-surface. It is not a universal taxonomy of all decomposition attacks.
+Reviewer note: every policy verdict above comes from one compiled graph. The
+retag theorem neither binds kernel actions to claims nor proves a
+`KernelAxiomViolation`; ordered nonempty action-trace binding and replay
+simulation remain downstream obligations.
 
 ### C19. The Codex harness repair case study derives its repaired verdict.
 
@@ -901,14 +913,14 @@ Status: **Formally proved** for the modeled three-valued node composition.
 
 Public source: paper 03, "2. Three-Diagnostic Obstruction Theorem" (Definition
 2.4 governance node and the Escalate decision) and "6.7.8" composition follow-on;
-paper 05, "5. Decomposition Attack Bridge".
+paper 05, "5. Compiled Claim-Policy Decomposition".
 
 Lean evidence:
 
 - `Legitimacy.three_valued_composition_inadmissibility`
-  `lean/Legitimacy/Results/Composition.lean:519`
+  `lean/Legitimacy/Results/Composition.lean:536`
 - `Legitimacy.three_valued_escalationPolicyWitness_composition_inadmissibility`
-  `lean/Legitimacy/Results/Composition.lean:499`
+  `lean/Legitimacy/Results/Composition.lean:516`
 
 Rust evidence:
 

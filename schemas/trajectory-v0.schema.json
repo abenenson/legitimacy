@@ -1,0 +1,523 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:legitimacy:trajectory:trace:v0",
+  "title": "Legitimacy offline single-stream trajectory trace v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "run_id",
+    "adapter",
+    "policy",
+    "raw_capture",
+    "events"
+  ],
+  "properties": {
+    "schema": {
+      "$ref": "#/$defs/artifact_binding"
+    },
+    "run_id": {
+      "$ref": "#/$defs/evidenced_string"
+    },
+    "adapter": {
+      "$ref": "#/$defs/artifact_binding"
+    },
+    "policy": {
+      "$ref": "#/$defs/artifact_binding"
+    },
+    "raw_capture": {
+      "$ref": "#/$defs/raw_capture_seal"
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    }
+  },
+  "x-contract-identity": "legitimacy.trajectory.trace",
+  "x-contract-version": "0",
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "minLength": 71,
+      "maxLength": 71,
+      "pattern": "^sha256:[0-9a-f]{64}"
+    },
+    "artifact_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]",
+      "not": {
+        "pattern": "[^a-z0-9._-]"
+      }
+    },
+    "artifact_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "not": {
+        "pattern": "[^A-Za-z0-9._+-]"
+      }
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9]",
+      "not": {
+        "anyOf": [
+          {
+            "const": "unknown"
+          },
+          {
+            "pattern": "[^A-Za-z0-9._:@/+\\-]"
+          }
+        ]
+      }
+    },
+    "artifact_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "version",
+        "hash"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/artifact_name"
+        },
+        "version": {
+          "$ref": "#/$defs/artifact_version"
+        },
+        "hash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "raw_capture_seal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_count",
+        "digest"
+      ],
+      "properties": {
+        "record_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "source_locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_index",
+        "byte_offset",
+        "byte_length",
+        "digest"
+      ],
+      "properties": {
+        "record_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9999
+        },
+        "byte_offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8388607
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8388608
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "cites_raw_range_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "locator"
+      ],
+      "properties": {
+        "classification": {
+          "const": "cites-raw-range"
+        },
+        "locator": {
+          "$ref": "#/$defs/source_locator"
+        }
+      }
+    },
+    "declared_derivation_binding_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "rule",
+        "source_inputs"
+      ],
+      "properties": {
+        "classification": {
+          "const": "declared-derivation-binding"
+        },
+        "rule": {
+          "$ref": "#/$defs/artifact_binding"
+        },
+        "source_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "items": {
+            "$ref": "#/$defs/source_locator"
+          }
+        }
+      }
+    },
+    "unavailable_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "reason"
+      ],
+      "properties": {
+        "classification": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/cites_raw_range_evidence"
+        },
+        {
+          "$ref": "#/$defs/declared_derivation_binding_evidence"
+        },
+        {
+          "$ref": "#/$defs/unavailable_evidence"
+        }
+      ]
+    },
+    "evidenced_string": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "properties": {
+        "value": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "evidenced_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 9999
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "event_kind": {
+      "type": "string",
+      "enum": [
+        "action-request",
+        "action-result",
+        "observation",
+        "message",
+        "lifecycle"
+      ]
+    },
+    "evidenced_kind": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "properties": {
+        "value": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/event_kind"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "normalized_value": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "null"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "integer"
+            },
+            "value": {
+              "type": "string",
+              "oneOf": [
+                {
+                  "const": "0"
+                },
+                {
+                  "maxLength": 1024,
+                  "pattern": "^[1-9]",
+                  "not": {
+                    "pattern": "[^0-9]"
+                  }
+                },
+                {
+                  "maxLength": 1025,
+                  "pattern": "^-[1-9]",
+                  "not": {
+                    "anyOf": [
+                      {
+                        "pattern": "[^0-9-]"
+                      },
+                      {
+                        "pattern": "[0-9]-"
+                      },
+                      {
+                        "pattern": "-.*-"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "string"
+            },
+            "value": {
+              "type": "string",
+              "maxLength": 16384
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "array"
+            },
+            "value": {
+              "type": "array",
+              "maxItems": 1024,
+              "items": {
+                "$ref": "#/$defs/normalized_value"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "object"
+            },
+            "value": {
+              "type": "object",
+              "maxProperties": 256,
+              "propertyNames": {
+                "$ref": "#/$defs/artifact_name"
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/normalized_value"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evidenced_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "properties": {
+        "value": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/normalized_value"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "raw_record_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_index",
+        "digest"
+      ],
+      "properties": {
+        "record_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9999
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "sequence_index",
+        "kind",
+        "raw_record",
+        "payload"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/evidenced_string"
+        },
+        "sequence_index": {
+          "$ref": "#/$defs/evidenced_index"
+        },
+        "kind": {
+          "$ref": "#/$defs/evidenced_kind"
+        },
+        "source_item_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/evidenced_string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_record": {
+          "$ref": "#/$defs/raw_record_reference"
+        },
+        "payload": {
+          "type": "object",
+          "maxProperties": 256,
+          "propertyNames": {
+            "$ref": "#/$defs/artifact_name"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/evidenced_value"
+          }
+        }
+      }
+    }
+  }
+}
