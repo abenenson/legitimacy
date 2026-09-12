@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.1 (unreleased) — executed composition, useful repair and explicit evidence
+## 1.1.1 (2026-09-11) — executed composition, useful repair and explicit evidence
 
 This is the v1.1 research release, using the fresh 1.1.1 identity after
 withdrawal of v1.1.0. It includes breaking Rust API and JSON changes relative

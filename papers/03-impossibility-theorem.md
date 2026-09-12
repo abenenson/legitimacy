@@ -23,7 +23,7 @@ non-denying suffix $\to$ forced diagnostic sacrifice\\
 \end{tcolorbox}
 ```
 
-> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.1.1` (planned; resolve the signed tag before citing this candidate as released). Dual license: MIT OR Apache-2.0.
+> **Artifact, data, and companion papers.** This paper is one of the Legitimacy program's manuscripts. The machine-checked artifact (Lean 4 theorem stack + Rust audit pipeline), the companion papers, and the claim ledger are in the project repository, github.com/abenenson/legitimacy; project page: adambenenson.com/projects/legitimacy. Verification code anchor: `v1.1.1` (signed release). Dual license: MIT OR Apache-2.0.
 
 > **Main theorem: reachable peer-relative obstruction.** The reachable-stage theorem forces a choice: once a real binary governance decision reaches a scarce peer-relative allocator, the rule must give up consistency, solidarity, or cross-claimant monotonicity. In this binary semantics, strategyproofness follows from solidarity plus monotonicity, so it is a derived corollary rather than a fourth independent axiom. Formal scope: a transparent prefix reaches a nontrivial symmetric scarce peer-relative allocator, the allocator is decisive for the relevant claim profile, and the suffix preserves every permit issued by that allocator.
 
@@ -848,7 +848,7 @@ The impossibility theorem makes the compiler's diagnostic layers non-optional. A
 
 ## 9. Code and Data Availability
 
-**Artifact status**: this checkout prepares the `v1.1.1` verification code anchor; its signed-tag identity is pending publication. The required artifact invariants are: zero Lean `sorry`, zero Lean `admit`, zero first-party Lean `axiom`, `cd lean && lake build Legitimacy` green, and the Rust gate `cargo test && cargo clippy --all-targets --all-features -- -D warnings && cargo fmt --check` is the required extractor verification path.
+**Artifact status**: the verification code anchor is `v1.1.1` (signed release). The required artifact invariants are: zero Lean `sorry`, zero Lean `admit`, zero first-party Lean `axiom`, `cd lean && lake build Legitimacy` green, and the Rust gate `cargo test && cargo clippy --all-targets --all-features -- -D warnings && cargo fmt --check` is the required extractor verification path.
 
 **Repository access**: the public repository is the artifact of record for the preprint release. Immutable archives are produced from the released tag.
 

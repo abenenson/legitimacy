@@ -62,9 +62,9 @@ needed. The first build downloads dependencies and can take several minutes.
 The [reproduction guide](docs/executed-composition-v1.md#run-it) explains the
 seven outcomes, signed-capture checks and how to build an offline bundle.
 
-**Latest published release:** [signed v1.0.0](https://github.com/abenenson/legitimacy/releases/tag/v1.0.0).
-The composition experiment is available in this checkout and is not included in
-that release. [Citation metadata](CITATION.cff) describes this checkout.
+**Latest published release:** [signed v1.1.1](https://github.com/abenenson/legitimacy/releases/tag/v1.1.1).
+The release includes the composition experiment and an offline Linux x86_64 bundle.
+[Citation metadata](CITATION.cff) describes this checkout.
 
 ## Why this matters for AI alignment
 
