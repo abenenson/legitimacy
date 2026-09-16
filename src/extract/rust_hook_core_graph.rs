@@ -133,7 +133,8 @@ fn build_graph(files: Vec<RustHookCoreFile>) -> Result<CoreGraphBuild, Legitimac
     let mut builder = GraphBuilder::new()?;
     let mut nodes = Vec::new();
     let mut edges = Vec::new();
-    let mut resolution_issues = Vec::new();
+    let resolution_issues = Vec::new();
+    let mut seen_registrations = BTreeSet::new();
     let mut seen_nodes = BTreeSet::new();
     let mut hook_index: BTreeMap<String, Vec<HookLocation>> = BTreeMap::new();
 
@@ -152,15 +153,15 @@ fn build_graph(files: Vec<RustHookCoreFile>) -> Result<CoreGraphBuild, Legitimac
     for file in &files {
         for registration in &file.ast.registrations {
             let registration_id = registration_node_id(&file.path, registration);
-            let Some(location) = resolve_hook(
-                &files,
-                &hook_index,
-                &registration.callback,
-                &registration_id,
-                &mut resolution_issues,
-            ) else {
-                continue;
-            };
+            if !seen_registrations
+                .insert((registration.event.clone(), registration.callback.clone()))
+            {
+                return Err(LegitimacyError::invalid_input(format!(
+                    "duplicate RustHookCore registration for event '{}' and callback '{}'",
+                    registration.event, registration.callback,
+                )));
+            }
+            let location = resolve_hook(&hook_index, &registration.callback)?;
             let hook_file = &files[location.file_index];
             let hook = &hook_file.ast.hooks[location.hook_index];
             let hook_id = hook_node_id(&hook_file.path, hook);
@@ -231,38 +232,18 @@ fn build_graph(files: Vec<RustHookCoreFile>) -> Result<CoreGraphBuild, Legitimac
 }
 
 fn resolve_hook(
-    files: &[RustHookCoreFile],
     hook_index: &BTreeMap<String, Vec<HookLocation>>,
     callback: &str,
-    caller: &str,
-    resolution_issues: &mut Vec<super::ResolutionIssue>,
-) -> Option<HookLocation> {
-    let Some(candidates) = hook_index.get(callback) else {
-        resolution_issues.push(super::ResolutionIssue {
-            caller: caller.to_string(),
-            target_symbol: callback.to_string(),
-            kind: super::ResolutionIssueKind::Unresolved,
-            candidates: Vec::new(),
-        });
-        return None;
-    };
-    if candidates.len() > 1 {
-        resolution_issues.push(super::ResolutionIssue {
-            caller: caller.to_string(),
-            target_symbol: callback.to_string(),
-            kind: super::ResolutionIssueKind::Ambiguous,
-            candidates: candidates
-                .iter()
-                .map(|location| {
-                    hook_node_id(
-                        &files[location.file_index].path,
-                        &files[location.file_index].ast.hooks[location.hook_index],
-                    )
-                })
-                .collect(),
-        });
+) -> Result<HookLocation, LegitimacyError> {
+    match hook_index.get(callback).map(Vec::as_slice) {
+        Some([location]) => Ok(*location),
+        Some(_) => Err(LegitimacyError::invalid_input(format!(
+            "ambiguous RustHookCore callback '{callback}': module/name resolution is not modeled",
+        ))),
+        None => Err(LegitimacyError::invalid_input(format!(
+            "unresolved RustHookCore callback '{callback}'",
+        ))),
     }
-    candidates.first().copied()
 }
 
 fn registration_node_id(path: &str, registration: &RustHookCoreRegistration) -> String {

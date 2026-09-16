@@ -5,6 +5,34 @@ papers. It does not add new theorem, Rust, or paper claims. It names where each
 headline claim is load-bearing, where it is only executable evidence, and where
 the current substrate is deliberately scoped.
 
+## Read the evidence in five minutes
+
+The composition experiment is the shortest path from the research question to
+an observable failure and repair. The other results explain the obligations and
+tradeoffs a broader governance system would need to carry. Start with the
+construction you want to assess, then inspect the corresponding boundary:
+
+| Question | Evidence to inspect | What still needs evidence |
+| --- | --- | --- |
+| Can approved actions combine into harm, and can useful work survive a repair? | [Executed composition and reproduction](executed-composition-v1.md): a fixed forbidden outcome, a finite-sequence repair proof and a runnable host. | Applying the model to a live agent system; the supplied host is sequential and synthetic. |
+| Which source-to-graph transformation is proved? | [Restricted source extraction](extractor-boundary.md#from-source-to-a-checked-decision): successful extraction preserves modeled program decisions. | Live source faithfully interpreted as that program; correctness of the separate production Rust parser. |
+| How do concrete kernels satisfy the obligations? | [Kernel examples](../lean/Legitimacy/Kernel/BoundaryExitExamples.lean) include a causal handoff; [action-driven examples](../lean/Legitimacy/Safety/KernelSafety/GovernanceExamples.lean) prove restricted supervisory preservation under a state-changing action. | One useful deployed system carrying the obligations together; these witnesses simplify different dimensions. |
+| How general is the impossibility result? | [The wider scarce-coupled class](../lean/Legitimacy/Impossibility/SymmetricScarceCoupledObstruction.lean) includes the median rule; a narrower rank-sensitive class forces stronger individual failures. | Whether a particular deployment meets the stated premises and should adopt these diagnostics. |
+| How does vulnerability connect to modeled capability? | [The shared-cliff construction](../lean/Legitimacy/Results/CapabilityScalingKernelSafety.lean) connects obstruction to positive vulnerability on a chosen carrier and a common modeled threshold. | An independently justified deployment interpretation and calibration; the threshold algebra alone is not an empirical ASI prediction. |
+| How does this relate to existing research? | [The positioning paper](../papers/06-positioning.md) compares governance rules with accountability allocation, social choice and runtime enforcement. | Contribution-specific comparisons; neither shared vocabulary nor a machine-checked proof establishes broad priority. |
+
+A failed graph diagnostic identifies a property the represented rule does not
+preserve. Its practical significance depends on the policy; it is not automatically
+a security exploit. Under scarcity, one request displacing another may be intentional. The
+abstraction must fit the system, and the property must fit its intended policy.
+
+For reproduction, the [signed release](https://github.com/abenenson/legitimacy/releases/tag/v1.1.1)
+provides an offline Linux bundle and provenance. The [verification commands](../README.md#verify)
+check a source checkout. Maintainer-run checks are reproducible evidence;
+independent reproduction is a separate step.
+
+## Evidence statuses
+
 Statuses:
 
 - **Formally proved**: Lean proves the statement over the modeled artifact.
@@ -51,7 +79,7 @@ explicit layers.
 Status: **Formally proved** as a decomposition; **scoped** away from raw source
 semantics.
 
-Public source: README "Theorem Spine"; paper 02, "3. The Kernel Target"; paper
+Public source: Formal overview "Theorem Spine"; paper 02, "3. The Kernel Target"; paper
 03, "4. Semantic Kernel Bridge".
 
 Lean evidence:
@@ -80,7 +108,7 @@ proof of diagnostic or spectral legitimacy.
 Status: **Formally proved** for contracted extractors; **empirically enforced**
 for the current Rust extractor and fixtures.
 
-Public source: README "Boundaries And Gates"; paper 02, "6. Evidence That the
+Public source: Formal overview "Boundaries And Gates"; paper 02, "6. Evidence That the
 Object Is Buildable"; paper 03, "6.1 Bounded extractor contract and Rust
 parity"; paper 01, "Current Evidence Lanes".
 
@@ -114,7 +142,7 @@ tree-sitter parsing or Rust execution.
 Status: **Empirically enforced** and **scoped**.
 
 Public source: paper 01, "The setup", "Current Evidence Lanes", and "Why the
-Evidence Tiers Matter"; README "Boundaries And Gates"; `docs/boundary.md`.
+Evidence Tiers Matter"; Formal overview "Boundaries And Gates"; `docs/boundary.md`.
 
 Lean evidence:
 
@@ -142,11 +170,21 @@ tradeoff.
 
 Status: **Formally proved**.
 
-Public source: README "Theorem Spine"; paper 02, "4. The Forcing Theorem";
+The wider scarce-coupled obstruction includes the median rule. The structural
+peer-relative class is a narrower specialization with additional rank laws;
+the max-rule separator preserves consistency in the wider class while failing
+monotonicity. The general conclusion is failure of the conjunction, not that
+every covered rule must fail the same individual diagnostic.
+
+Public source: Formal overview "Theorem Spine"; paper 02, "4. The Forcing Theorem";
 paper 03, "2. Three-Diagnostic Obstruction Theorem".
 
 Lean evidence:
 
+- `Legitimacy.symmetric_scarce_coupled_allocators_obstructed`
+  `lean/Legitimacy/Impossibility/SymmetricScarceCoupledObstruction.lean:129`
+- `Legitimacy.maxStrengthNode_separates_structural_from_symmetricScarceCoupled`
+  `lean/Legitimacy/Impossibility/SymmetricScarceCoupledTightness.lean:752`
 - `Legitimacy.reachable_peer_relative_decisive_stage_obstructs_diagnostics`
   `lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103`
 - `Legitimacy.nontrivial_symmetric_scarce_peer_relative_binary_allocators_obstructed`
@@ -163,9 +201,13 @@ Rust evidence:
 - `src::axioms::diagnostics::graph::monotonicity::check_graph_monotonicity`
   `src/axioms/diagnostics/graph/monotonicity.rs:233`
 
-Reviewer note: the theorem needs reachability, transparent-prefix, structural
-scarcity, symmetry, and non-denying suffix hypotheses. It is not the claim that
-any graph containing any peer-relative component is impossible.
+Reviewer note: the wider theorem requires claimant symmetry, finite-estate
+coupling, a scarce admissible profile, an effective surface and a complete tail.
+The structural reachable-stage result additionally specifies the narrower
+allocator class, a transparent prefix and a non-denying suffix. Neither theorem
+says that any graph containing any peer-relative component is impossible.
+The Rust checks listed here do not establish those hypotheses for arbitrary
+production extraction.
 
 ### C06. The theorem boundary is honest: some weakened peer-relative slogans
 are false.
@@ -251,7 +293,7 @@ level, but the public claim is not that they recover substantive allocation.
 Status: **Formally proved** for the modeled live-compiled surface;
 **empirically enforced** by protocol and sacrifice compilation tests.
 
-Public source: README "Boundaries And Gates"; paper 02, "4.1 Twin Safety-Stack
+Public source: Formal overview "Boundaries And Gates"; paper 02, "4.1 Twin Safety-Stack
 Headlines"; paper 03, "3.7 The impossibility-safety canonical pair".
 
 Lean evidence:
@@ -280,7 +322,7 @@ theorem is over the modeled complete peer-relative surface.
 
 Status: **Formally proved** for covered trajectories and schedules.
 
-Public source: README "Theorem Spine"; paper 02, "4.1 Twin Safety-Stack
+Public source: Formal overview "Theorem Spine"; paper 02, "4.1 Twin Safety-Stack
 Headlines"; paper 03, "3.7 The impossibility-safety canonical pair".
 
 Lean evidence:
@@ -331,7 +373,7 @@ strict preservation of every original decision.
 
 Status: **Formally modeled** in Lean and **empirically enforced** in Rust.
 
-Public source: README "Broader CLI Surface"; paper 03, "6.3 Empirical audit"; paper
+Public source: Formal overview "Broader CLI Surface"; paper 03, "6.3 Empirical audit"; paper
 05, "3.1 The 9-element audit".
 
 Lean evidence:
@@ -363,7 +405,7 @@ Status: **Formally proved** over the extracted finite graph; **empirically
 enforced** for fixture extraction and audits; **scoped** away from all live
 Codex behavior.
 
-Public source: README "Worked extractions: the obstruction on real-agent graphs"; paper 01, "Exploratory
+Public source: Formal overview "Worked extractions: the obstruction on real-agent graphs"; paper 01, "Exploratory
 Findings"; paper 03, "1.4 Contributions"; paper 05, "6. Codex Harness Worked
 Example".
 
@@ -379,7 +421,7 @@ Lean evidence:
 Rust evidence:
 
 - `src::extract::rust_hook_core_parser::parse_rust_hook_core`
-  `src/extract/rust_hook_core_parser.rs:110`
+  `src/extract/rust_hook_core_parser.rs:114`
 - Namespace: `tests::codex_mechanical`
   Function:
   `mechanical_codex_source_graph_distinguishes_schema_polarity_from_legacy_delta`
@@ -403,7 +445,7 @@ finite-graph claims.
 Status: **Formally proved** over the extracted finite graph; **scoped** to the
 modeled graph and lattice choice.
 
-Public source: README "Worked extractions: the obstruction on real-agent graphs"; paper 03,
+Public source: Formal overview "Worked extractions: the obstruction on real-agent graphs"; paper 03,
 "1.4 Contributions"; `docs/repository-context.md`, "Review-Required Axiom
 Revision".
 
@@ -585,7 +627,7 @@ verdict is a typed case-study endpoint.
 Status: **Formally proved** in the spectral surrogate; **empirically mirrored**
 by Rust spectral checks.
 
-Public source: README "Theorem Spine"; paper 03, "5.6 Critical capability and
+Public source: Formal overview "Theorem Spine"; paper 03, "5.6 Critical capability and
 the Stackelberg limit"; paper 04, "3.1 The governance graph and its spectral
 vulnerability".
 
@@ -614,7 +656,7 @@ about behavioral learning dynamics.
 
 Status: **Formally proved** in the spectral surrogate.
 
-Public source: README "Theorem Spine"; paper 04, "3. Stackelberg Asymptotic
+Public source: Formal overview "Theorem Spine"; paper 04, "3. Stackelberg Asymptotic
 Limit"; paper 03, "5.6 Critical capability and the Stackelberg limit".
 
 Lean evidence:
@@ -641,7 +683,7 @@ arbitrary strategic behavior by deployed models.
 Status: **Formally proved** for the stated deterministic and calibrated-channel
 models; **scoped** away from general Shannon equality.
 
-Public source: README "Theorem Spine"; paper 04, "2. Capacity Converse"; paper
+Public source: Formal overview "Theorem Spine"; paper 04, "2. Capacity Converse"; paper
 06, "6. Two C* Notions".
 
 Lean evidence:
@@ -707,7 +749,7 @@ alignment proofs.
 Status: **Formally proved** for family-aligned complete carriers; **open** for a
 substrate-wide free bridge.
 
-Public source: README "Theorem Spine"; paper 03, "Abstract" and "5.7 RG flow";
+Public source: Formal overview "Theorem Spine"; paper 03, "Abstract" and "5.7 RG flow";
 paper 06, "4. GS-AI Verifier Positioning"; `docs/safety-and-asi-scope.md`.
 
 Lean evidence:
@@ -871,7 +913,7 @@ frontier-framework refutations.
 
 Status: **Scoped** framing claim with theorem-backed fixture rows.
 
-Public source: README "Worked extractions: the obstruction on real-agent graphs"; paper 03, "6.3
+Public source: Formal overview "Worked extractions: the obstruction on real-agent graphs"; paper 03, "6.3
 Executable audit results"; paper 05, "2. AI Control Case Study and Verdict";
 paper 06, "2. Prior Art and Adjacent Programs"; docs/repository-context.md,
 "Claim Ledger" and "Review-Required Axiom Revision".
@@ -1094,7 +1136,7 @@ Status: **Formally proved** over the public-doc-derived governance graph;
 is derived from the public Claude Code hook/settings/command governance schema,
 not extracted from closed-source handler implementations.
 
-Public source: README "Why a frontier lab should care" and README
+Public source: Formal overview "Why a frontier lab should care" and README
 "Worked extractions: the obstruction on real-agent graphs"; paper 03 audit taxonomy (the proprietary Claude
 Code product, treated as metadata-only).
 

@@ -13,16 +13,19 @@ my ($root) = @ARGV;
 my $readme = "$root/README.md";
 my $ledger = "$root/docs/claim-ledger.md";
 
-open my $rfh, "<", $readme or die "cannot read $readme: $!";
 my %headings;
-while (my $line = <$rfh>) {
-  if ($line =~ /^#+\s+(.+?)\s*$/) {
-    my $heading = $1;
-    $heading =~ s/\s+#+\s*$//;
-    $headings{$heading} = 1;
+for my $source (["README", $readme], ["Formal overview", "$root/docs/formal-overview.md"]) {
+  my ($label, $path) = @$source;
+  open my $rfh, "<", $path or die "cannot read $path: $!";
+  while (my $line = <$rfh>) {
+    if ($line =~ /^#+\s+(.+?)\s*$/) {
+      my $heading = $1;
+      $heading =~ s/\s+#+\s*$//;
+      $headings{$label}{$heading} = 1;
+    }
   }
+  close $rfh;
 }
-close $rfh;
 
 open my $lfh, "<", $ledger or die "cannot read $ledger: $!";
 my $failures = 0;
@@ -129,10 +132,10 @@ sub is_declaration_candidate {
 
 while (my $line = <$lfh>) {
   ++$line_number;
-  while ($line =~ /README "([^"\n]+)"/g) {
-    my $heading = $1;
-    next if $headings{$heading};
-    warn "docs/claim-ledger.md:$line_number: README heading not found: "
+  while ($line =~ /(README|Formal overview) "([^"\n]+)"/g) {
+    my ($label, $heading) = ($1, $2);
+    next if $headings{$label}{$heading};
+    warn "docs/claim-ledger.md:$line_number: $label heading not found: "
       . "\"$heading\"\n";
     ++$failures;
   }

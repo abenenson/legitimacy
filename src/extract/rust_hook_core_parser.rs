@@ -1,9 +1,13 @@
+mod source_spans;
+
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::fmt;
+use source_spans::RustHookCoreSpanIndex;
+use std::{collections::BTreeSet, fmt};
+use syn::parse::Parser;
 use syn::{
-    Expr, ExprCall, ExprMatch, ExprPath, FnArg, GenericArgument, Item, ItemEnum, ItemFn, Lit, Pat,
-    PatLit, PathArguments, ReturnType, Stmt, Type, TypePath, parse_file,
+    Expr, ExprMatch, ExprPath, FnArg, GenericArgument, Item, ItemEnum, ItemFn, Lit, Pat, PatLit,
+    PathArguments, ReturnType, Stmt, Type, TypePath, parse_file,
 };
 
 const CORE_HASH_ALGORITHM: &str = "rust-hook-core-json-sha256:v1";
@@ -114,6 +118,21 @@ pub fn parse_rust_hook_core(
         RustHookCoreUnsupportedConstruct::new(format!("source contains Rust parse errors: {error}"))
     })?;
     reject_dynamic_dispatch(&file)?;
+    reject_semantic_attributes(&file)?;
+    let event_variants: BTreeSet<String> = file
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            Item::Enum(declaration) if declaration.ident == "HookEvent" => Some(declaration),
+            _ => None,
+        })
+        .flat_map(|declaration| {
+            declaration
+                .variants
+                .iter()
+                .map(|variant| variant.ident.to_string())
+        })
+        .collect();
     let mut source_spans = RustHookCoreSpanIndex::new(source);
     let mut ast = RustHookCoreAst {
         hash_algorithm: CORE_HASH_ALGORITHM.to_string(),
@@ -126,7 +145,10 @@ pub fn parse_rust_hook_core(
         match item {
             Item::Use(_) => {}
             Item::Enum(item_enum) => ast.decision_enums.push(parse_decision_enum(item_enum)?),
-            Item::Fn(function) => ast.hooks.push(parse_hook_fn(function, &source_spans)?),
+            Item::Fn(function) => {
+                ast.hooks
+                    .push(parse_hook_fn(function, &source_spans, &event_variants)?)
+            }
             Item::Macro(item_macro) => {
                 if item_macro.mac.path.is_ident("register_hook") {
                     let mut registration =
@@ -151,6 +173,19 @@ pub fn parse_rust_hook_core(
     ast.decision_enums
         .sort_by(|left, right| left.name.cmp(&right.name));
     ast.hooks.sort_by(|left, right| left.name.cmp(&right.name));
+    if ast
+        .hooks
+        .windows(2)
+        .any(|pair| pair[0].name == pair[1].name)
+        || ast
+            .decision_enums
+            .windows(2)
+            .any(|pair| pair[0].name == pair[1].name)
+    {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "duplicate declaration names are outside RustHookCore",
+        ));
+    }
     ast.registrations.sort_by(|left, right| {
         left.event
             .cmp(&right.event)
@@ -173,6 +208,16 @@ pub fn parse_rust_hook_core(
 fn parse_decision_enum(
     item_enum: &ItemEnum,
 ) -> Result<RustHookCoreDecisionEnum, RustHookCoreUnsupportedConstruct> {
+    if !item_enum.generics.params.is_empty()
+        || item_enum.generics.where_clause.is_some()
+        || item_enum.variants.iter().any(|variant| {
+            !matches!(variant.fields, syn::Fields::Unit) || variant.discriminant.is_some()
+        })
+    {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "enum payloads, discriminants and generics are outside RustHookCore",
+        ));
+    }
     let name = item_enum.ident.to_string();
     let variants = item_enum
         .variants
@@ -203,17 +248,22 @@ fn parse_decision_enum(
 fn parse_hook_fn(
     function: &ItemFn,
     source_spans: &RustHookCoreSpanIndex<'_>,
+    event_variants: &BTreeSet<String>,
 ) -> Result<RustHookCoreHook, RustHookCoreUnsupportedConstruct> {
     let name = function.sig.ident.to_string();
     if function.sig.asyncness.is_some()
         || function.sig.unsafety.is_some()
+        || function.sig.constness.is_some()
+        || function.sig.abi.is_some()
+        || function.sig.variadic.is_some()
+        || function.sig.generics.where_clause.is_some()
         || !function.sig.generics.params.is_empty()
     {
         return Err(RustHookCoreUnsupportedConstruct::new(
             "hook function qualifiers or generics are outside RustHookCore",
         ));
     }
-    let input_type = single_input_type(function)?;
+    let (input_name, input_type) = single_input(function)?;
     let result_type = return_type(&function.sig.output)?;
     if !name.starts_with("on_") || input_type != "HookInput" || result_type != "HookResult" {
         return Err(RustHookCoreUnsupportedConstruct::new(
@@ -221,7 +271,12 @@ fn parse_hook_fn(
         ));
     }
     let mut body = Body::default();
-    collect_stmts(&function.block.stmts, &mut body)?;
+    collect_stmts(
+        &function.block.stmts,
+        &input_name,
+        event_variants,
+        &mut body,
+    )?;
     let source_span = source_spans.function_span(&name).unwrap_or_default();
     Ok(RustHookCoreHook {
         event: name.trim_start_matches("on_").to_string(),
@@ -244,52 +299,65 @@ struct Body {
     calls: Vec<String>,
 }
 
-fn collect_stmts(stmts: &[Stmt], body: &mut Body) -> Result<(), RustHookCoreUnsupportedConstruct> {
-    for stmt in stmts {
-        match stmt {
-            Stmt::Expr(expr, _) => {
-                collect_expr(expr, body)?;
-                if matches!(expr, Expr::Return(_) | Expr::Path(_) | Expr::Match(_)) {
-                    break;
-                }
+// Only a returned value or the final expression determines the summary. In
+// particular, a discarded match is not a return. Named, argument-free call
+// statements are retained as opaque labels; their effects are not verified.
+fn collect_stmts(
+    stmts: &[Stmt],
+    input_name: &str,
+    event_variants: &BTreeSet<String>,
+    body: &mut Body,
+) -> Result<(), RustHookCoreUnsupportedConstruct> {
+    let mut result_start = 0;
+    for statement in stmts {
+        let Stmt::Expr(Expr::Call(call), Some(_)) = statement else {
+            break;
+        };
+        let name = match call.func.as_ref() {
+            Expr::Path(path) if path.qself.is_none() && call.args.is_empty() => {
+                path.path.get_ident()
             }
-            Stmt::Local(local) if local.init.is_none() => {}
-            _ => {
-                return Err(RustHookCoreUnsupportedConstruct::new(
-                    "hook body statement is outside RustHookCore",
-                ));
-            }
+            _ => None,
         }
+        .ok_or_else(|| {
+            RustHookCoreUnsupportedConstruct::new(
+                "opaque call statements require an unqualified identifier and no arguments",
+            )
+        })?;
+        body.calls.push(name.to_string());
+        result_start += 1;
     }
-    Ok(())
-}
-
-fn collect_expr(expr: &Expr, body: &mut Body) -> Result<(), RustHookCoreUnsupportedConstruct> {
-    match expr {
-        Expr::Return(expr_return) => {
+    let stmts = &stmts[result_start..];
+    match stmts.first() {
+        Some(Stmt::Expr(Expr::Return(expr_return), _)) => {
             let Some(returned) = &expr_return.expr else {
                 return Err(RustHookCoreUnsupportedConstruct::new(
                     "empty return is outside RustHookCore",
                 ));
             };
-            push_decision(returned, body)
+            // Remaining statements are unreachable after an explicit return.
+            collect_result(returned, input_name, event_variants, body)
         }
-        Expr::Path(_) => push_decision(expr, body),
-        Expr::Match(expr_match) => collect_match(expr_match, body),
-        Expr::Call(ExprCall { func, .. }) => {
-            let Expr::Path(path) = func.as_ref() else {
-                return Err(RustHookCoreUnsupportedConstruct::new(
-                    "indirect calls are outside RustHookCore",
-                ));
-            };
-            body.calls.push(
-                last_path_ident(path)
-                    .ok_or_else(|| RustHookCoreUnsupportedConstruct::new("empty callback path"))?,
-            );
-            Ok(())
+        Some(Stmt::Expr(expr, None)) if stmts.len() == 1 => {
+            collect_result(expr, input_name, event_variants, body)
         }
         _ => Err(RustHookCoreUnsupportedConstruct::new(
-            "hook expression is outside RustHookCore",
+            "hook body must directly return a result or end in a single result expression; discarded expressions and locals are outside RustHookCore",
+        )),
+    }
+}
+
+fn collect_result(
+    expr: &Expr,
+    input_name: &str,
+    event_variants: &BTreeSet<String>,
+    body: &mut Body,
+) -> Result<(), RustHookCoreUnsupportedConstruct> {
+    match expr {
+        Expr::Path(_) => push_decision(expr, body),
+        Expr::Match(expr_match) => collect_match(expr_match, input_name, event_variants, body),
+        _ => Err(RustHookCoreUnsupportedConstruct::new(
+            "hook result must be a HookResult variant or an event match; calls are outside RustHookCore",
         )),
     }
 }
@@ -303,20 +371,58 @@ fn push_decision(expr: &Expr, body: &mut Body) -> Result<(), RustHookCoreUnsuppo
 
 fn collect_match(
     expr_match: &ExprMatch,
+    input_name: &str,
+    event_variants: &BTreeSet<String>,
     body: &mut Body,
 ) -> Result<(), RustHookCoreUnsupportedConstruct> {
-    for arm in &expr_match.arms {
+    let is_input_event = match expr_match.expr.as_ref() {
+        Expr::Field(field) if matches!(&field.member, syn::Member::Named(name) if name == "event") =>
+        {
+            matches!(field.base.as_ref(), Expr::Path(path)
+                if path.qself.is_none() && path.path.is_ident(input_name))
+        }
+        _ => false,
+    };
+    if !is_input_event {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "match scrutinee must be the hook parameter's event field",
+        ));
+    }
+    let mut events = BTreeSet::new();
+    for (index, arm) in expr_match.arms.iter().enumerate() {
+        if arm.guard.is_some() {
+            return Err(RustHookCoreUnsupportedConstruct::new(
+                "match guards are outside RustHookCore",
+            ));
+        }
         let decision = decision_from_expr(&arm.body)?;
         if matches!(arm.pat, Pat::Wild(_)) {
+            if index + 1 != expr_match.arms.len() {
+                return Err(RustHookCoreUnsupportedConstruct::new(
+                    "match wildcard must be the final arm",
+                ));
+            }
             body.default_decision = Some(decision.clone());
         } else {
+            let event = event_from_pat(&arm.pat, event_variants)?;
+            if !events.insert(event.clone()) {
+                return Err(RustHookCoreUnsupportedConstruct::new(
+                    "duplicate event patterns are outside RustHookCore",
+                ));
+            }
             body.event_decisions.push(RustHookCoreEventDecision {
-                event: event_from_pat(&arm.pat)?,
+                event,
                 decision: decision.clone(),
             });
         }
         body.decisions.push(decision);
     }
+    if body.default_decision.is_none() {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "event match requires a final wildcard default",
+        ));
+    }
+    // Distinct literal arms do not overlap; sorting cannot change precedence.
     body.event_decisions
         .sort_by(|left, right| left.event.cmp(&right.event));
     Ok(())
@@ -325,20 +431,30 @@ fn collect_match(
 fn decision_from_expr(
     expr: &Expr,
 ) -> Result<RustHookCoreDecision, RustHookCoreUnsupportedConstruct> {
-    let Expr::Path(ExprPath { path, .. }) = expr else {
+    let Expr::Path(ExprPath {
+        path, qself: None, ..
+    }) = expr
+    else {
         return Err(RustHookCoreUnsupportedConstruct::new(
             "returns and match arms must directly produce HookResult variants",
         ));
     };
+    if path.leading_colon.is_some()
+        || path
+            .segments
+            .iter()
+            .any(|segment| !matches!(segment.arguments, PathArguments::None))
+    {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "qualified or generic result paths are outside RustHookCore",
+        ));
+    }
     let segments = path
         .segments
         .iter()
         .map(|segment| segment.ident.to_string())
         .collect::<Vec<_>>();
     match segments.as_slice() {
-        [variant] => decision_from_variant(variant).ok_or_else(|| {
-            RustHookCoreUnsupportedConstruct::new(format!("unknown HookResult variant '{variant}'"))
-        }),
         [enum_name, variant] if enum_name == "HookResult" => decision_from_variant(variant)
             .ok_or_else(|| {
                 RustHookCoreUnsupportedConstruct::new(format!(
@@ -370,24 +486,35 @@ fn decision_from_variant(variant: &str) -> Option<RustHookCoreDecision> {
     decision_from_literal(variant)
 }
 
-fn event_from_pat(pat: &Pat) -> Result<String, RustHookCoreUnsupportedConstruct> {
+fn event_from_pat(
+    pat: &Pat,
+    event_variants: &BTreeSet<String>,
+) -> Result<String, RustHookCoreUnsupportedConstruct> {
     match pat {
         Pat::Lit(PatLit {
             lit: Lit::Str(lit), ..
         }) => Ok(lit.value()),
-        Pat::Path(path) => path
-            .path
-            .segments
-            .last()
-            .map(|segment| segment.ident.to_string())
-            .ok_or_else(|| RustHookCoreUnsupportedConstruct::new("empty event path")),
+        Pat::Path(path)
+            if path.qself.is_none()
+                && path.path.leading_colon.is_none()
+                && path.path.segments.len() == 2
+                && path
+                    .path
+                    .segments
+                    .iter()
+                    .all(|segment| matches!(segment.arguments, PathArguments::None))
+                && path.path.segments[0].ident == "HookEvent"
+                && event_variants.contains(&path.path.segments[1].ident.to_string()) =>
+        {
+            Ok(path.path.segments[1].ident.to_string())
+        }
         _ => Err(RustHookCoreUnsupportedConstruct::new(
-            "match arms must use event paths, string literals, or wildcard defaults",
+            "match arms require string literals, locally declared HookEvent variants or a wildcard default",
         )),
     }
 }
 
-fn single_input_type(function: &ItemFn) -> Result<String, RustHookCoreUnsupportedConstruct> {
+fn single_input(function: &ItemFn) -> Result<(String, String), RustHookCoreUnsupportedConstruct> {
     let mut inputs = function.sig.inputs.iter();
     let Some(FnArg::Typed(input)) = inputs.next() else {
         return Err(RustHookCoreUnsupportedConstruct::new(
@@ -399,7 +526,17 @@ fn single_input_type(function: &ItemFn) -> Result<String, RustHookCoreUnsupporte
             "hook function must take exactly one HookInput parameter",
         ));
     }
-    type_name(&input.ty)
+    let Pat::Ident(binding) = input.pat.as_ref() else {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "hook parameter must be a simple identifier",
+        ));
+    };
+    if binding.by_ref.is_some() || binding.subpat.is_some() {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "hook parameter must be a simple identifier",
+        ));
+    }
+    Ok((binding.ident.to_string(), type_name(&input.ty)?))
 }
 
 fn return_type(output: &ReturnType) -> Result<String, RustHookCoreUnsupportedConstruct> {
@@ -413,7 +550,7 @@ fn return_type(output: &ReturnType) -> Result<String, RustHookCoreUnsupportedCon
 
 fn type_name(ty: &Type) -> Result<String, RustHookCoreUnsupportedConstruct> {
     match ty {
-        Type::Path(TypePath { path, .. }) => path
+        Type::Path(TypePath { path, qself: None }) if path.get_ident().is_some() => path
             .segments
             .last()
             .map(|segment| segment.ident.to_string())
@@ -425,6 +562,30 @@ fn type_name(ty: &Type) -> Result<String, RustHookCoreUnsupportedConstruct> {
             "hook signature type is outside RustHookCore",
         )),
     }
+}
+
+fn reject_semantic_attributes(file: &syn::File) -> Result<(), RustHookCoreUnsupportedConstruct> {
+    struct Attributes {
+        unsupported: bool,
+    }
+    impl<'ast> syn::visit::Visit<'ast> for Attributes {
+        fn visit_attribute(&mut self, attribute: &'ast syn::Attribute) {
+            if !["doc", "allow", "warn", "deny", "forbid"]
+                .iter()
+                .any(|name| attribute.path().is_ident(name))
+            {
+                self.unsupported = true;
+            }
+        }
+    }
+    let mut attributes = Attributes { unsupported: false };
+    syn::visit::Visit::visit_file(&mut attributes, file);
+    if attributes.unsupported {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "conditional compilation and transforming attributes are outside RustHookCore",
+        ));
+    }
+    Ok(())
 }
 
 fn reject_dynamic_dispatch(file: &syn::File) -> Result<(), RustHookCoreUnsupportedConstruct> {
@@ -543,22 +704,44 @@ fn dynamic_dispatch_error<T>() -> Result<T, RustHookCoreUnsupportedConstruct> {
 fn registration_from_macro_tokens(
     tokens: &str,
 ) -> Result<RustHookCoreRegistration, RustHookCoreUnsupportedConstruct> {
-    let event = first_string_literal(tokens).ok_or_else(|| {
-        RustHookCoreUnsupportedConstruct::new("register_hook! requires a string event")
+    let arguments = syn::punctuated::Punctuated::<Expr, syn::Token![,]>::parse_terminated
+        .parse_str(tokens)
+        .map_err(|_| {
+            RustHookCoreUnsupportedConstruct::new(
+                "register_hook! requires exactly a string event and a callback identifier",
+            )
+        })?;
+    if arguments.len() != 2 {
+        return Err(RustHookCoreUnsupportedConstruct::new(
+            "register_hook! requires exactly a string event and a callback identifier",
+        ));
+    }
+    let event = match &arguments[0] {
+        Expr::Lit(literal) if literal.attrs.is_empty() => match &literal.lit {
+            Lit::Str(event) => event.value(),
+            _ => {
+                return Err(RustHookCoreUnsupportedConstruct::new(
+                    "register_hook! event must be a string literal",
+                ));
+            }
+        },
+        _ => {
+            return Err(RustHookCoreUnsupportedConstruct::new(
+                "register_hook! event must be a string literal",
+            ));
+        }
+    };
+    let callback = match &arguments[1] {
+        Expr::Path(path) if path.qself.is_none() && path.attrs.is_empty() => {
+            path.path.get_ident().map(ToString::to_string)
+        }
+        _ => None,
+    }
+    .ok_or_else(|| {
+        RustHookCoreUnsupportedConstruct::new(
+            "register_hook! callback must be an unqualified identifier",
+        )
     })?;
-    let callback = tokens
-        .split(|character: char| !character.is_alphanumeric() && character != '_')
-        .rfind(|part| {
-            !part.is_empty()
-                && part
-                    .chars()
-                    .next()
-                    .is_some_and(|ch| ch.is_alphabetic() || ch == '_')
-        })
-        .ok_or_else(|| {
-            RustHookCoreUnsupportedConstruct::new("register_hook! requires a callback identifier")
-        })?
-        .to_string();
     Ok(RustHookCoreRegistration {
         event,
         callback,
@@ -567,313 +750,10 @@ fn registration_from_macro_tokens(
     })
 }
 
-fn first_string_literal(text: &str) -> Option<String> {
-    let start = text.find('"')? + 1;
-    let end = text[start..].find('"')? + start;
-    Some(text[start..end].to_string())
-}
-
-fn last_path_ident(path: &ExprPath) -> Option<String> {
-    path.path
-        .segments
-        .last()
-        .map(|segment| segment.ident.to_string())
-}
-
 fn stable_decisions(mut decisions: Vec<RustHookCoreDecision>) -> Vec<RustHookCoreDecision> {
     decisions.sort();
     decisions.dedup();
     decisions
-}
-
-#[derive(Clone, Copy)]
-struct ByteSpan {
-    start: usize,
-    end: usize,
-}
-
-struct RustHookCoreSpanIndex<'source> {
-    source: &'source str,
-    mask: Vec<u8>,
-    registration_spans: Vec<ByteSpan>,
-}
-
-impl<'source> RustHookCoreSpanIndex<'source> {
-    fn new(source: &'source str) -> Self {
-        let mask = rust_source_mask(source);
-        let registration_spans = collect_registration_spans(&mask);
-        Self {
-            source,
-            mask,
-            registration_spans,
-        }
-    }
-
-    fn function_span(&self, name: &str) -> Option<RustHookCoreSourceSpan> {
-        let bytes = self.mask.as_slice();
-        let mut cursor = 0;
-        while let Some(fn_index) = find_token(bytes, cursor, b"fn") {
-            let name_start = skip_ascii_whitespace(bytes, fn_index + 2);
-            let name_end = name_start.checked_add(name.len())?;
-            if bytes.get(name_start..name_end) == Some(name.as_bytes())
-                && is_token_boundary(bytes, name_end)
-            {
-                let open_brace = find_byte(bytes, name_end, b'{')?;
-                let close_brace = matching_delimiter(bytes, open_brace, b'{', b'}')?;
-                return Some(self.source_span(fn_index, close_brace));
-            }
-            cursor = fn_index + 2;
-        }
-        None
-    }
-
-    fn registration_span(
-        &mut self,
-        registration: &RustHookCoreRegistration,
-    ) -> Option<RustHookCoreSourceSpan> {
-        let index = self.registration_spans.iter().position(|span| {
-            let snippet = &self.source[span.start..=span.end];
-            registration_from_macro_tokens(snippet).is_ok_and(|candidate| {
-                candidate.event == registration.event && candidate.callback == registration.callback
-            })
-        })?;
-        let span = self.registration_spans.remove(index);
-        Some(self.source_span(span.start, span.end))
-    }
-
-    fn source_span(&self, start: usize, end: usize) -> RustHookCoreSourceSpan {
-        RustHookCoreSourceSpan {
-            line_start: line_number_at(self.source, start),
-            line_end: line_number_at(self.source, end),
-        }
-    }
-}
-
-fn collect_registration_spans(mask: &[u8]) -> Vec<ByteSpan> {
-    let mut spans = Vec::new();
-    let mut cursor = 0;
-    while let Some(start) = find_token(mask, cursor, b"register_hook") {
-        let bang = skip_ascii_whitespace(mask, start + "register_hook".len());
-        if mask.get(bang) != Some(&b'!') {
-            cursor = start + "register_hook".len();
-            continue;
-        }
-        let delimiter_start = skip_ascii_whitespace(mask, bang + 1);
-        let Some((open, close)) = mask.get(delimiter_start).and_then(delimiter_pair) else {
-            cursor = bang + 1;
-            continue;
-        };
-        let Some(delimiter_end) = matching_delimiter(mask, delimiter_start, open, close) else {
-            cursor = delimiter_start + 1;
-            continue;
-        };
-        let semicolon = skip_ascii_whitespace(mask, delimiter_end + 1);
-        let end = if mask.get(semicolon) == Some(&b';') {
-            semicolon
-        } else {
-            delimiter_end
-        };
-        spans.push(ByteSpan { start, end });
-        cursor = end + 1;
-    }
-    spans
-}
-
-fn rust_source_mask(source: &str) -> Vec<u8> {
-    let bytes = source.as_bytes();
-    let mut mask = bytes.to_vec();
-    let mut index = 0;
-    while index < bytes.len() {
-        if let Some(end) = raw_string_end(bytes, index) {
-            mask_range(&mut mask, index, end);
-            index = end + 1;
-        } else if bytes.get(index..index + 2) == Some(b"//") {
-            let end = find_line_end(bytes, index + 2);
-            mask_range(&mut mask, index, end.saturating_sub(1));
-            index = end;
-        } else if bytes.get(index..index + 2) == Some(b"/*") {
-            let end = block_comment_end(bytes, index + 2);
-            mask_range(&mut mask, index, end);
-            index = end + 1;
-        } else if bytes[index] == b'"' {
-            let end = quoted_literal_end(bytes, index, b'"');
-            mask_range(&mut mask, index, end);
-            index = end + 1;
-        } else if bytes[index] == b'\'' && !is_lifetime_start(bytes, index) {
-            let end = quoted_literal_end(bytes, index, b'\'');
-            mask_range(&mut mask, index, end);
-            index = end + 1;
-        } else {
-            index += 1;
-        }
-    }
-    mask
-}
-
-fn mask_range(mask: &mut [u8], start: usize, end: usize) {
-    let bounded_end = end.min(mask.len().saturating_sub(1));
-    for byte in &mut mask[start..=bounded_end] {
-        if *byte != b'\n' && *byte != b'\r' {
-            *byte = b' ';
-        }
-    }
-}
-
-fn raw_string_end(bytes: &[u8], start: usize) -> Option<usize> {
-    let mut index = start;
-    if bytes.get(index) == Some(&b'b') && bytes.get(index + 1) == Some(&b'r') {
-        index += 1;
-    }
-    if bytes.get(index) != Some(&b'r') {
-        return None;
-    }
-    let mut hashes = 0;
-    let mut quote_index = index + 1;
-    while bytes.get(quote_index) == Some(&b'#') {
-        hashes += 1;
-        quote_index += 1;
-    }
-    if bytes.get(quote_index) != Some(&b'"') {
-        return None;
-    }
-    let mut cursor = quote_index + 1;
-    while cursor < bytes.len() {
-        if bytes[cursor] == b'"'
-            && bytes
-                .get(cursor + 1..cursor + 1 + hashes)
-                .is_some_and(|suffix| suffix.iter().all(|byte| *byte == b'#'))
-        {
-            return Some(cursor + hashes);
-        }
-        cursor += 1;
-    }
-    Some(bytes.len().saturating_sub(1))
-}
-
-fn quoted_literal_end(bytes: &[u8], start: usize, quote: u8) -> usize {
-    let mut cursor = start + 1;
-    while cursor < bytes.len() {
-        if bytes[cursor] == b'\\' {
-            cursor += 2;
-        } else if bytes[cursor] == quote {
-            return cursor;
-        } else {
-            cursor += 1;
-        }
-    }
-    bytes.len().saturating_sub(1)
-}
-
-fn block_comment_end(bytes: &[u8], start: usize) -> usize {
-    let mut depth = 1;
-    let mut cursor = start;
-    while cursor + 1 < bytes.len() {
-        if bytes.get(cursor..cursor + 2) == Some(b"/*") {
-            depth += 1;
-            cursor += 2;
-        } else if bytes.get(cursor..cursor + 2) == Some(b"*/") {
-            depth -= 1;
-            cursor += 2;
-            if depth == 0 {
-                return cursor - 1;
-            }
-        } else {
-            cursor += 1;
-        }
-    }
-    bytes.len().saturating_sub(1)
-}
-
-fn find_line_end(bytes: &[u8], start: usize) -> usize {
-    bytes[start..]
-        .iter()
-        .position(|byte| *byte == b'\n')
-        .map(|offset| start + offset)
-        .unwrap_or(bytes.len())
-}
-
-fn is_lifetime_start(bytes: &[u8], index: usize) -> bool {
-    bytes
-        .get(index + 1)
-        .is_some_and(|byte| byte.is_ascii_alphabetic() || *byte == b'_')
-}
-
-fn find_token(bytes: &[u8], mut cursor: usize, token: &[u8]) -> Option<usize> {
-    while cursor + token.len() <= bytes.len() {
-        let index = find_bytes(bytes, cursor, token)?;
-        let end = index + token.len();
-        if is_token_boundary_before(bytes, index) && is_token_boundary(bytes, end) {
-            return Some(index);
-        }
-        cursor = end;
-    }
-    None
-}
-
-fn find_bytes(bytes: &[u8], start: usize, needle: &[u8]) -> Option<usize> {
-    bytes[start..]
-        .windows(needle.len())
-        .position(|window| window == needle)
-        .map(|offset| start + offset)
-}
-
-fn find_byte(bytes: &[u8], start: usize, needle: u8) -> Option<usize> {
-    bytes[start..]
-        .iter()
-        .position(|byte| *byte == needle)
-        .map(|offset| start + offset)
-}
-
-fn skip_ascii_whitespace(bytes: &[u8], mut cursor: usize) -> usize {
-    while bytes
-        .get(cursor)
-        .is_some_and(|byte| byte.is_ascii_whitespace())
-    {
-        cursor += 1;
-    }
-    cursor
-}
-
-fn is_token_boundary_before(bytes: &[u8], index: usize) -> bool {
-    index == 0 || is_token_boundary(bytes, index - 1)
-}
-
-fn is_token_boundary(bytes: &[u8], index: usize) -> bool {
-    !bytes
-        .get(index)
-        .is_some_and(|byte| byte.is_ascii_alphanumeric() || *byte == b'_')
-}
-
-fn delimiter_pair(open: &u8) -> Option<(u8, u8)> {
-    match open {
-        b'(' => Some((*open, b')')),
-        b'[' => Some((*open, b']')),
-        b'{' => Some((*open, b'}')),
-        _ => None,
-    }
-}
-
-fn matching_delimiter(bytes: &[u8], open_index: usize, open: u8, close: u8) -> Option<usize> {
-    let mut depth = 0;
-    for (offset, byte) in bytes[open_index..].iter().enumerate() {
-        if *byte == open {
-            depth += 1;
-        } else if *byte == close {
-            depth -= 1;
-            if depth == 0 {
-                return Some(open_index + offset);
-            }
-        }
-    }
-    None
-}
-
-fn line_number_at(source: &str, byte_index: usize) -> usize {
-    source.as_bytes()[..byte_index.min(source.len())]
-        .iter()
-        .filter(|byte| **byte == b'\n')
-        .count()
-        + 1
 }
 
 fn canonical_hash(ast: &RustHookCoreAst) -> Result<String, RustHookCoreUnsupportedConstruct> {

@@ -100,7 +100,7 @@ legitimacy protocol audit state.live.json
 
 `scripts/verify.sh` is the routine recommended check for a clean checkout. It checks formatting, clippy, the standard `cargo test` suite, Lean build, zero Lean `sorry`/`admit`/first-party `axiom`, spectral fixtures, public-surface documentation, doc alignment, legacy branding, and publication polish.
 
-`scripts/release-gate.sh` and `scripts/verify.sh --release-gate` additionally replay slow transcript snapshots and extraction fixtures, run `scripts/verify-clean.sh` to remove `lean/.lake/build/lib/lean/Legitimacy*` and force a fresh `lake build`, check the README Lean-gate status line, the paper verification anchor, and stale package directories. GitHub Actions provides an optional, manually dispatched mirror; repository-local execution remains the canonical gate, and pushing a version tag does not spend Actions minutes automatically.
+`scripts/release-gate.sh` and `scripts/verify.sh --release-gate` additionally replay slow transcript snapshots and extraction fixtures, run `scripts/verify-clean.sh` to remove `lean/.lake/build/lib/lean/Legitimacy*` and force a fresh `lake build`, check the README Lean-gate status line, the paper verification anchor, and stale package directories. GitHub Actions runs the canonical verification gate automatically for pushes and pull requests to `master` in the public `abenenson/legitimacy` repository. Manual dispatch also supports verification, audit-bundle reproduction and release-candidate checks. Automatic runs are scoped to that public repository; pushing a version tag does not trigger a run.
 
 The internal selected-authority execution boundary is specified in
 [Selected-Authority Process Contract](selected-authority-process-contract.md).

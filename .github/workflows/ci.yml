@@ -1,9 +1,12 @@
-name: Verification (manual mirror)
+name: Verification
 
 on:
-  # Heavy verification is intentionally opt-in: the canonical gates run on the
-  # trusted release host, and this mirror must not consume a maintainer's limited
-  # personal Actions quota merely because a version tag was pushed.
+  # Standard hosted runners are free for the public repository. Private
+  # development keeps heavy jobs opt-in through the job condition below.
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
     inputs:
       gate:
@@ -27,13 +30,18 @@ concurrency:
 jobs:
   verify:
     name: Canonical verify gate
-    if: github.event_name == 'workflow_dispatch' && (inputs.gate == 'verify' || inputs.gate == 'all')
+    if: >-
+      (github.repository == 'abenenson/legitimacy' &&
+       (github.event_name == 'push' || github.event_name == 'pull_request')) ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.gate == 'verify' || inputs.gate == 'all'))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # Rust toolchain action
         with:
+          toolchain: 1.98.1
           components: clippy, rustfmt
       - name: Set up Lean toolchain
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1
@@ -49,7 +57,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ripgrep
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
-      - name: Run canonical fast verification gate
+      - name: Run canonical verification gate
         run: bash scripts/verify.sh
 
   reproduce-audit:
@@ -59,8 +67,9 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # Rust toolchain action
         with:
+          toolchain: 1.98.1
           components: clippy, rustfmt
       - name: Set up Lean toolchain
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1
@@ -88,8 +97,9 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+      - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # Rust toolchain action
         with:
+          toolchain: 1.98.1
           components: clippy, rustfmt
       - name: Set up Lean toolchain
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1

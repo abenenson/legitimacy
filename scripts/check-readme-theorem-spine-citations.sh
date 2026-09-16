@@ -10,20 +10,20 @@ check_theorem_line() {
   local file="$ROOT/$path"
 
   if [[ ! -f "$file" ]]; then
-    echo "ERROR: README theorem spine path does not exist: $path" >&2
+    echo "ERROR: Formal overview theorem spine path does not exist: $path" >&2
     exit 1
   fi
 
   local actual
   actual="$(sed -n "${line}p" "$file")"
   if [[ "$actual" != *"theorem $theorem"* ]]; then
-    echo "ERROR: README theorem spine citation drifted: $theorem expected at $path:$line" >&2
+    echo "ERROR: Formal overview theorem spine citation drifted: $theorem expected at $path:$line" >&2
     echo "actual: $actual" >&2
     exit 1
   fi
 
-  if ! grep -Fq "\`$path:$line\`" "$ROOT/README.md"; then
-    echo "ERROR: README theorem spine table is missing $path:$line" >&2
+  if ! grep -Fq "\`$path:$line\`" "$ROOT/docs/formal-overview.md"; then
+    echo "ERROR: Formal overview theorem spine table is missing $path:$line" >&2
     exit 1
   fi
 }

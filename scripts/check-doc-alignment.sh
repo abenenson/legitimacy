@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Verify the theory doc names the canonical 5 axioms.
+# Verify the maintained formal overview names the canonical 5 axioms.
 # Prevents silent reversion to old 4-axiom version.
 set -euo pipefail
 
-DOC="docs/repository-context.md"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DOC="$ROOT/docs/formal-overview.md"
 
 for axiom in CERTIFIABLE GOVERNANCE-OBSERVABLE CORRIGIBLE "COMPOSITIONAL SAFETY" NON-VACUOUS; do
   if ! grep -q "${axiom}" "$DOC"; then

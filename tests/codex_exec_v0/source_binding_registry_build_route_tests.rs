@@ -517,6 +517,14 @@ fn cargo_target_and_build_script_authority_is_semantically_closed() {
 
     for (attack, mutant) in [
         (
+            "unsupported compiler baseline",
+            replace_manifest_once(
+                &manifest,
+                "rust-version = \"1.93.1\"",
+                "rust-version = \"1.98.1\"",
+            ),
+        ),
+        (
             "main binary path substitution",
             replace_manifest_once(
                 &manifest,

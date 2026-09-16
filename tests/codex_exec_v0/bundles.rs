@@ -21,17 +21,17 @@ fn source_derived_golden_ids_rules_evidence_locators_and_payloads() {
     assert_eq!(compact.len(), 7_319);
     assert_eq!(
         format!("sha256:{:x}", Sha256::digest(&compact)),
-        "sha256:0c7761ed7c3752cbb046b668a6060d5696c36164e2f127ab0d22282dad8a2b41"
+        "sha256:5df4278847022beb8b17ac2b8eec6b267d92f87b6bab70185e966d3b3ce336e1"
     );
     assert_eq!(canonical.len(), 5_056);
     assert_eq!(
         format!("sha256:{:x}", Sha256::digest(&canonical)),
-        "sha256:c1bebd1b87d4d7293caa5837624104d0d0db02c02591fd093ff8b4ec268b816a"
+        "sha256:cc581070688f9fda97cf5d355bc1e4775f26786bda95c01efce572e40169364d"
     );
     assert_eq!(private.len(), 20_850);
     assert_eq!(
         format!("sha256:{:x}", Sha256::digest(&private)),
-        "sha256:66dede74f328e22b4f81861599502a5170f22085d906bee64af7010f5e858050"
+        "sha256:70990463518e73469788778a2f1d6c37175d22f182db08263da778ba56e1eb5c"
     );
     let trace = adapted.trace();
     let records = FAILED

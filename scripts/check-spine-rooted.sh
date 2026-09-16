@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-README="$ROOT/README.md"
+README="$ROOT/docs/formal-overview.md"
 FACADE="$ROOT/lean/Legitimacy.lean"
 
 if [[ ! -f "$README" ]]; then
@@ -39,7 +39,7 @@ mapfile -t spine_entries < <(
 )
 
 if [[ "${#spine_entries[@]}" -eq 0 ]]; then
-  echo "ERROR: no Lean paths found in README Theorem Spine table" >&2
+  echo "ERROR: no Lean paths found in Formal overview Theorem Spine table" >&2
   exit 1
 fi
 
@@ -81,7 +81,7 @@ for spine_entry in "${spine_entries[@]}"; do
 done
 
 if [[ "${#missing[@]}" -gt 0 ]]; then
-  echo "ERROR: README Theorem Spine entries must be directly imported and line-accurate" >&2
+  echo "ERROR: Formal overview Theorem Spine entries must be directly imported and line-accurate" >&2
   printf '  %s\n' "${missing[@]}" >&2
   exit 1
 fi

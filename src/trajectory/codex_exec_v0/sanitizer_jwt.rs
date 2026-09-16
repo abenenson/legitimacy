@@ -58,8 +58,8 @@ fn bounded_jwt_json_object(segment: &[u8]) -> JwtJsonEvidenceV0 {
 
 fn decode_base64url_unpadded(segment: &[u8]) -> Option<Vec<u8>> {
     let mut decoded = Vec::with_capacity(segment.len().saturating_mul(3) / 4);
-    let mut chunks = segment.chunks_exact(4);
-    for chunk in &mut chunks {
+    let (chunks, remainder) = segment.as_chunks::<4>();
+    for chunk in chunks {
         let first = base64url_value(chunk[0])?;
         let second = base64url_value(chunk[1])?;
         let third = base64url_value(chunk[2])?;
@@ -68,7 +68,7 @@ fn decode_base64url_unpadded(segment: &[u8]) -> Option<Vec<u8>> {
         decoded.push((second << 4) | (third >> 2));
         decoded.push((third << 6) | fourth);
     }
-    match chunks.remainder() {
+    match remainder {
         [] => {}
         [first, second] => {
             let first = base64url_value(*first)?;
@@ -107,6 +107,28 @@ fn base64url_value(byte: u8) -> Option<u8> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn base64url_decoding_preserves_full_chunks_and_canonical_remainders() {
+        for (encoded, decoded) in [
+            ("", ""),
+            ("Zg", "f"),
+            ("Zm8", "fo"),
+            ("Zm9v", "foo"),
+            ("Zm9vYg", "foob"),
+            ("Zm9vYmE", "fooba"),
+            ("Zm9vYmFy", "foobar"),
+        ] {
+            assert_eq!(
+                decode_base64url_unpadded(encoded.as_bytes()),
+                Some(decoded.as_bytes().to_vec()),
+                "{encoded}"
+            );
+        }
+        for malformed in ["Z", "Zh", "Zm9", "Zg=", "Zm9v=", "Zm9v!g", "Zm9vYh"] {
+            assert_eq!(decode_base64url_unpadded(malformed.as_bytes()), None);
+        }
+    }
 
     #[test]
     fn jwt_recognition_requires_bounded_decoded_object_evidence() {

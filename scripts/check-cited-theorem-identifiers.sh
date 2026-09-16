@@ -53,17 +53,17 @@ def add_lean_citations_from_text(path, lineno, text):
     for ident in lean_ident_re.findall(text):
         add_citation(path, lineno, ident)
 
-readme = root / "README.md"
-readme_lines = readme.read_text(encoding="utf-8").splitlines()
-capture_table = False
-for lineno, line in enumerate(readme_lines, start=1):
-    if "Lean witness" in line or "Spine theorem" in line:
-        capture_table = True
-    elif capture_table and line and not line.startswith("|"):
-        capture_table = False
-    if capture_table or "Lean theorem" in line:
-        for ident in ident_re.findall(line):
-            add_citation(readme, lineno, ident)
+for readme in [root / "README.md", root / "docs/formal-overview.md"]:
+    readme_lines = readme.read_text(encoding="utf-8").splitlines()
+    capture_table = False
+    for lineno, line in enumerate(readme_lines, start=1):
+        if "Lean witness" in line or "Spine theorem" in line:
+            capture_table = True
+        elif capture_table and line and not line.startswith("|"):
+            capture_table = False
+        if capture_table or "Lean theorem" in line:
+            for ident in ident_re.findall(line):
+                add_citation(readme, lineno, ident)
 
 leaderboard = root / "audits" / "leaderboard" / "LEADERBOARD.md"
 leaderboard_lines = leaderboard.read_text(encoding="utf-8").splitlines()

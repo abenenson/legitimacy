@@ -25,11 +25,13 @@ pub(super) fn verify_manifest_route(source: &str) -> Result<(), &'static str> {
             "name",
             "readme",
             "repository",
+            "rust-version",
             "version",
         ])
         || package["name"].as_str() != Some("legitimacy")
         || package["version"].as_str() != Some("1.1.1")
         || package["edition"].as_str() != Some("2024")
+        || package["rust-version"].as_str() != Some("1.93.1")
         || package["autolib"].as_bool() != Some(false)
         || package["autobins"].as_bool() != Some(false)
         || package["build"].as_str() != Some("build.rs")

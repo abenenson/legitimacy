@@ -511,7 +511,7 @@ fn decode_prefixed_hex<const N: usize>(value: &str) -> AuthorityResultV0<[u8; N]
         ));
     }
     let mut output = [0u8; N];
-    for (index, pair) in hex.as_bytes().chunks_exact(2).enumerate() {
+    for (index, pair) in hex.as_bytes().as_chunks::<2>().0.iter().enumerate() {
         output[index] = (hex_nibble(pair[0])? << 4) | hex_nibble(pair[1])?;
     }
     Ok(output)

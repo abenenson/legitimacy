@@ -78,7 +78,7 @@ def check_assignment(rel_file: Path, start: int, graph_path: str, cited_nodes, c
 
 
 def scan_files() -> list[Path]:
-    files = [root / "README.md"]
+    files = [root / "README.md", root / "docs/formal-overview.md"]
     files.extend(sorted((root / "papers").glob("*.md")))
     for path in sorted((root / "lean").rglob("*.lean")):
         if ".lake" not in path.parts:

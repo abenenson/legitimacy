@@ -119,6 +119,8 @@ verify_step_begin check-spectral-fixtures
 bash scripts/check-spectral-fixtures.sh
 verify_step_begin check-public-surface
 bash scripts/check-public-surface.sh
+verify_step_begin test-reader-document-gates
+python3 scripts/test-reader-document-gates.py
 verify_step_begin check-cited-theorem-identifiers
 bash scripts/check-cited-theorem-identifiers.sh
 verify_step_begin check-doc-rejection-theorem-claims

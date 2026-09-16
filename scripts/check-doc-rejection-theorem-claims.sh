@@ -12,6 +12,7 @@ root = Path(sys.argv[1]).resolve()
 
 docs = [
     root / "README.md",
+    root / "docs/formal-overview.md",
     root / "audits/leaderboard/LEADERBOARD.md",
 ]
 docs.extend(sorted((root / "papers").glob("*.md")))

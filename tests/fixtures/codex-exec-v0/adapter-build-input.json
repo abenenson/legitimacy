@@ -252,6 +252,7 @@
         "src/extract/review.rs",
         "src/extract/rust_hook_core_graph.rs",
         "src/extract/rust_hook_core_parser.rs",
+        "src/extract/rust_hook_core_parser/source_spans.rs",
         "src/extract/rust_parser.rs",
         "src/extract/schedule_witness.rs",
         "src/extract/spectral.rs",
@@ -365,7 +366,7 @@
         "rust-toolchain.toml"
       ]
     },
-    "bound_inputs_sha256": "sha256:118ac5e929c2a03e6f4b6c0419aaad30fd60f3a7b5c65fb9fb3a2b0def57197c",
+    "bound_inputs_sha256": "sha256:a1863615e6a32a3097931807adf10bd9a932765b9c639c8bcfd7b6226dd16349",
     "test_only_cli_rust_sources": [
       "cli/tests.rs",
       "cli/trajectory/linux_output_set_tests.rs",

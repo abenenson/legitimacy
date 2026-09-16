@@ -4,17 +4,11 @@ This note preserves operational and background material that is useful for reade
 
 ## Kernel Shape
 
-The runtime kernel checks five obligations:
-
-- CERTIFIABLE: governed outcomes carry checkable certificates and proof witnesses.
-- GOVERNANCE-OBSERVABLE: governance state and decisions remain auditable through extraction, ledger integrity, and runtime observation.
-- CORRIGIBLE: supervisory interventions preserve the governance substrate while enabling authorized control.
-- COMPOSITIONAL SAFETY: composed governance graphs remain legitimate under composition, cycles, and decomposition pressure.
-- NON-VACUOUS: the system actually governs instead of collapsing into refusal, deadlock, or permanent escalation.
-
-`IsSemanticLegitimacyKernel` strengthens this runtime kernel with graph diagnostics and spectral well-connectedness through `KernelSemanticBridge`. The decomposition theorem `semanticKernel_iff_runtime_diagnostic_spectral_layers` factors that target into runtime, diagnostic, and spectral layers; it does not derive graph diagnostics or spectral structure from runtime obligations alone.
-
-`GOVERNANCE-OBSERVABLE` is the current name for the observability axiom. It emphasizes governance-query preservation rather than raw-state identity exposure.
+The [kernel section of the formal overview](formal-overview.md#the-kernel-object)
+maintains the runtime obligations, semantic bridge and concrete constructions.
+The [claim ledger](claim-ledger.md#kernel-and-boundary) maps those claims to
+proofs, executable evidence and remaining obligations. Use those definitions
+when interpreting the supporting results below.
 
 ## Reference Docs
 
@@ -43,7 +37,11 @@ Other reference docs:
 
 ## Theorem Spine Context
 
-The README elevates the forcing theorem because it is the agent-governance load-bearer: any pipeline whose scarce peer-relative decisive structural allocator is reachable through a transparent prefix and followed by non-denying suffix discipline cannot keep all three governance diagnostics simultaneously. The shortened README keeps only the headline theorem and the directly consumed results. The full supporting theorem map below preserves the prior 17-statement compiler stack without making the root page ask the reader to choose the central result.
+The [formal overview](formal-overview.md#the-forcing-argument-why-the-kernel-must-declare-a-sacrifice)
+distinguishes the wider median-inclusive obstruction from the narrower
+reachable-stage result. Its [theorem spine](formal-overview.md#theorem-spine)
+records the central source anchors. The supporting compiler and carrier results
+below provide additional detail; they do not expand either theorem's premises.
 
 ### S1 Carrier Seam
 

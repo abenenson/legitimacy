@@ -16,14 +16,14 @@ AI-governance impossibility results now form a growing line rather than a single
 
 - The **preference-aggregation axis** imports Arrow-style social-choice impossibility into preference and reward space. Eckersley (2019) imports Arrow-style social-choice impossibility into AI value alignment in utility space; Conitzer et al. (2024), Ge-Halpern et al. (2024, NeurIPS 2024), and Qiu (2024; JAIR; Best Paper at NeurIPS 2024 Pluralistic Alignment Workshop) extend that lineage into preference and reward space and prove Arrow-like representational impossibilities in their respective formal settings.
 - The **agreement-complexity axis** proves alignment lower bounds through agreement and communication complexity. Nayebi's "Intrinsic Barriers" (2025, AAAI 2026) is distinct in proof technique.
-- The **accountability-allocation axis** proves an impossibility on accountability allocation in human-agent collectives above an autonomy threshold. Tibebu's "The Accountability Horizon" (2026) is the representative result. The RLHF trilemma paper (Sahoo et al., 2025) formalizes a distinct impossibility inside preference-learning pipelines.
+- The **accountability-allocation axis** proves an impossibility on accountability allocation in human-agent collectives above an autonomy threshold. Tibebu and Shemtaga's "The Accountability Horizon" (2026) is the representative result. The RLHF trilemma paper (Sahoo et al., 2025) formalizes a distinct impossibility inside preference-learning pipelines.
 - The **governance-rule structural-admissibility axis** is legitimacy's distinct contribution in this public-literature map: a formally verified Arrow-template graph-diagnostic impossibility on the structural admissibility of the deployed governance rule itself, for reachable scarce peer-relative decisive stages under transparent-prefix and non-denying-suffix scope, with strategyproofness derived by `solidarity_monotonicity_imply_strategyproof`, coupled to a byte-stable extractor and a spectral scaling theory (`C*`, RG flow, `SpectralWellConnected`).
 
-The four public-literature axes are not in competition. They map to different objects: preferences and rewards (Eckersley / Conitzer et al. / Ge-Halpern et al. / Qiu), agreement under information constraints (Nayebi), accountability allocation across a collective (Tibebu), and the structural admissibility of the deployed governance rule itself (legitimacy). Reading them as a coherent program is more accurate than reading any one as the canonical theorem.
+The four public-literature axes are not in competition. They map to different objects: preferences and rewards (Eckersley / Conitzer et al. / Ge-Halpern et al. / Qiu), agreement under information constraints (Nayebi), accountability allocation across a collective (Tibebu and Shemtaga), and the structural admissibility of the deployed governance rule itself (legitimacy). Reading them as a coherent program is more accurate than reading any one as the canonical theorem.
 
 This literature-map axis is consistent with `papers/03-impossibility-theorem.md` §6.6.8, but it is a different coordinate system from the internal follow-on axis there: inside Legitimacy's own follow-on program, the shipped governance-rule theorem is **Axis 1: Allocation**, while the paper's **Axis 4: Extraction** is a future extraction-transformation program. The literature-map axis here and the internal follow-on axis there should not be conflated.
 
-Tibebu's priority claim also needs a diplomatic correction. Tibebu frames *The Accountability Horizon* as the first impossibility theorem in AI governance; our reading of the published record places Eckersley (2019), Nayebi (2025), and the RLHF trilemma paper (Sahoo et al., 2025, submitted November 23, 2025) as antecedent contributions with non-trivial formal structure. No stable public bibliographic record was located for the possible Oswald (2026) allocation-under-uncertainty antecedent, so the public citation set does not rely on that item.
+Tibebu and Shemtaga's priority claim also needs a diplomatic correction. Tibebu and Shemtaga frame *The Accountability Horizon* as the first impossibility theorem in AI governance; our reading of the published record places Eckersley (2019), Nayebi (2025), and the RLHF trilemma paper (Sahoo et al., 2025, submitted November 23, 2025) as antecedent contributions with non-trivial formal structure. No stable public bibliographic record was located for the possible Oswald (2026) allocation-under-uncertainty antecedent, so the public citation set does not rely on that item.
 
 ### 2.2 The preference-aggregation neighbors: reward-space and feedback-aggregation work
 
@@ -801,7 +801,7 @@ We do not here recommend that either lineage rename their `C*`. The notational c
 
 3. **No bridge-existence claim**. We claim orthogonality; we do not characterize agreement / disagreement classes for any algebraic bridge between the two notions.
 
-4. **Two-lineage focus**. The cross-talk is between Cao (2025) and our substrate. Other capacity-style alignment works (Nayebi 2025 *Intrinsic Barriers*, Tibebu 2026 *Accountability Horizon*, Agarwal 2026 verification trilemma) are distinct again; their relationship to either of these two `C*` notions is open.
+4. **Two-lineage focus**. The cross-talk is between Cao (2025) and our substrate. Other capacity-style alignment works (Nayebi 2025 *Intrinsic Barriers*, Tibebu and Shemtaga 2026 *Accountability Horizon*, Agarwal 2026 verification trilemma) are distinct again; their relationship to either of these two `C*` notions is open.
 
 5. **Notational scope only**. The cross-talk is a notational and conceptual map. It is not a quantitative comparison of bound strengths.
 
@@ -826,7 +826,7 @@ The contribution is precision in the notational and conceptual map. We do not re
 - **Cao, W.** (2025). The Alignment Bottleneck. *arXiv:2509.15932*.
 - **Nayebi, A.** (2025). Intrinsic Barriers and Practical Pathways for Human-AI Alignment: An Agreement-Based Complexity Analysis. *arXiv:2502.05934*. AAAI 2026 oral.
 - **Shannon, C. E.** (1948). A Mathematical Theory of Communication. *Bell System Technical Journal*, 27(3): 379-423; 27(4): 623-656.
-- **Tibebu, H.** (2026). The Accountability Horizon: An Impossibility Theorem for Governing Human-Agent Collectives. *arXiv:2604.07778*.
+- **Tibebu, H., and Shemtaga, H.** (2026). The Accountability Horizon: An Impossibility Theorem for Governing Human-Agent Collectives. *[arXiv:2604.07778v2](https://arxiv.org/abs/2604.07778v2)*.
 - **Agarwal, A.** (2026). On the Formal Limits of Alignment Verification. *arXiv:2603.08761*.
 
 ##### Lean substrate references
@@ -912,7 +912,7 @@ The Balinski-Young lineage is allocation-shaped: the object is a vote-count prof
 
 **Nayebi, A.** (2025), *Intrinsic Barriers and Practical Pathways for Human-AI Alignment: An Agreement-Based Complexity Analysis* (arXiv:2502.05934, AAAI 2026 oral), multi-agent overhead lower bound.
 
-**Tibebu, H.** (2026), *The Accountability Horizon*, accountability-incompleteness phase transition.
+**Tibebu, H., and Shemtaga, H.** (2026), *The Accountability Horizon*, accountability-incompleteness phase transition.
 
 These adjacent lineages bring impossibility theorems into AI-alignment territory. Our axis (governance-rule structural admissibility) is distinct from these: it is on the *rule layer* of the typed governance object, not on preference aggregation or accountability surfaces.
 
@@ -1061,7 +1061,7 @@ The compounded ceiling is the joint constraint. A deployment satisfies this join
 
 **Nayebi 2025**: multi-agent overhead lower bound. The Nayebi axis is a *fourth* axis we do not address here (multi-agent coordination overhead); the multi-agent companion paper considers the multi-agent extension to our third axis.
 
-**Tibebu 2026**: accountability-incompleteness phase transition. A *fifth* axis (accountability) we do not address here.
+**Tibebu and Shemtaga 2026**: accountability-incompleteness phase transition. A *fifth* axis (accountability) we do not address here.
 
 The triangulation is a starting point, not a comprehensive taxonomy. Other axes (multi-agent, accountability, capability-scaling) are separately addressable.
 
@@ -1114,7 +1114,7 @@ For mechanism-design + AI-alignment crossover researchers, the triangulation sup
 - **Nayebi, A.** (2025). Intrinsic Barriers and Practical Pathways for Human-AI Alignment: An Agreement-Based Complexity Analysis. *arXiv:2502.05934*. AAAI 2026 oral.
 - **Satterthwaite, M.** (1975). Strategy-Proofness and Arrow's Conditions. *Journal of Economic Theory*, 10(2): 187-217.
 - **Sen, A.** (1970). The Impossibility of a Paretian Liberal. *Journal of Political Economy*, 78(1): 152-157.
-- **Tibebu, H.** (2026). The Accountability Horizon: An Impossibility Theorem for Governing Human-Agent Collectives. *arXiv:2604.07778*.
+- **Tibebu, H., and Shemtaga, H.** (2026). The Accountability Horizon: An Impossibility Theorem for Governing Human-Agent Collectives. *[arXiv:2604.07778v2](https://arxiv.org/abs/2604.07778v2)*.
 - **Young, H. P.** (1994). *Equity: In Theory and Practice*. Princeton University Press.
 
 ##### Lean substrate references

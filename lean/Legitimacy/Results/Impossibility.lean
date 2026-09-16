@@ -10,7 +10,7 @@ import Mathlib.Tactic.NormNum
 
 /-!
   Peer-graph impossibility counterexample — ported to Mathlib ℚ.
-  The Arrow's theorem for agent governance. Main results:
+  Concrete peer-rule counterexamples in the Arrow/Young lineage. Main results:
   1. The peer-relative node violates strategyproofness (constructive
      counterexample): claimant C improves from Deny to Permit by
      misreporting strength upward.
