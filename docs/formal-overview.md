@@ -335,8 +335,19 @@ For the maintained subsystem ledger and graph-carrier seam map, read
 
 ## Theorem Spine
 
-The public theorem spine is the small set of named Lean statements that carries
-the artifact, in spine order: the kernel object, its forcing argument, the
+The headline obstruction is `symmetric_scarce_coupled_allocators_obstructed`
+(`lean/Legitimacy/Impossibility/SymmetricScarceCoupledObstruction.lean:129`):
+the median-inclusive class cannot jointly satisfy consistency, solidarity and
+cross-claimant monotonicity. The max-rule separator shows why the conclusion
+does not force consistency failure alone. See the [forcing argument](#the-forcing-argument-why-the-kernel-must-declare-a-sacrifice)
+for the exact hypotheses and witnesses.
+
+The typed package below retains the narrower reachable-stage specialization.
+It does not yet package a concrete application of the wider theorem; the
+specialization's stronger structural hypotheses are not the headline's scope.
+
+The packaged spine collects concrete applications of named Lean statements
+that connect the artifact, in spine order: the kernel object, its forcing argument, the
 activation gate, the semantic bridge, the standalone spectral layer, and the
 wider-frontier rows. Supporting lemmas, fixtures, and evidence artifacts are
 mapped in [`docs/repository-context.md`](../docs/repository-context.md). All ten
@@ -348,7 +359,7 @@ the explicit maintenance boundary for future public-spine rows.
 | Role | Spine theorem | One-line role | Lean path |
 | --- | --- | --- | --- |
 | Kernel object | `LegitimacyKernel` | The bundled five-axiom kernel structure over a shared governed system; inhabited by `permitKernel`. | `lean/Legitimacy/Kernel/Unified.lean:29` |
-| Forcing argument (impossibility) | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` | The reachable peer-relative decisive stage cannot satisfy all diagnostics. | `lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103` |
+| Reachable-stage specialization | `reachable_peer_relative_decisive_stage_obstructs_diagnostics` | Under the narrower structural premises, the reachable decisive stage cannot satisfy all diagnostics. | `lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103` |
 | Activation gate | `noUndeclaredSacrificeImplication` | Interface implication: the complete-surface activation gate projects the deployment direction from the compatibility iff, so the kernel must declare its sacrifice. | `lean/Legitimacy/Safety/KernelSafety/BinaryDecisionPipeline.lean:145` |
 | Semantic bridge | `semanticKernel_iff_runtime_diagnostic_spectral_layers` | Compatibility unfolding: the strengthened semantic-kernel contract decomposes into runtime, diagnostic, and spectral conjuncts. | `lean/Legitimacy/Results/SemanticBridge.lean:74` |
 | Three-valued frontier | `three_valued_composition_inadmissibility` | A third (escalate) verdict does not escape the obstruction; parametric via `three_valued_escalationPolicyWitness_composition_inadmissibility`. | `lean/Legitimacy/Results/Composition.lean:536` |

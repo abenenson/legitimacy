@@ -79,9 +79,10 @@ not arbitrary deployed agents.
 
 ## Try the example
 
-Start with the [companion reader](docs/executed-composition-reader.html):
-download the HTML file and open it in your browser. It presents the seven
-outcomes and their evidence without installing Rust or Lean.
+[Open the companion reader in your browser](https://adambenenson.com/projects/legitimacy/reader.html).
+It presents the seven outcomes and their evidence without installing Rust or Lean.
+For offline use, [download the self-contained HTML](docs/executed-composition-reader.html)
+and open it locally.
 
 To execute the experiment yourself, run from this checkout with Rust installed:
 

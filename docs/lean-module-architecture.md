@@ -10,11 +10,37 @@ the [claim ledger](claim-ledger.md) records evidence status. This document maps
 those results to source modules. The [paper index](../papers/README.md) provides
 section-level routes through all six manuscripts.
 
-Inventory snapshot: 2026-09-15, source tree at `5e1c1a9`. Counts cover tracked
+Inventory snapshot: [public commit `1949f40`](https://github.com/abenenson/legitimacy/commit/1949f4033bf9dcb8370d249ca8f33e40c0b9e863). Counts cover tracked
 first-party `.lean` files under `lean/Legitimacy` and `.rs` files under `src`,
 including tests embedded there. LOC means physical source lines. Root files
 are counted separately from recursive directory rows; build outputs and the
 separate `tests/` directory are excluded.
+
+<details>
+<summary>Reproduce the snapshot counts from a public clone</summary>
+
+Run from the repository root. The command reads the pinned Git objects, so later
+working-tree edits do not change the snapshot counts.
+
+```python
+import collections, pathlib, subprocess
+rev = "1949f4033bf9dcb8370d249ca8f33e40c0b9e863"
+def git(*args):
+    return subprocess.check_output(["git", *args], text=True)
+groups = collections.defaultdict(lambda: [0, 0])
+for name in git("ls-tree", "-r", "--name-only", rev, "--", "lean/Legitimacy", "src").splitlines():
+    path = pathlib.PurePosixPath(name)
+    depth = 3 if path.suffix == ".lean" else 2 if path.suffix == ".rs" else 0
+    if not depth:
+        continue
+    key = "/".join(path.parts[:min(len(path.parts) - 1, depth)])
+    groups[key][0] += len(git("show", f"{rev}:{name}").splitlines())
+    groups[key][1] += 1
+for key, (loc, files) in sorted(groups.items()):
+    print(f"{key}: LOC={loc}, files={files}")
+```
+
+</details>
 
 ## Lean Subsystem Ledger
 
@@ -61,7 +87,7 @@ separate `tests/` directory are excluded.
 | [`src/rules`](../src/rules) | Built-in allocation and harness rules used by examples and tests. | 151 | 1 | `proportional_rule`, `jefferson_rule`, `webster_rule`, `claude_agent_sdk_hooks_rule` | tooling |
 | [`src/spectral`](../src/spectral) | Executable spectral diagnostics, concrete graph fixtures, C* calculations, coarse-graining, noisy-channel calibration, and positive-procedure helpers. | 3407 | 11 | `capacity`, `cv`, `c_star`, `governance_certificate` | supporting |
 | [`src/executed_composition`](../src/executed_composition) | Finite experiment host, independently reconstructed deliveries, checked Lean transition-table consumption and signed capture verification. | 603 | 2 | `Grant`, `Event`, `SignedRun`, `check_signed` | supporting |
-| [`src/trajectory`](../src/trajectory) | Versioned trace validation, replay and authority receipts, replay-bound composition evaluation, and bounded Codex capture/import. | 15874 | 42 | `TrajectoryTraceV0`, `VerifiedTrajectoryReplayV0`, `evaluate_replay_bound_composition_v0`, `VerifiedReplayAuthorityReceiptV0` | supporting |
+| [`src/trajectory`](../src/trajectory) | Versioned trace validation, replay and authority receipts, replay-bound composition evaluation, and bounded Codex capture/import. | 15898 | 42 | `TrajectoryTraceV0`, `VerifiedTrajectoryReplayV0`, `evaluate_replay_bound_composition_v0`, `VerifiedReplayAuthorityReceiptV0` | supporting |
 
 ## Canonical Graph Carriers
 

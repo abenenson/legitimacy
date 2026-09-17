@@ -65,8 +65,22 @@ for the full carrier map.
 
 ### Headline Theorem
 
+`symmetric_scarce_coupled_allocators_obstructed`
+(`lean/Legitimacy/Impossibility/SymmetricScarceCoupledObstruction.lean:129`)
+is the wider obstruction: a symmetric scarce-coupled allocator on an effective
+surface with a complete tail cannot jointly satisfy consistency, solidarity and
+cross-claimant monotonicity. The median rule belongs to this class. The max-rule
+separator preserves consistency while sacrificing monotonicity, showing why
+the theorem's conclusion is disjunctive. The [formal overview](formal-overview.md#the-forcing-argument-why-the-kernel-must-declare-a-sacrifice)
+gives the membership and separating witnesses.
+
 `reachable_peer_relative_decisive_stage_obstructs_diagnostics`
-(`lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103`) is the forcing move. It states that a governance pipeline with a reachable scarce peer-relative decisive stage, reached through a transparent prefix and followed by the required suffix discipline, cannot jointly satisfy graph consistency, graph solidarity, and graph monotonicity. The theorem is deliberately stated at the reachable-stage level; the older complete first-effective peer-relative surface is retained as a special case through `complete_first_effective_implies_reachable_peer_relative_decisive`. This is the source of the forced tradeoff that the rest of the stack makes operational.
+(`lean/Legitimacy/Impossibility/PeerRelativeReachable.lean:103`) is the narrower
+structural specialization: a transparent prefix reaches a scarce structurally
+peer-relative decisive stage, followed by a non-denying suffix. The median rule
+is excluded from this narrower class. This is the forcing anchor currently
+carried by the typed `PublicSpinePremiseInhabitation` package; that package does
+not define the scope of the wider headline theorem.
 
 ### Supporting Theorems
 

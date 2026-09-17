@@ -25,6 +25,26 @@ verifies the production Rust parser nor covers arbitrary Rust execution.
 Byte-stable extraction and agreement with saved fixtures alone cannot establish
 that the abstraction preserves a live harness's relevant behavior.
 
+## Modeled language versus accepted Rust syntax
+
+The Lean AST is wider than the Rust parser's accepted fragment. Its
+[`Expr` and `Stmt` constructors](../lean/Legitimacy/Extract/RustHookCore/Syntax.lean)
+include conditionals and expressions that the production parser refuses.
+In the [modeled semantics](../lean/Legitimacy/Extract/RustHookCore/Semantics.lean),
+`Expr.eventEq` always evaluates to `false`; expression evaluation has no event
+argument. This is distinct from `Stmt.matchEvent`, which does compare the
+registration event with its arm labels. A matching arm without a direct hook
+result falls back to the default; the Rust parser instead requires every arm
+to return a direct `HookResult` variant. Modeled calls are also not an execution
+of their implementations.
+
+The general decision-equivalence theorem remains a theorem of those explicitly
+defined Lean semantics. It does not establish that all Lean constructors model
+accepted Rust, or that their extra cases are faithful Rust semantics. A future
+mechanical translation must specify its image in this AST and validate the
+correspondence on that image. The ordinary-Rust execution tests below provide
+evidence for the accepted source fragment, not for the extra Lean constructors.
+
 ## Formally Proved
 
 - `BoundedExtractorContract` states the Lean-side source evidence, runtime
